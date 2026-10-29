@@ -11,6 +11,12 @@ body.in-greenhouse .garden-scene {
   filter: blur(3px) brightness(1.04);
   transition: transform .95s var(--ease), filter .95s var(--ease);
 }
+/* phones and tablets: the garden zooms in without the soft blur. Blurring the whole enlarged garden
+   on every frame needed an off-screen copy of it several times the screen's size, which is what
+   made iPhones stall and reload; the room fades in over it just the same. */
+@media (hover: none) and (pointer: coarse) {
+  body.in-greenhouse .garden-scene { filter: none; transition: transform .95s var(--ease); }
+}
 /* (the garden's animations pause in js/main.js) Once the room has fully faded in, the
    garden behind it is skipped entirely: the room covers it, so nothing changes visually,
    but the browser no longer draws, blurs and restyles the whole garden underneath. */
@@ -62,6 +68,15 @@ body.in-greenhouse .swipe-hint {
   transition: transform 1.1s var(--ease) .15s;
 }
 .gh-room.is-open .gh-room__scene { transform: translateY(-50%); }
+/* sized from the room's own window rather than dvh, so it always covers the whole phone screen
+   (see "Fitting the garden" in css/garden.css) */
+@supports (height: 1cqh) {
+  .gh-room__viewport { container-type: size; }
+  .gh-room__scene {
+    top: calc(50% - max(0px, max(100vw, 160cqh) * .625 - 100cqh) * .3);
+    width: max(100vw, 160cqh);
+  }
+}
 
 .gh-room__art {
   position: absolute;

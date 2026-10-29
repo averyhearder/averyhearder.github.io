@@ -17,6 +17,11 @@
    #bloom-cosmos and #bloom-daisy) and reused at many sizes, colours and
    angles. Only whole clusters animate as they grow, and the push-through
    moves six layers, so it stays light. Styles: css/intro.css.
+   On phones and tablets the growing clusters are painted onto six canvases
+   (one per half-layer) instead of being ~110 separately animated images:
+   each image needed its own graphics layer at the screen's full resolution,
+   which used more memory than iOS Safari allows a page, so it reloaded.
+   The canvases draw the same pictures with the same timing and easing.
    With reduced motion, the button simply opens the garden.
    ========================================================================== */
 (function () {
@@ -32,6 +37,26 @@
   const r2 = (n) => Math.round(n * 100) / 100;
   const rand = (a, b) => a + Math.random() * (b - a);
   const pick = (list) => list[Math.floor(Math.random() * list.length)];
+  // phones and tablets: clusters are painted on canvases (see above), at up to 2x resolution
+  const LITE = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  const DPR = Math.min(2, window.devicePixelRatio || 1);
+
+  // the timing curve of a CSS cubic-bezier(), for the canvas clusters
+  function bezier(x1, y1, x2, y2) {
+    const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+    const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+    return (x) => {
+      let t = x;
+      for (let i = 0; i < 8; i++) {
+        const slope = (3 * ax * t + 2 * bx) * t + cx;
+        if (Math.abs(slope) < 1e-6) break;
+        t -= (((ax * t + bx) * t + cx) * t - x) / slope;
+      }
+      t = Math.min(1, Math.max(0, t));
+      return ((ay * t + by) * t + cy) * t;
+    };
+  }
+  const clusterEase = bezier(0.22, 1.18, 0.42, 1);   // the same curve as .ib-cl in css/intro.css
 
   // the moments of the transition, in milliseconds (counted from the first frame the flowers are drawn,
   // so the timings stay in step with the animations even on a slower phone)
@@ -221,33 +246,66 @@
   function prepare() {
     const g = spacing();
     if (sprites && Math.abs(sprites.g - g) < 10) return sprites;   // already drawn for this screen
+    release();
     ensureDefs();
     // an image can't see the page's drawings, so each carries its own copy of them
     const defs = DEFS.replace(/^<svg[^>]*><defs>/, '').replace(/<\/defs><\/svg>$/, '') +
       document.getElementById('bloom-cosmos').outerHTML + document.getElementById('bloom-daisy').outerHTML;
-    sprites = { g };
+    const set = { g };
+    const loading = [];
     Object.keys(VARIANTS).forEach((depth) => {
       const size = g * NOMINAL[depth];
       const box = Math.round(size * 1.1);
-      sprites[depth] = Array.from({ length: VARIANTS[depth] }, () => {
+      set[depth] = Array.from({ length: VARIANTS[depth] }, () => {
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-box} ${-box} ${box * 2} ${box * 2}" width="${box * 2}" height="${box * 2}"><defs>${defs}</defs>${cluster(depth, size)}</svg>`;
         const url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        const sprite = { url, box };
         const img = new Image();
         img.src = url;
-        if (img.decode) img.decode().catch(() => {});   // ready before anyone clicks
-        return { url, box };
+        if (LITE) {
+          // painted once onto a small canvas, then the image itself is let go
+          const loaded = img.decode ? img.decode() : new Promise((done, fail) => { img.onload = done; img.onerror = fail; });
+          loading.push(loaded.then(() => {
+            const c = document.createElement('canvas');
+            c.width = c.height = Math.ceil(box * 2 * DPR);
+            c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+            sprite.canvas = c;
+          }, () => {}));
+        } else if (img.decode) img.decode().catch(() => {});   // ready before anyone clicks
+        return sprite;
       });
     });
+    set.done = !LITE;
+    set.ready = Promise.all(loading).then(() => { set.done = true; });
+    sprites = set;
     return sprites;
+  }
+
+  // phones: hand the cluster canvases' memory straight back (Safari is slow to reclaim it on its own)
+  function release() {
+    if (!sprites || !LITE) return;
+    Object.keys(VARIANTS).forEach((depth) => sprites[depth].forEach((s) => { if (s.canvas) { s.canvas.width = 0; s.canvas.height = 0; } }));
+    sprites = null;
   }
 
   // ---- The transition -------------------------------------------------------------------
   let stage = null;
   let timers = [];
+  let waiting = false;   // phones: the click came before the clusters were painted (only a moment)
+  let painters = [];     // phones: one canvas per half-layer
+  let frameId = 0;
 
   function grow() {
     ensureDefs();
     const sp = prepare();
+    if (!sp.done) {
+      waiting = true;
+      sp.ready.then(() => {
+        waiting = false;
+        if (!stage && document.body.classList.contains('is-welcome')) grow();
+      });
+      return;
+    }
     const W = window.innerWidth;
     const H = window.innerHeight;
     const b = button.getBoundingClientRect();
@@ -267,8 +325,14 @@
       // each copy is shown at its image's own size (so it's only ever drawn once) and sized by --s
       const sprite = pick(sp[depth]);
       const half = sprite.box;
-      parts[depth][side(x)].cl.push([sprite.url, `left:${Math.round(x - half)}px; top:${Math.round(y - half)}px; width:${half * 2}px; height:${half * 2}px; ` +
-        `--d:${delay}ms; --r:${Math.round(rand(-25, 25))}deg; --f:${Math.random() < 0.5 ? -1 : 1}; --s:${r2(size / (sp.g * NOMINAL[depth]))}`]);
+      const left = Math.round(x - half), top = Math.round(y - half);
+      const r = Math.round(rand(-25, 25)), f = Math.random() < 0.5 ? -1 : 1, s = r2(size / (sp.g * NOMINAL[depth]));
+      if (LITE) {
+        parts[depth][side(x)].cl.push({ sprite, x: left + half, y: top + half, d: delay, r, f, s });
+        return;
+      }
+      parts[depth][side(x)].cl.push([sprite.url, `left:${left}px; top:${top}px; width:${half * 2}px; height:${half * 2}px; ` +
+        `--d:${delay}ms; --r:${r}deg; --f:${f}; --s:${s}`]);
     };
 
     // far away: small, soft flowers and leaves on a close-knit grid, so there are no gaps
@@ -330,7 +394,14 @@
         const p = parts[depth][half];
         const layer = document.createElement('div');
         layer.className = `ib-half ib-half--${depth} ib-half--${half}`;
-        p.cl.forEach(([url, style]) => {
+        if (LITE) {
+          const canvas = document.createElement('canvas');
+          canvas.className = 'ib-canvas';
+          canvas.width = Math.round(W * DPR);
+          canvas.height = Math.round(H * DPR);
+          layer.appendChild(canvas);
+          painters.push({ canvas, ctx: canvas.getContext('2d'), cl: p.cl, alpha: depth === 'back' ? 0.93 : 1, still: false });
+        } else p.cl.forEach(([url, style]) => {
           const img = document.createElement('img');
           img.className = 'ib-cl';
           img.alt = '';
@@ -352,6 +423,42 @@
     stage.addEventListener('animationend', (event) => {
       if (event.animationName === 'ib-push' && ++away === 6) finish();
     });
+    // phones: each canvas repaints its clusters every frame while any of them is still growing, exactly
+    // as the CSS animation would (scale(0) until its moment, then 460ms with a soft overshoot), and
+    // stops for good once they've all grown
+    let grownAll = !LITE;
+    let markGrown;
+    const grownP = new Promise((done) => { markGrown = done; });
+    const paintFrame = (now, t0) => {
+      if (!stage) return;
+      const t = now - t0;
+      let busy = false;
+      painters.forEach((pt) => {
+        if (pt.still) return;
+        const ctx = pt.ctx;
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, pt.canvas.width, pt.canvas.height);
+        ctx.globalAlpha = pt.alpha;
+        let moving = false;
+        pt.cl.forEach((k) => {
+          const p = (t - k.d) / 460;
+          if (p < 1) moving = true;
+          if (p <= 0 || !k.sprite.canvas) return;
+          const e = p >= 1 ? 1 : clusterEase(p);
+          const amount = 0.06 + 0.94 * e;
+          ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+          ctx.translate(k.x, k.y);
+          ctx.rotate((k.r - 50 + 50 * e) * Math.PI / 180);
+          ctx.scale(k.f * k.s * amount, k.s * amount);
+          ctx.drawImage(k.sprite.canvas, -k.sprite.box, -k.sprite.box, k.sprite.box * 2, k.sprite.box * 2);
+        });
+        if (moving) busy = true; else pt.still = true;   // fully grown: its last picture simply stays
+      });
+      if (busy) frameId = window.requestAnimationFrame((next) => paintFrame(next, t0));
+      else { grownAll = true; markGrown(); }
+    };
+    if (LITE) frameId = window.requestAnimationFrame((now) => paintFrame(now, now));
+
     // the moments are counted from the first frame the flowers are actually drawn
     const begin = () => {
       if (!stage) return;
@@ -366,7 +473,8 @@
     // a moment longer; it never waits more than 0.8s)
     const push = () => {
       if (!stage) return;
-      const growing = stage.getAnimations ? stage.getAnimations({ subtree: true }).filter((a) => a.animationName === 'ib-cluster' && a.playState === 'running') : [];
+      const growing = LITE ? (grownAll ? [] : [grownP]) : stage.getAnimations ? stage.getAnimations({ subtree: true })
+        .filter((a) => a.animationName === 'ib-cluster' && a.playState === 'running').map((a) => a.finished) : [];
       let pushed = false;
       const go = () => {
         if (pushed || !stage) return;
@@ -374,7 +482,7 @@
         stage.classList.add('is-pushing');
         timers.push(window.setTimeout(safetyNet, DONE - PUSH));
       };
-      if (growing.length) { Promise.all(growing.map((a) => a.finished)).then(go, go); timers.push(window.setTimeout(go, 800)); } else go();
+      if (growing.length) { Promise.all(growing).then(go, go); timers.push(window.setTimeout(go, 800)); } else go();
     };
     // if the layers are somehow still drifting (a very busy phone), give them a little longer
     const safetyNet = () => {
@@ -395,8 +503,12 @@
   function finish() {
     timers.forEach((t) => window.clearTimeout(t));
     timers = [];
+    window.cancelAnimationFrame(frameId);
+    painters.forEach((pt) => { pt.canvas.width = 0; pt.canvas.height = 0; });   // phones: free the canvases at once
+    painters = [];
     if (stage) stage.remove();
     stage = null;
+    release();   // phones: painted again (quietly) if the visitor comes back to the landing page
     welcome.classList.remove('is-blooming');
     document.body.classList.remove('ib-running');
   }
@@ -413,13 +525,14 @@
       return;
     }
     event.preventDefault();
-    if (stage) return;   // already on the way: one transition per click
+    if (stage || waiting) return;   // already on the way: one transition per click
     grow();
   });
 
   // if the visitor heads somewhere else mid-way (the menu, the back button), let it go quietly
   window.addEventListener('hashchange', () => {
     if (stage && location.hash !== '#garden') finish();
+    if (location.hash === '' || location.hash === '#home') whenIdle(ready);   // back on the landing page: be ready again
   });
 
   // draw the ready-made clusters while the landing page is quiet, so the click starts instantly

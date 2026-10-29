@@ -19,6 +19,9 @@
 .ib-half { position: absolute; inset: 0; transform-origin: 50% 52%; }
 .ib-vines { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
 .ib-half--back > * { opacity: .93; }   /* far away: a touch softer */
+/* phones and tablets: the clusters are painted on one canvas per half (js/intro.js), which sets the
+   far layer's softness on each cluster itself, as above */
+.ib-half > .ib-canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 1; }
 
 /* a cluster of flowers and leaves: it grows in with a little turn, as if unfolding. It's one
    smooth movement with a single soft overshoot, and once grown it simply stays (no switching

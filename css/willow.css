@@ -31,6 +31,10 @@ body.at-willow .garden-scene {
   filter: blur(3px) brightness(1.04);
   transition: transform .95s var(--ease), filter .95s var(--ease);
 }
+/* phones and tablets: no blur on the zoom (as in css/greenhouse.css) */
+@media (hover: none) and (pointer: coarse) {
+  body.at-willow .garden-scene { filter: none; transition: transform .95s var(--ease); }
+}
 body.at-willow .instruction-bar,
 body.at-willow .garden-note,
 body.at-willow .swipe-hint {
@@ -78,6 +82,12 @@ body.willow-settled .garden-scene { content-visibility: hidden; visibility: hidd
   transition: transform 1.1s var(--ease) .15s;
 }
 .willow-room.is-open .willow-room__scene { transform: translateY(-50%); }
+/* sized from the nook's own window rather than dvh, so it always covers the whole phone screen
+   (see "Fitting the garden" in css/garden.css) */
+@supports (height: 1cqh) {
+  .willow-room__viewport { container-type: size; }
+  .willow-room__scene { width: max(100vw, 160cqh); }
+}
 
 .willow-room__art,
 .wl-beams,

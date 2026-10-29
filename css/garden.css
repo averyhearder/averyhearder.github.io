@@ -290,6 +290,27 @@ body { overflow: hidden; }
   .signpost-board:focus-visible { transform: rotate(var(--tilt)); }
   .signpost-board:hover .signpost-board__wood { fill: #d6b48a; }
 }
+/* The signpost on phones and tablets (js/signpost.js): the first tap enlarges the whole signpost
+   in the clear space above the beds (--sp-x/--sp-y: how far it moves, --sp-k: how much bigger, so
+   each board's tap area is about 44px tall), and a tap on a board then leads there. One transform
+   on one element; computers never get the class. */
+@media (hover: none) and (pointer: coarse) {
+  .garden-signpost {
+    transform-origin: 0 0;
+    transition: transform .4s var(--ease);
+  }
+  .garden-signpost.is-enlarged {
+    z-index: 50;
+    transform: translate(var(--sp-x, 0), var(--sp-y, 0)) scale(var(--sp-k, 1));
+  }
+  /* boards stay still when enlarged (a tap's lingering "hover" shouldn't leave one swung) */
+  .garden-signpost.is-enlarged .signpost-board { transform: rotate(var(--tilt)); }
+  /* the little "find your seeds" arrow steps aside so it doesn't cover a board */
+  body.signpost-open .garden-guide { opacity: 0; }
+}
+@media (hover: none) and (pointer: coarse) and (prefers-reduced-motion: reduce) {
+  .garden-signpost { transition: none; }
+}
 
 /* ---- The sun ------------------------------------------------------------ */
 .sun {
@@ -1235,9 +1256,10 @@ body.is-dragging-seed * { cursor: grabbing !important; }
   background: linear-gradient(180deg, rgba(255, 196, 120, .35), rgba(255, 170, 120, .15) 60%, rgba(255, 210, 160, .2));
   mix-blend-mode: soft-light;
   opacity: 0;
-  transition: opacity 3s ease;
+  visibility: hidden;   /* not drawn at all until it's needed (saves a full-screen layer on phones) */
+  transition: opacity 3s ease, visibility 0s linear 3s;
 }
-.garden-scene.is-golden .golden-hour { opacity: 1; }
+.garden-scene.is-golden .golden-hour { opacity: 1; visibility: visible; transition-delay: 0s; }
 
 .scene-light {
   background:
@@ -1334,6 +1356,19 @@ body.is-dragging-seed * { cursor: grabbing !important; }
 body.is-welcome .garden-scene {
   transform: scale(1.07);
   filter: saturate(.92) brightness(1.03);
+}
+/* phones and tablets: the same soft, faded look comes from a faint wash on the landing overlay, rather
+   than a filter over the whole moving garden (which the phone had to redraw off-screen every frame) */
+@media (hover: none) and (pointer: coarse) {
+  body.is-welcome .garden-scene { filter: none; }
+  .welcome::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(252, 249, 242, .07);
+    pointer-events: none;
+  }
 }
 body.is-welcome .garden-viewport { overflow: hidden; }
 body.is-welcome .garden-scene button { pointer-events: none; }
@@ -1613,6 +1648,27 @@ body.has-panel .swipe-hint { opacity: 0; }
 @media (min-width: 561px) {
   .garden-guide { display: none; }   /* phones only: on larger screens the whole garden fits */
   .garden-soil { display: none; }    /* the garden already reaches the bottom of the screen */
+}
+
+/* ---- Fitting the garden to the screen it's actually on -----------------------------------
+   The garden is sized from the height of its own window (cqh) rather than from vh/dvh. On iPhones,
+   Safari's dvh doesn't always match the area a full-screen element really covers (its toolbars float
+   over the page and change size), which left the garden a little short of the screen, with flat bands
+   of colour above and below it. Measuring the window itself keeps it one continuous scene, in the same
+   proportions; on computers the two are identical. (Older browsers keep the vh/dvh sizes above.) */
+@supports (height: 1cqh) {
+  .garden-viewport { container-type: size; }
+  .garden-scene { width: max(100vw, 160cqh); }
+  @media (max-width: 560px) {
+    .garden-scene,
+    .garden-soil { width: max(100vw, calc((100cqh - var(--dock)) * 1.6)); }
+  }
+}
+/* phones: should anything ever show past the garden's edges (or Safari tint its toolbars from it),
+   it fades like the garden itself, from sky to meadow to courtyard gravel, never a flat strip */
+@media (max-width: 560px) {
+  .garden-viewport { background: linear-gradient(180deg, #a6c3d4, #d2e1e1 40%, #a9b98e 62%, #bba98a 80%) #a6c3d4; }
+  body.mode-golden .garden-viewport { background: linear-gradient(180deg, #b8aac8, #efc6b4 40%, #a9a98a 62%, #bba98a 80%) #b8aac8; }
 }
 
 /* ---- Little garden moments (js/garden-extras.js) ------------------------------

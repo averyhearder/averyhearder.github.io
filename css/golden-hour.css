@@ -100,12 +100,16 @@
 }
 
 /* ---- Fading golden layers in and out (about 2 seconds) ---------------------- */
+/* By day they're hidden as well as transparent, so the browser doesn't keep a full-screen layer for
+   each one (about a dozen, across the garden and rooms: on phones that memory is what made Safari
+   reload the page). They stay visible until they've finished fading out. */
 .golden-only {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 1.5s ease;
+  transition: opacity 1.5s ease, visibility 0s linear 1.5s;
 }
-body.mode-golden .golden-only { opacity: 1; }
+body.mode-golden .golden-only { opacity: 1; visibility: visible; transition-delay: 0s; }
 body.mode-instant .golden-only,
 body.mode-instant .sun::before { transition: none !important; }
 
