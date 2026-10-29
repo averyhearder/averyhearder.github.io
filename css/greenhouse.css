@@ -1,0 +1,492 @@
+/* ==========================================================================
+   A Day in Bloom · inside the greenhouse (js/greenhouse.js)
+   The room uses the garden's 1600 × 1000 units, so the garden's .prop
+   placement, hover labels and twinkles work here too.
+   ========================================================================== */
+
+/* ---- Stepping in: the garden leans in toward the greenhouse ---------------- */
+body.in-greenhouse .garden-scene {
+  transform: scale(1.9);
+  transform-origin: 85% 52%;
+  filter: blur(3px) brightness(1.04);
+  transition: transform .95s var(--ease), filter .95s var(--ease);
+}
+/* (the garden's animations pause in js/main.js) Once the room has fully faded in, the
+   garden behind it is skipped entirely: the room covers it, so nothing changes visually,
+   but the browser no longer draws, blurs and restyles the whole garden underneath. */
+body.gh-settled .garden-scene { content-visibility: hidden; visibility: hidden; }
+body.in-greenhouse .instruction-bar,
+body.in-greenhouse .garden-note,
+body.in-greenhouse .swipe-hint {
+  opacity: 0;
+  pointer-events: none;
+  transition-delay: 0s !important;
+}
+
+/* ---- The room ------------------------------------------------------------- */
+.gh-room {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  background: #f1ece0;
+  opacity: 0;
+  transition: opacity .55s var(--ease) .2s;
+}
+.gh-room.is-open { opacity: 1; }
+.gh-room[hidden] { display: none; }
+.gh-room:not(.is-open) { transition-delay: 0s; transition-duration: .5s; }
+
+/* fills the screen; on narrow screens it keeps its shape and you swipe sideways */
+.gh-room__viewport {
+  position: absolute;
+  inset: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.gh-room__viewport::-webkit-scrollbar { display: none; }
+
+.gh-room__scene {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  /* on screens wider than 16:10 the room is taller than the screen: trim a little more of the
+     extra from the glass roof than from the floor, so the chalkboard sign by the buckets stays whole */
+  top: calc(50% - max(0px, max(100vw, 160dvh) * .625 - 100dvh) * .3);
+  width: max(100vw, 160vh);
+  width: max(100vw, 160dvh);
+  aspect-ratio: 16 / 10;
+  container-type: inline-size;
+  transform: translateY(-50%) scale(1.06);
+  transition: transform 1.1s var(--ease) .15s;
+}
+.gh-room.is-open .gh-room__scene { transform: translateY(-50%); }
+
+.gh-room__art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* warm light and a paper grain over the room, like the garden */
+.gh-room__light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 75% 15%, rgba(255, 244, 210, .3), transparent 70%),
+    radial-gradient(ellipse 120% 90% at 50% 45%, transparent 60%, rgba(70, 56, 36, .22)),
+    var(--grain-soft);
+  background-size: auto, auto, 220px;
+  mix-blend-mode: multiply;
+}
+
+/* ---- Flowers that sway (layers added by js/greenhouse-flowers.js) -----------
+   Each layer leans gently around its own anchor point, at its own pace. */
+.ghf-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  transform-origin: var(--o, 50% 50%);
+  will-change: transform;
+  animation: ghf-sway var(--d, 8s) ease-in-out var(--delay, 0s) infinite alternate;
+}
+.ghf-layer--still { animation: none; will-change: auto; }
+@keyframes ghf-sway {
+  from { transform: skewX(calc(var(--a, 1deg) * -1)); }
+  to   { transform: skewX(var(--a, 1deg)); }
+}
+
+/* ---- Petals drifting down and dust motes in the sunbeams -------------------- */
+.ghf-air { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.ghf-petal,
+.ghf-mote {
+  position: absolute;
+  left: calc(var(--x) / 16 * 1%);
+  top: calc(var(--y) / 10 * 1%);
+}
+.ghf-petal {
+  width: .6cqw;
+  height: .42cqw;
+  border-radius: 70% 0 70% 0;
+  background: #efbcc4;
+  opacity: 0;
+  animation: ghf-fall var(--dur) linear var(--delay) infinite;
+}
+.ghf-petal:nth-child(3n) { background: #f6c3a0; }
+.ghf-petal:nth-child(3n+1) { background: #fbe9e7; }
+@keyframes ghf-fall {
+  0%   { opacity: 0;  transform: translate(0, 0) rotate(0); }
+  8%   { opacity: .9; }
+  50%  { transform: translate(1.6cqw, 14cqw) rotate(160deg); }
+  92%  { opacity: .8; }
+  100% { opacity: 0;  transform: translate(-.8cqw, 28cqw) rotate(320deg); }
+}
+.ghf-mote {
+  width: .22cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fffaf0;
+  box-shadow: 0 0 .3cqw rgba(255, 250, 235, .9);
+  opacity: .45;
+  animation: ghf-mote var(--dur) ease-in-out var(--delay) infinite alternate;
+}
+body.mode-golden .ghf-mote { background: #ffe7b0; box-shadow: 0 0 .35cqw rgba(255, 214, 140, .95); }
+@keyframes ghf-mote {
+  0%   { opacity: .1;  transform: translate(0, 0); }
+  50%  { opacity: .65; }
+  100% { opacity: .2;  transform: translate(1.2cqw, -2.4cqw); }
+}
+
+/* ---- Fairy lights in the room: soft by day, glowing at golden hour ----------- */
+.gh-room .fairy-bulbs { fill: #fbefd2; filter: none; }
+.gh-room .fairy-bulbs circle { animation: ghf-twinkle 4.5s ease-in-out infinite alternate; }
+body.mode-golden .gh-room .fairy-bulbs { fill: #ffe6a6; filter: drop-shadow(0 0 7px #ffd27a); }
+@keyframes ghf-twinkle { from { opacity: 1; } to { opacity: .72; } }
+
+/* the lantern's candle flickers a little */
+.ghf-flame { transform-box: fill-box; transform-origin: 50% 100%; animation: ghf-flicker 2.6s ease-in-out infinite alternate; }
+@keyframes ghf-flicker { from { transform: scale(1, 1); } to { transform: scale(.88, 1.12); } }
+
+/* golden highlights on flowers and leaves */
+.gh-room__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(ellipse 55% 50% at 74% 18%, rgba(255, 200, 130, .32), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 30% 70%, rgba(255, 190, 140, .14), transparent 70%);
+}
+
+/* ---- "back to the garden" -------------------------------------------------- */
+.gh-room__back {
+  position: fixed;
+  left: 50%;
+  bottom: clamp(14px, 3vh, 28px);
+  z-index: 2;
+  padding: .7rem 1.6rem;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--hand);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--cream);
+  background: var(--sage-deep);
+  box-shadow: 0 10px 28px rgba(40, 50, 35, .3);
+  cursor: pointer;
+  transform: translateX(-50%);
+  transition: background-color .3s, transform .3s var(--ease);
+}
+.gh-room__back:hover { background: #546650; transform: translate(-50%, -2px); }
+.gh-room__back { white-space: nowrap; }
+@media (max-width: 560px) {
+  .gh-room__back { padding: .5rem 1.2rem; font-size: 1.15rem; }
+}
+
+/* ---- The sketchbook on the bench ------------------------------------------- */
+.gh-sketchbook::before { inset: -30% -12%; }
+.gh-sketchbook:hover,
+.gh-sketchbook:focus-visible {
+  transform: translateY(-.4cqw) rotate(-2deg) scale(1.05);
+  filter: drop-shadow(0 .4cqw .5cqw rgba(60, 45, 30, .25)) drop-shadow(0 0 .8cqw rgba(255, 244, 205, 1));
+}
+.gh-sketchbook .prop-sparkle { top: -12%; right: 8%; }
+
+/* ---- The "Growing Soon" shelf ---------------------------------------------- */
+.gh-shelf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  aspect-ratio: 360 / 187;   /* from the sign down to the top of the shelf plank */
+  justify-content: space-between;
+}
+
+.gh-shelf__sign {
+  padding: .5cqw 1.4cqw .55cqw;
+  border-radius: .4cqw;
+  text-align: center;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0) 0 7px, rgba(255, 255, 255, .08) 7px 9px, rgba(0, 0, 0, .04) 9px 13px),
+    linear-gradient(180deg, #dcc29a, #c4a678);
+  box-shadow: 0 .2cqw .5cqw rgba(50, 35, 20, .28), inset 0 1px 0 rgba(255, 255, 255, .35);
+  transform: rotate(-1.5deg);
+}
+.gh-shelf__title {
+  margin: 0;
+  font-size: 2cqw;
+  font-weight: 600;
+  color: #4f3b28;
+}
+.gh-shelf__sub {
+  margin: .1cqw 0 0;
+  font-size: max(9px, .62cqw);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #6b5440;
+}
+
+.gh-shelf__pots {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* each seedling pot, with a little paper tag tied on */
+.gh-pot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 6.4cqw;
+  text-decoration: none;
+  color: var(--ink);
+}
+a.gh-pot:hover .gh-pot__art { transform: translateY(-.2cqw); }
+.gh-pot__art { width: 100%; height: auto; display: block; transition: transform .3s var(--ease); }
+.gh-pot__tag {
+  position: absolute;
+  top: 34%;
+  left: 62%;
+  display: flex;
+  flex-direction: column;
+  padding: .12cqw .4cqw .16cqw;
+  border-radius: .15cqw;
+  white-space: nowrap;
+  background: #fffaf0;
+  box-shadow: 0 .1cqw .25cqw rgba(60, 45, 30, .2);
+  transform: rotate(7deg);
+}
+.gh-pot__title { font-size: max(11px, .95cqw); font-weight: 600; line-height: 1.05; color: var(--sage-deep); }
+.gh-pot__note { font-size: max(7px, .42cqw); letter-spacing: .16em; text-transform: uppercase; color: #9a5a6b; }
+
+/* ---- The bouquet bar (js/bouquet.js) ---------------------------------------- */
+/* The button's box is larger than the cart, so only the painted cart, its bouquet and an
+   invisible pad over the cart's body take taps: nothing nearby is covered. */
+.gh-station { aspect-ratio: 290 / 490; pointer-events: none; }
+.gh-station svg { display: block; width: 100%; height: auto; overflow: visible; }
+.gh-station svg * { pointer-events: visiblePainted; }
+.gh-station .gh-station__hit { fill: transparent; pointer-events: all; }
+.gh-station .prop-tag { top: 2%; bottom: auto; }
+.gh-station .prop-sparkle { top: 16%; right: 30%; animation-delay: 1.2s; }
+.gh-station__twinkle--2 { top: 64%; right: auto; left: 4%; animation-delay: 2.6s; }
+.gh-station__twinkle--3 { top: 46%; right: 4%; animation-delay: 3.7s; }
+/* the flowers on the cart sway a little, to catch the eye */
+.gh-station__sway {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  --a: .8deg;
+  animation: ghf-sway 6.5s ease-in-out infinite alternate;
+}
+.gh-station__sway ~ .gh-station__sway { animation-duration: 8s; animation-delay: -3s; }
+
+/* ---- The little speaker on the stool (js/greenhouse.js) ---------------------- */
+.gh-speaker svg { display: block; width: 100%; height: auto; transition: filter .6s var(--ease); }
+.gh-speaker .prop-sparkle { top: -4%; right: 6%; animation-delay: 3.1s; }
+.gh-speaker__light { fill: #b8ab90; transition: fill .4s; }
+.gh-speaker.is-on .gh-speaker__light { fill: #ffd27a; }
+.gh-speaker.is-on svg {
+  filter: drop-shadow(0 0 .5cqw rgba(255, 222, 150, .75));
+  animation: gh-speaker-wake .6s var(--ease);
+}
+@keyframes gh-speaker-wake {
+  35% { transform: translateY(-3%) scale(1.02); }
+}
+.gh-speaker__notes {
+  position: absolute;
+  left: 28%;
+  bottom: 80%;
+  width: 46%;
+  height: 90%;
+  pointer-events: none;
+}
+.gh-speaker__notes i {
+  position: absolute;
+  bottom: 0;
+  font-style: normal;
+  font-size: max(12px, 1.15cqw);
+  line-height: 1;
+  color: #b0697a;
+  opacity: 0;
+}
+.gh-speaker__notes i:nth-child(1) { left: 0; }
+.gh-speaker__notes i:nth-child(2) { left: 44%; color: var(--sage-deep); }
+.gh-speaker__notes i:nth-child(3) { left: 86%; color: #b9925f; }
+.gh-speaker.is-on .gh-speaker__notes i { animation: gh-note-float 4.8s ease-in-out infinite; }
+.gh-speaker.is-on .gh-speaker__notes i:nth-child(1) { animation-delay: .3s; }
+.gh-speaker.is-on .gh-speaker__notes i:nth-child(2) { animation-delay: 1.9s; }
+.gh-speaker.is-on .gh-speaker__notes i:nth-child(3) { animation-delay: 3.4s; }
+@keyframes gh-note-float {
+  0%   { opacity: 0;  transform: translate(0, 0) rotate(-8deg); }
+  15%  { opacity: .9; }
+  75%  { opacity: .6; }
+  100% { opacity: 0;  transform: translate(.6cqw, -3cqw) rotate(10deg); }
+}
+
+/* ---- The bouquet card ------------------------------------------------------------ */
+.gh-bouquet { width: min(780px, calc(100vw - 24px)); }
+.gh-bouquet__card {
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  padding: 30px 24px 22px;
+  background:
+    linear-gradient(180deg, rgba(201, 214, 182, .25), transparent 120px),
+    var(--grain-soft), var(--paper);
+  background-size: auto, 220px, auto;
+}
+.gh-bouquet__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 18px;
+  align-items: center;
+  margin-top: 12px;
+}
+.gh-bouquet__stage { margin: 0; }
+.gh-bouquet__stage svg { display: block; width: 100%; height: min(360px, 44dvh); overflow: visible; }
+
+/* each new stem slides gently into the jar */
+.gh-bq-stem.is-new {
+  transform-box: view-box;
+  transform-origin: 150px 300px;
+  animation: gh-bq-in .55s var(--ease) both;
+}
+@keyframes gh-bq-in {
+  from { opacity: 0; transform: translateY(16px) scale(.94); }
+}
+.gh-bq-bow { animation: gh-bq-fade .7s var(--ease) both; }
+@keyframes gh-bq-fade { from { opacity: 0; } }
+
+.gh-bouquet__message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: gh-bq-note .9s var(--ease) .15s both;
+}
+.gh-bouquet__message[hidden] { display: none; }
+@keyframes gh-bq-note { from { opacity: 0; transform: translateY(8px) rotate(-2deg); } }
+.gh-bouquet__note { font-size: 1.9rem; font-weight: 600; line-height: 1.05; color: #b0697a; }
+.gh-bouquet__from { font-family: var(--serif); font-size: 1.05rem; font-style: italic; color: var(--ink-soft); }
+
+.gh-bouquet__stems {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.gh-bq-bucket {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 4px 4px 7px;
+  border: 1px dashed rgba(127, 154, 100, .6);
+  border-radius: 14px;
+  color: var(--ink);
+  background: rgba(255, 253, 248, .9);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .3s var(--ease), background-color .3s, box-shadow .3s, opacity .3s;
+}
+.gh-bq-bucket svg { width: 62px; height: 72px; overflow: visible; }
+.gh-bq-bucket span { font-size: 1.15rem; line-height: 1; }
+.gh-bq-bucket:not(.is-off):hover,
+.gh-bq-bucket:not(.is-off):focus-visible {
+  background: #fff;
+  box-shadow: 0 6px 14px rgba(95, 115, 87, .16);
+  transform: translateY(-2px) rotate(-1deg);
+}
+.gh-bq-bucket:not(.is-off):active { transform: scale(.96); }
+.gh-bq-bucket.is-off { opacity: .45; cursor: default; }
+
+.gh-bouquet__count { min-height: 1.4em; margin: 10px 0 6px; font-size: 1.25rem; color: var(--sage-deep); }
+.gh-bouquet__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.gh-bouquet__clear,
+.gh-bouquet__finish {
+  padding: .3rem 1rem;
+  border-radius: 999px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .3s, transform .3s var(--ease), opacity .3s;
+}
+.gh-bouquet__clear { border: 1px solid rgba(176, 105, 122, .45); color: #b0697a; background: rgba(255, 253, 248, .7); }
+.gh-bouquet__clear:hover:not(:disabled) { background: #fff; }
+.gh-bouquet__finish { border: 0; color: var(--cream); background: var(--sage-deep); box-shadow: 0 6px 16px rgba(61, 71, 57, .22); }
+.gh-bouquet__finish:hover:not(:disabled) { background: #546650; transform: translateY(-1px); }
+.gh-bouquet__clear:disabled,
+.gh-bouquet__finish:disabled { opacity: .45; cursor: default; box-shadow: none; }
+
+/* keeping the finished bouquet: save / send */
+.gh-bouquet__keep { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 2px 0 4px; }
+.gh-bouquet__keep[hidden] { display: none; }
+.gh-bouquet__save,
+.gh-bouquet__send {
+  padding: .35rem 1.1rem;
+  border: 0;
+  border-radius: 999px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(90, 66, 44, .14);
+  transition: transform .3s var(--ease), background-color .3s, opacity .3s;
+}
+.gh-bouquet__save { color: #8f4a5b; background: #f1c9cd; }
+.gh-bouquet__send { color: var(--cream); background: var(--sage-deep); }
+.gh-bouquet__save:hover:not(:disabled) { background: #edbcc1; transform: translateY(-1px) rotate(-1deg); }
+.gh-bouquet__send:hover:not(:disabled) { background: #546650; transform: translateY(-1px) rotate(1deg); }
+.gh-bouquet__save:disabled,
+.gh-bouquet__send:disabled { opacity: .6; cursor: progress; }
+.gh-bouquet__keep-note {
+  max-width: 34ch;
+  min-height: 0;
+  margin: 0 auto 6px;
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.3;
+  color: var(--ink-soft);
+}
+.gh-bouquet__keep-note:empty { display: none; }
+
+@media (max-width: 640px) {
+  .gh-bouquet__card { padding: 26px 12px 16px; }
+  /* once finished, the buckets step aside so the bouquet and its buttons fit the screen */
+  .gh-bouquet.is-finished .gh-bouquet__stems { display: none; }
+  .gh-bouquet__body { grid-template-columns: 1fr; gap: 4px; margin-top: 4px; }
+  .gh-bouquet__stage svg { height: min(250px, 30dvh); }
+  .gh-bq-bucket svg { width: 48px; height: 56px; }
+  .gh-bq-bucket span { font-size: 1.05rem; }
+  .gh-bouquet__note { font-size: 1.6rem; }
+}
+
+/* ---- The sketchbook's note -------------------------------------------------- */
+.gh-note .music-card {
+  background:
+    repeating-linear-gradient(180deg, transparent 0 29px, rgba(157, 176, 139, .22) 29px 30px),
+    var(--grain-soft), var(--paper);
+  background-size: auto, 220px, auto;
+}
+.gh-note__text {
+  margin: 1rem 0 0;
+  font-size: 1.45rem;
+  line-height: 1.3;
+  color: var(--ink);
+}
+.gh-note__sign {
+  margin: .6rem 0 0;
+  font-size: 1.4rem;
+  text-align: right;
+  color: #b0697a;
+}

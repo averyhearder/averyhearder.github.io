@@ -1,0 +1,2809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A Day in Bloom — Avery Hearder</title>
+  <meta name="description" content="A Day in Bloom: an interactive portfolio garden by interior design student Avery Hearder.">
+
+  <!-- Link previews (iMessage, social media, messaging apps). https://averyhearder.github.io/ is replaced with the
+       site's public address, ending in a slash, before publishing (see README.md) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="A Day in Bloom">
+  <meta property="og:locale" content="en_CA">
+  <meta property="og:title" content="A Day in Bloom | Avery Hearder">
+  <meta property="og:description" content="An interactive interior design portfolio exploring creativity, thoughtful spaces and the stories behind design.">
+  <meta property="og:url" content="https://averyhearder.github.io/">
+  <meta property="og:image" content="https://averyhearder.github.io/assets/social/a-day-in-bloom.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="An illustrated flower garden with a willow tree, a lake, a greenhouse and three planters, beside the title A Day in Bloom">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A Day in Bloom | Avery Hearder">
+  <meta name="twitter:description" content="An interactive interior design portfolio exploring creativity, thoughtful spaces and the stories behind design.">
+  <meta name="twitter:image" content="https://averyhearder.github.io/assets/social/a-day-in-bloom.jpg">
+  <meta name="twitter:image:alt" content="An illustrated flower garden with a willow tree, a lake, a greenhouse and three planters, beside the title A Day in Bloom">
+  <link rel="icon" type="image/svg+xml" href="assets/favicons/garden.svg">
+
+  <!-- Fonts: Cormorant Garamond (serif headings), Jost (clean text), Caveat (handwritten accents) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/paper.css">
+  <link rel="stylesheet" href="css/garden.css">
+  <link rel="stylesheet" href="css/panels.css">
+  <link rel="stylesheet" href="css/journal.css">
+  <link rel="stylesheet" href="css/greenhouse.css">
+  <link rel="stylesheet" href="css/lake.css">
+  <link rel="stylesheet" href="css/willow.css">
+  <link rel="stylesheet" href="css/golden-hour.css">
+  <link rel="stylesheet" href="css/intro.css">
+  <link rel="stylesheet" href="css/bloom-cursor.css">
+</head>
+<body class="is-welcome">
+
+  <!-- =====================================================================
+       SHARED ART SUPPLIES
+       Colours, gradients, textures and small flower shapes that every
+       drawing on the page can borrow (referenced like url(#sky-grad)).
+       ===================================================================== -->
+  <svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <defs>
+      <!-- Sky, water and ground -->
+      <linearGradient id="sky-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#a6c3d4"/>
+        <stop offset=".42" stop-color="#d2e1e1"/>
+        <stop offset=".78" stop-color="#f3e9d4"/>
+        <stop offset="1" stop-color="#f8dcc4"/>
+      </linearGradient>
+      <linearGradient id="lake-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#b6ced6"/>
+        <stop offset=".5" stop-color="#90b2c1"/>
+        <stop offset="1" stop-color="#7ea3b4"/>
+      </linearGradient>
+      <linearGradient id="meadow-grad" gradientUnits="userSpaceOnUse" x1="0" y1="460" x2="0" y2="1000">
+        <stop offset="0" stop-color="#a8bc84"/>
+        <stop offset=".35" stop-color="#93ab72"/>
+        <stop offset="1" stop-color="#7d9662"/>
+      </linearGradient>
+      <linearGradient id="gravel-grad" gradientUnits="userSpaceOnUse" x1="0" y1="700" x2="0" y2="1000">
+        <stop offset="0" stop-color="#d8cab0"/>
+        <stop offset=".5" stop-color="#ccbc9c"/>
+        <stop offset="1" stop-color="#bba98a"/>
+      </linearGradient>
+      <radialGradient id="sun-glow">
+        <stop offset="0" stop-color="#fff4d6" stop-opacity=".85"/>
+        <stop offset="1" stop-color="#fff4d6" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="sunset-sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#b8aac8"/>
+        <stop offset=".22" stop-color="#d9b3c4"/>
+        <stop offset=".38" stop-color="#f2c2b4"/>
+        <stop offset=".46" stop-color="#f8d3a8"/>
+        <stop offset=".6" stop-color="#fbe2bd"/>
+      </linearGradient>
+      <radialGradient id="sunset-glow">
+        <stop offset="0" stop-color="#ffd896" stop-opacity=".95"/>
+        <stop offset=".45" stop-color="#ffc79a" stop-opacity=".45"/>
+        <stop offset="1" stop-color="#ffc79a" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="sunset-lake" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#c9a6bf"/>
+        <stop offset=".55" stop-color="#e9b5ad"/>
+        <stop offset=".78" stop-color="#f7cf9a"/>
+        <stop offset="1" stop-color="#e5b3ae"/>
+      </linearGradient>
+      <radialGradient id="window-glow">
+        <stop offset="0" stop-color="#ffd58f" stop-opacity=".85"/>
+        <stop offset="1" stop-color="#ffc98a" stop-opacity=".25"/>
+      </radialGradient>
+      <radialGradient id="canopy-shade">
+        <stop offset="0" stop-color="#6c8656" stop-opacity=".8"/>
+        <stop offset=".65" stop-color="#7a935f" stop-opacity=".45"/>
+        <stop offset="1" stop-color="#7a935f" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="soft-shadow">
+        <stop offset="0" stop-color="#2f281f" stop-opacity=".35"/>
+        <stop offset="1" stop-color="#2f281f" stop-opacity="0"/>
+      </radialGradient>
+
+      <!-- Materials -->
+      <linearGradient id="bark" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#76685a"/>
+        <stop offset=".45" stop-color="#93826f"/>
+        <stop offset="1" stop-color="#5c5147"/>
+      </linearGradient>
+      <linearGradient id="galv-body" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#7f898e"/>
+        <stop offset=".08" stop-color="#b3bbbe"/>
+        <stop offset=".28" stop-color="#dde2e2"/>
+        <stop offset=".46" stop-color="#b8c0c2"/>
+        <stop offset=".62" stop-color="#cdd3d4"/>
+        <stop offset=".88" stop-color="#9aa3a7"/>
+        <stop offset="1" stop-color="#737d82"/>
+      </linearGradient>
+      <linearGradient id="galv-rim" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#f4f6f5"/>
+        <stop offset=".45" stop-color="#cfd5d6"/>
+        <stop offset="1" stop-color="#99a2a6"/>
+      </linearGradient>
+      <linearGradient id="rib" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset=".3" stop-color="#ffffff" stop-opacity=".6"/>
+        <stop offset=".52" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset=".72" stop-color="#36414a" stop-opacity=".32"/>
+        <stop offset="1" stop-color="#36414a" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset=".5" stop-color="#ffffff" stop-opacity=".85"/>
+        <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="bed-depth" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffffff" stop-opacity=".1"/>
+        <stop offset=".45" stop-color="#ffffff" stop-opacity="0"/>
+        <stop offset="1" stop-color="#2b3338" stop-opacity=".34"/>
+      </linearGradient>
+      <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3f3027"/>
+        <stop offset="1" stop-color="#644b3a"/>
+      </linearGradient>
+      <linearGradient id="weathered-wood" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#c4b195"/>
+        <stop offset="1" stop-color="#9e8a6f"/>
+      </linearGradient>
+      <linearGradient id="straw" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#f1dca2"/>
+        <stop offset="1" stop-color="#d2b26c"/>
+      </linearGradient>
+      <linearGradient id="terracotta" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#9d5c40"/>
+        <stop offset=".3" stop-color="#cf8c63"/>
+        <stop offset=".55" stop-color="#c47e58"/>
+        <stop offset="1" stop-color="#8f533b"/>
+      </linearGradient>
+      <linearGradient id="terracotta-rim" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#e0a37c"/>
+        <stop offset=".6" stop-color="#c27f5c"/>
+        <stop offset="1" stop-color="#a1644a"/>
+      </linearGradient>
+      <linearGradient id="pot-shade" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3a2216" stop-opacity=".28"/>
+        <stop offset=".2" stop-color="#3a2216" stop-opacity="0"/>
+        <stop offset=".75" stop-color="#3a2216" stop-opacity=".05"/>
+        <stop offset="1" stop-color="#3a2216" stop-opacity=".3"/>
+      </linearGradient>
+      <linearGradient id="stone" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#9c958a"/>
+        <stop offset=".35" stop-color="#d3cdc1"/>
+        <stop offset=".7" stop-color="#bdb6aa"/>
+        <stop offset="1" stop-color="#8b8479"/>
+      </linearGradient>
+      <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#9dbccb"/>
+        <stop offset="1" stop-color="#c9dde2"/>
+      </linearGradient>
+      <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ffffff" stop-opacity=".72"/>
+        <stop offset=".45" stop-color="#d6e8e6" stop-opacity=".42"/>
+        <stop offset="1" stop-color="#aecbca" stop-opacity=".58"/>
+      </linearGradient>
+      <linearGradient id="basket-shade" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#4f3820" stop-opacity=".42"/>
+        <stop offset=".3" stop-color="#4f3820" stop-opacity="0"/>
+        <stop offset=".75" stop-color="#4f3820" stop-opacity="0"/>
+        <stop offset="1" stop-color="#4f3820" stop-opacity=".42"/>
+      </linearGradient>
+      <linearGradient id="hb-body" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#5f8f6c"/>
+        <stop offset="1" stop-color="#8fb39a"/>
+      </linearGradient>
+      <pattern id="wicker" width="14" height="9" patternUnits="userSpaceOnUse">
+        <rect width="14" height="9" fill="#c0965b"/>
+        <path d="M0 4.5 Q3.5 .5 7 4.5 T14 4.5" fill="none" stroke="#dcb985" stroke-width="2.2"/>
+        <path d="M0 8.5 Q3.5 5 7 8.5 T14 8.5" fill="none" stroke="#9c7440" stroke-width="1.1" opacity=".7"/>
+      </pattern>
+
+      <!-- Textures -->
+      <filter id="metal-light" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.42" numOctaves="2" seed="7"/>
+        <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.9 -0.88"/>
+      </filter>
+      <filter id="metal-dark" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.05 0.12" numOctaves="3" seed="3"/>
+        <feColorMatrix values="0 0 0 0 .2  0 0 0 0 .24  0 0 0 0 .26  0 0 0 2.2 -1.05"/>
+      </filter>
+
+      <!-- Soft-focus filters (for distance and depth) -->
+      <filter id="blur-sm" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1"/></filter>
+      <filter id="blur-md" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6"/></filter>
+
+      <!-- Reusable little blooms (scattered through the garden by js/scenery.js) -->
+      <g id="bloom-daisy">
+        <g fill="#fffaf0" stroke="#cfc4ad" stroke-width=".35">
+          <ellipse rx="1.6" ry="4.4" cy="-4"/>
+          <ellipse rx="1.6" ry="4.4" cy="-4" transform="rotate(40)"/>
+          <ellipse rx="1.6" ry="4.4" cy="-4" transform="rotate(80)"/>
+          <ellipse rx="1.6" ry="4.4" cy="-4" transform="rotate(120)"/>
+          <ellipse rx="1.6" ry="4.4" cy="-4" transform="rotate(160)"/>
+          <ellipse rx="1.6" ry="4.4" cy="-4" transform="rotate(200)"/>
+          <ellipse rx="1.6" ry="4.4" cy="-4" transform="rotate(240)"/>
+          <ellipse rx="1.6" ry="4.4" cy="-4" transform="rotate(280)"/>
+          <ellipse rx="1.6" ry="4.4" cy="-4" transform="rotate(320)"/>
+        </g>
+        <circle r="2.3" fill="#e2b546"/>
+        <circle r="2.3" fill="none" stroke="#b98a2c" stroke-width=".5"/>
+      </g>
+      <g id="bloom-cosmos">
+        <g fill="currentColor" stroke="#7a3b4a" stroke-opacity=".22" stroke-width=".45">
+          <path id="cosmos-petal" d="M0 -1 C-2.6 -2.6 -3 -7 -1.8 -9 L-.9 -8.2 L0 -9.4 L.9 -8.2 L1.8 -9 C3 -7 2.6 -2.6 0 -1 Z"/>
+          <use href="#cosmos-petal" transform="rotate(45)"/>
+          <use href="#cosmos-petal" transform="rotate(90)"/>
+          <use href="#cosmos-petal" transform="rotate(135)"/>
+          <use href="#cosmos-petal" transform="rotate(180)"/>
+          <use href="#cosmos-petal" transform="rotate(225)"/>
+          <use href="#cosmos-petal" transform="rotate(270)"/>
+          <use href="#cosmos-petal" transform="rotate(315)"/>
+        </g>
+        <circle r="2" fill="#dcae46"/>
+        <circle r="1" fill="#b98a2c"/>
+      </g>
+      <g id="bloom-round">
+        <circle r="5" fill="currentColor"/>
+        <circle r="5" fill="none" stroke="#5a3a2a" stroke-opacity=".2" stroke-width=".5"/>
+        <circle r="3.8" fill="none" stroke="#5a3a2a" stroke-opacity=".16" stroke-width=".55"/>
+        <circle r="2.6" fill="#ffffff" fill-opacity=".22"/>
+        <circle r="2.6" fill="none" stroke="#5a3a2a" stroke-opacity=".16" stroke-width=".55"/>
+        <circle r="1.1" fill="#7f8a55" opacity=".6"/>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- =====================================================================
+       SITE HEADER + DISCREET NAVIGATION (always available for employers)
+       ===================================================================== -->
+  <header class="site-header">
+    <a class="brand" href="#garden">A Day in Bloom</a>
+    <div class="garden-controls">
+      <!-- Daytime / Golden Hour (js/mode.js) -->
+      <div class="mode-toggle" role="group" aria-label="Garden light">
+        <button type="button" data-mode="day" aria-pressed="true">
+          <svg class="mode-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.3" fill="#f1dca6" stroke="none"/>
+            <path d="M12.1 7.6 C9.7 7.5 7.7 9.6 7.8 12.1 C7.9 14.6 9.9 16.5 12.2 16.4 C14.6 16.3 16.4 14.3 16.3 11.9 C16.2 9.5 14.4 7.7 12.1 7.6" fill="none"/>
+            <path d="M12 2.6 L12.2 5 M12.1 19.1 L11.9 21.4 M2.7 12.1 L5 11.9 M19 12 L21.3 12.2 M5.4 5.3 L7 7 M17.1 16.9 L18.7 18.6 M18.6 5.5 L17 7.1 M7.1 17 L5.5 18.6"/>
+          </svg>
+          <span class="mode-toggle__label">Daytime</span>
+        </button>
+        <button type="button" data-mode="golden" aria-pressed="false">
+          <svg class="mode-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6.6 15.2 C6.7 12 9.1 9.6 12.1 9.7 C15 9.8 17.4 12.2 17.4 15.2 Z" fill="#efc7b0" stroke="none"/>
+            <path d="M6.6 15.2 C6.7 12 9.1 9.6 12.1 9.7 C15 9.8 17.4 12.2 17.4 15.2" fill="none"/>
+            <path d="M12 4.3 L12.1 6.6 M5.2 7.4 L6.8 9 M18.9 7.5 L17.3 9.1 M2.9 12.6 L4.9 12.8 M19.2 12.7 L21.1 12.5"/>
+            <path d="M2.6 15.3 C8 15 15.6 15.4 21.4 15.1 M6 18.3 C8.6 18.1 10.6 18.4 12.6 18.2 M14.6 18.3 C15.9 18.2 17 18.3 18.1 18.2 M8.6 21 C10.6 20.9 12.4 21.1 14.6 20.9"/>
+          </svg>
+          <span class="mode-toggle__label">Golden Hour</span>
+        </button>
+      </div>
+      <!-- Garden sounds on / off (js/sound.js). Off until the visitor turns it on. -->
+      <button type="button" class="sound-toggle" id="sound-toggle" aria-label="Turn garden sounds on" title="Turn garden sounds on" data-sound="off">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4.2 9.4 L7.6 9.3 L11.7 5.6 C12 5.4 12.3 5.6 12.3 5.9 L12.4 18 C12.4 18.4 12 18.6 11.7 18.3 L7.6 14.8 L4.3 14.7 C3.9 14.7 3.7 14.4 3.7 14.1 L3.6 10 C3.6 9.7 3.9 9.4 4.2 9.4 Z" fill="#efe3c8"/>
+          <g class="sound-toggle__waves">
+            <path d="M15.2 9.2 C16.4 10.6 16.5 13.3 15.3 14.8"/>
+            <path d="M17.7 6.9 C20.2 9.6 20.3 14.4 17.8 17.1"/>
+          </g>
+          <g class="sound-toggle__hush">
+            <path d="M15.6 9.8 L20 14.3 M20.1 9.7 L15.7 14.2"/>
+          </g>
+        </svg>
+      </button>
+    </div>
+    <nav class="site-nav" aria-label="Main">
+      <a href="#home" data-nav="home">Home</a>
+      <a href="#work" data-nav="work">Work</a>
+      <a href="#about" data-nav="about">About</a>
+      <a href="#contact" data-nav="contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- =====================================================================
+       THE GARDEN
+       The scene is 1600 x 1000 "garden units". Every object below is placed
+       with --x / --y (top-left corner) and --w (width) in those units, so
+       you can nudge anything by changing its numbers.
+       Layers are stacked back-to-front, exactly like a theatre set.
+       ===================================================================== -->
+  <div class="garden-viewport" id="garden-viewport">
+    <!-- PHONES: the courtyard gravel and grasses carry on beneath the garden, under the instruction
+         band, so there's never a blank strip (painted by js/scenery.js; it scrolls with the garden) -->
+    <div class="garden-soil" aria-hidden="true">
+      <svg viewBox="0 1000 1600 260" preserveAspectRatio="xMidYMin slice">
+        <defs>
+          <linearGradient id="soil-extension-grad" gradientUnits="userSpaceOnUse" x1="0" y1="1000" x2="0" y2="1260">
+            <stop offset="0" stop-color="#bba98a"/>
+            <stop offset="1" stop-color="#ab987a"/>
+          </linearGradient>
+        </defs>
+        <rect x="-10" y="1000" width="1620" height="260" fill="url(#soil-extension-grad)"/>
+        <g id="soil-gravel"></g>
+        <g id="soil-grass"></g>
+      </svg>
+      <div class="golden-only garden-soil__evening"></div>
+    </div>
+    <main class="garden-scene" id="garden-scene" aria-label="The garden">
+
+      <!-- LAYER · Sky -->
+      <svg class="layer layer-sky" viewBox="0 0 1600 1000" aria-hidden="true">
+        <rect width="1600" height="1000" fill="url(#sky-grad)"/>
+        <ellipse cx="1090" cy="300" rx="520" ry="260" fill="url(#sun-glow)"/>
+        <!-- GOLDEN HOUR: sunset sky and a decorative glow low over the hills
+             (the gameplay sun sinks into this glow; see css/golden-hour.css) -->
+        <g class="golden-only">
+          <rect width="1600" height="1000" fill="url(#sunset-sky)"/>
+          <ellipse cx="1092" cy="385" rx="560" ry="240" fill="url(#sunset-glow)"/>
+          <ellipse cx="1092" cy="398" rx="180" ry="16" fill="#ffe7b8" opacity=".7" filter="url(#blur-md)"/>
+        </g>
+      </svg>
+
+      <!-- LAYERS · Clouds drifting slowly across the sky.
+           Each layer is twice as wide as the garden and holds the same clouds twice,
+           so they can travel forever without a gap. Each sits in a holder that sways it gently
+           (css/golden-hour.css): one movement per element, so the graphics card can do both. -->
+      <div class="cloud-sway cloud-sway--high" aria-hidden="true">
+      <svg class="layer layer-clouds layer-clouds--high" viewBox="0 0 3200 1000" preserveAspectRatio="none" aria-hidden="true">
+        <g id="clouds-high" fill="#ffffff" filter="url(#blur-md)" opacity=".5">
+          <ellipse cx="300" cy="196" rx="180" ry="11"/>
+          <ellipse cx="380" cy="188" rx="90" ry="10"/>
+          <ellipse cx="880" cy="168" rx="150" ry="9"/>
+          <ellipse cx="1340" cy="214" rx="210" ry="12"/>
+        </g>
+        <use href="#clouds-high" x="1600"/>
+      </svg>
+      </div>
+      <div class="cloud-sway cloud-sway--low" aria-hidden="true">
+      <svg class="layer layer-clouds layer-clouds--low" viewBox="0 0 3200 1000" preserveAspectRatio="none" aria-hidden="true">
+        <use href="#clouds-low" x="1600"/>
+        <g id="clouds-low" fill="#ffffff" filter="url(#blur-md)">
+          <g opacity=".8">
+            <ellipse cx="560" cy="250" rx="120" ry="22"/>
+            <ellipse cx="620" cy="236" rx="70" ry="24"/>
+            <ellipse cx="500" cy="242" rx="60" ry="18"/>
+          </g>
+          <g opacity=".65">
+            <ellipse cx="900" cy="330" rx="150" ry="16"/>
+            <ellipse cx="960" cy="320" rx="80" ry="18"/>
+          </g>
+          <g opacity=".75">
+            <ellipse cx="1380" cy="240" rx="130" ry="20"/>
+            <ellipse cx="1430" cy="228" rx="70" ry="22"/>
+          </g>
+          <ellipse cx="240" cy="360" rx="160" ry="14" opacity=".55"/>
+        </g>
+      </svg>
+      </div>
+
+      <!-- GOLDEN HOUR: soft pink evening wisps that drift a little faster -->
+      <svg class="layer golden-only golden-wisps" viewBox="0 0 1600 1000" aria-hidden="true">
+        <g fill="#f6c9c0" filter="url(#blur-md)">
+          <ellipse cx="300" cy="300" rx="190" ry="10" opacity=".7"/>
+          <ellipse cx="760" cy="350" rx="240" ry="9" opacity=".6"/>
+          <ellipse cx="1080" cy="270" rx="170" ry="8" opacity=".65"/>
+          <ellipse cx="1420" cy="330" rx="200" ry="10" fill="#f9d6b0" opacity=".7"/>
+        </g>
+      </svg>
+
+      <!-- THE SUN · visitors will drag it across the sky in the game -->
+      <button class="prop sun" type="button" style="--x:1050; --y:250; --w:84"
+              data-tool="sun" id="sun" aria-pressed="false"
+              aria-label="The summer sun: drag it over a watered bed, or tap it and then tap a bed">
+        <span class="prop-tag">The summer sun</span>
+      </button>
+
+      <!-- LAYER · Distance: hills, lakeshore pines, the lake -->
+      <svg class="layer layer-distance" viewBox="0 0 1600 1000" aria-hidden="true">
+        <g id="far-hills" filter="url(#blur-sm)">
+          <path d="M0 420 C140 394 260 406 380 398 C520 388 640 412 780 404 C920 396 1040 382 1180 394 C1320 406 1460 388 1600 398 L1600 470 L0 470 Z" fill="#b9c9c7"/>
+          <path d="M0 432 C180 418 300 428 460 422 C640 414 760 430 940 424 C1100 418 1260 428 1600 420 L1600 470 L0 470 Z" fill="#a5b9b3" opacity=".85"/>
+        </g>
+        <g id="far-treeline"></g>       <!-- drawn by scenery.js -->
+        <rect id="lake" x="0" y="446" width="1600" height="110" fill="url(#lake-grad)"/>
+        <clipPath id="lake-clip"><rect x="0" y="446" width="1600" height="110"/></clipPath>
+        <g clip-path="url(#lake-clip)"><g id="lake-reflections" filter="url(#blur-sm)" opacity=".32"></g></g>
+        <!-- GOLDEN HOUR: pink and golden light on the water, with the sunset's glint -->
+        <g class="golden-only" clip-path="url(#lake-clip)">
+          <rect x="0" y="446" width="1600" height="110" fill="url(#sunset-lake)" opacity=".55"/>
+          <g fill="#fff0c8" filter="url(#blur-sm)" opacity=".8">
+            <rect x="1074" y="450" width="36" height="3" rx="1.5"/>
+            <rect x="1064" y="458" width="56" height="2.6" rx="1.3"/>
+            <rect x="1078" y="466" width="30" height="2.4" rx="1.2"/>
+            <rect x="1056" y="474" width="70" height="2.4" rx="1.2"/>
+            <rect x="1082" y="484" width="24" height="2.2" rx="1.1"/>
+          </g>
+        </g>
+        <g id="lake-island"></g>
+        <g id="background-trees" filter="url(#blur-sm)"></g>   <!-- drawn by scenery.js -->
+      </svg>
+
+      <!-- LAYER · Lake sparkle and slow ripples -->
+      <svg class="layer layer-shimmer" viewBox="0 0 1600 1000" aria-hidden="true">
+        <g id="lake-shimmer" stroke="#ffffff" stroke-linecap="round"></g>
+        <g class="lake-ripples" fill="none" stroke="#ffffff" stroke-width=".8">
+          <ellipse class="ripple" cx="830" cy="496" rx="22" ry="2.4"/>
+          <ellipse class="ripple ripple--late" cx="980" cy="486" rx="26" ry="2.6"/>
+          <ellipse class="ripple ripple--later" cx="700" cy="492" rx="18" ry="2"/>
+        </g>
+        <!-- GOLDEN HOUR: warm glints that shimmer on the water -->
+        <g class="golden-only gx-glints" clip-path="url(#lake-clip)" fill="#fff6d8">
+          <rect class="gx-glint" x="1062" y="451" width="30" height="2.2" rx="1" style="--d:-0.4s"/>
+          <rect class="gx-glint" x="1092" y="456" width="40" height="2.2" rx="1" style="--d:-1.6s"/>
+          <rect class="gx-glint" x="1056" y="461" width="24" height="2" rx="1" style="--d:-2.7s"/>
+          <rect class="gx-glint" x="1098" y="466" width="46" height="2.2" rx="1" style="--d:-0.9s"/>
+          <rect class="gx-glint" x="1048" y="471" width="30" height="2" rx="1" style="--d:-3.3s"/>
+          <rect class="gx-glint" x="1084" y="475" width="26" height="2" rx="1" style="--d:-2.1s"/>
+          <rect class="gx-glint" x="1130" y="452" width="18" height="1.6" rx="1" style="--d:-3s"/>
+          <rect class="gx-glint" x="1030" y="458" width="16" height="1.6" rx="1" style="--d:-1.1s"/>
+          <rect class="gx-glint" x="640" y="454" width="22" height="1.6" rx="1" style="--d:-2.4s"/>
+          <rect class="gx-glint" x="760" y="459" width="26" height="1.6" rx="1" style="--d:-1.2s"/>
+          <rect class="gx-glint" x="880" y="453" width="30" height="1.6" rx="1" style="--d:-3.6s"/>
+          <rect class="gx-glint" x="980" y="463" width="20" height="1.6" rx="1" style="--d:-2.9s"/>
+          <rect class="gx-glint" x="1180" y="459" width="24" height="1.6" rx="1" style="--d:-0.2s"/>
+          <rect class="gx-glint" x="1240" y="454" width="18" height="1.6" rx="1" style="--d:-1.9s"/>
+          <rect class="gx-glint" x="700" y="466" width="18" height="1.4" rx="1" style="--d:-4s"/>
+          <rect class="gx-glint" x="930" y="470" width="22" height="1.4" rx="1" style="--d:-0.7s"/>
+        </g>
+      </svg>
+
+      <!-- LAYER · Little boats bobbing on the lake (Muskoka) -->
+      <svg class="layer layer-boats" viewBox="0 0 1600 1000" aria-hidden="true">
+        <g fill="none" stroke="#ffffff" stroke-width=".7">
+          <ellipse class="ripple" cx="801" cy="477" rx="40" ry="2.6"/>
+          <ellipse class="ripple ripple--late" cx="962" cy="471" rx="30" ry="2.2"/>
+        </g>
+        <!-- cedar canoe -->
+        <g class="boat boat--1">
+          <ellipse cx="801" cy="476" rx="34" ry="2" fill="#4f6d5d" opacity=".25"/>
+          <path d="M770 472 Q801 480 832 472 Q803 476.5 770 472 Z" fill="#a8663f"/>
+          <path d="M779 472.8 Q802 477 825 472.8" fill="none" stroke="#dcaa80" stroke-width=".8"/>
+        </g>
+        <!-- white rowboat with oars -->
+        <g class="boat boat--2">
+          <ellipse cx="962" cy="471.5" rx="24" ry="2" fill="#4f6d5d" opacity=".25"/>
+          <path d="M944 466 Q962 474 982 466 L979 463 L946 463 Z" fill="#f4efe4"/>
+          <path d="M945 465.2 Q962 472 981 465.2" fill="none" stroke="#7f9a64" stroke-width="1.2"/>
+          <path d="M946 463 L979 463" stroke="#a5845f" stroke-width="1"/>
+          <path d="M955 464 L941 471 M969 464 L985 470.5" stroke="#9a7b58" stroke-width=".8"/>
+        </g>
+        <!-- a smaller blush rowboat further out -->
+        <g class="boat boat--3">
+          <ellipse cx="1102" cy="461" rx="14" ry="1.2" fill="#4f6d5d" opacity=".22"/>
+          <path d="M1091 458 Q1102 463 1114 458 L1112 456 L1092.5 456 Z" fill="#e7b9bb"/>
+          <path d="M1092.5 456 L1112 456" stroke="#a5845f" stroke-width=".7"/>
+          <path d="M1098 456.6 L1089 461 M1106 456.6 L1116 460.6" stroke="#9a7b58" stroke-width=".6"/>
+        </g>
+      </svg>
+
+      <!-- LAYER · Midground: meadow, flower-farm rows, greenhouse, willow trunk -->
+      <svg class="layer layer-midground" viewBox="0 0 1600 1000" aria-hidden="true">
+        <g id="meadow"></g>
+        <g id="shoreline"></g>
+        <g id="hedgerow"></g>
+        <g id="field-fence"></g>
+        <g id="garden-path"></g>
+        <g id="field-rows-back"></g>
+
+        <!-- GREENHOUSE · glass panels with a soft white frame -->
+        <g id="greenhouse">
+          <ellipse cx="1360" cy="603" rx="170" ry="10" fill="url(#soft-shadow)"/>
+          <!-- plants seen through the glass -->
+          <g opacity=".85">
+            <ellipse cx="1440" cy="572" rx="44" ry="18" fill="#7f9a64"/>
+            <ellipse cx="1480" cy="566" rx="22" ry="14" fill="#a3b882"/>
+            <circle cx="1430" cy="562" r="4" fill="#e39aa8"/>
+            <circle cx="1452" cy="560" r="3.5" fill="#f0d07c"/>
+            <path d="M1240 512 L1240 524 M1330 506 L1330 520 M1420 500 L1420 514" stroke="#b3a993" stroke-width="1"/>
+            <ellipse cx="1240" cy="530" rx="9" ry="7" fill="#8fa871"/>
+            <ellipse cx="1330" cy="526" rx="9" ry="7" fill="#a3b882"/>
+            <ellipse cx="1420" cy="520" rx="9" ry="7" fill="#8fa871"/>
+            <path d="M1236 534 q-3 8 -1 14 M1244 534 q3 7 1 12 M1326 530 q-3 9 0 15 M1416 524 q-2 8 1 13" fill="none" stroke="#7f9a64" stroke-width="1.6" stroke-linecap="round"/>
+          </g>
+          <!-- glass -->
+          <path d="M1385 500 L1505 492 L1505 588 L1385 600 Z" fill="url(#glass)"/>
+          <path d="M1300 446 L1420 442 L1505 492 L1385 500 Z" fill="url(#glass)"/>
+          <path d="M1215 600 L1215 500 L1300 446 L1385 500 L1385 600 Z" fill="url(#glass)"/>
+          <path d="M1385 500 L1505 492 L1505 588 L1385 600 Z" fill="#6f8a7f" opacity=".08"/>
+          <!-- GOLDEN HOUR: warm lamplight glowing in the windows -->
+          <g class="golden-only">
+            <path d="M1215 600 L1215 500 L1300 446 L1385 500 L1385 600 Z" fill="url(#window-glow)" opacity=".55"/>
+            <path d="M1385 500 L1505 492 L1505 588 L1385 600 Z" fill="url(#window-glow)" opacity=".45"/>
+          </g>
+
+          <!-- INSIDE THE GREENHOUSE · potting bench, seedlings, tools and the pets
+               (drawn over the glass so they stay clear; the frame still sits on top) -->
+          <g id="greenhouse-interior">
+            <!-- floor shadow -->
+            <ellipse cx="1300" cy="591" rx="82" ry="3" fill="#5c6b4f" opacity=".18"/>
+
+            <!-- wooden potting bench -->
+            <rect x="1219" y="569" width="60" height="4" rx="1" fill="#a9825d"/>
+            <rect x="1219" y="569" width="60" height="1.2" fill="#d1ae82"/>
+            <rect x="1222" y="573" width="2.6" height="18" fill="#8c6a4a"/>
+            <rect x="1274" y="573" width="2.6" height="18" fill="#8c6a4a"/>
+            <rect x="1222" y="583" width="54" height="2.2" fill="#9c7a55"/>
+            <!-- seedling tray on the lower shelf -->
+            <rect x="1228" y="579.6" width="22" height="3.4" rx=".6" fill="#b77654"/>
+            <g stroke="#6f8a58" stroke-width=".6" fill="#8fb069">
+              <path d="M1231 579.6 v-2.4 M1236 579.6 v-2.6 M1241 579.6 v-2.4 M1246 579.6 v-2.6" fill="none"/>
+              <ellipse cx="1230.2" cy="577" rx="1.1" ry=".6"/><ellipse cx="1231.8" cy="576.8" rx="1.1" ry=".6"/>
+              <ellipse cx="1235.2" cy="576.8" rx="1.1" ry=".6"/><ellipse cx="1236.8" cy="576.6" rx="1.1" ry=".6"/>
+              <ellipse cx="1240.2" cy="577" rx="1.1" ry=".6"/><ellipse cx="1241.8" cy="576.8" rx="1.1" ry=".6"/>
+              <ellipse cx="1245.2" cy="576.8" rx="1.1" ry=".6"/><ellipse cx="1246.8" cy="576.6" rx="1.1" ry=".6"/>
+            </g>
+            <!-- terracotta pots with seedlings on the bench -->
+            <g>
+              <path d="M1257 562 L1266 562 L1265 569 L1258 569 Z" fill="url(#terracotta)"/>
+              <rect x="1256.4" y="560.6" width="10.2" height="2.2" rx=".6" fill="url(#terracotta-rim)"/>
+              <path d="M1261.5 560.6 V555" stroke="#6f8a58" stroke-width=".7"/>
+              <path d="M1261.5 557 C1258.5 557 1257 555 1257 553 C1259.6 553 1261.2 554.6 1261.5 557 Z M1261.5 556 C1264.2 555.6 1265.6 553.6 1265.6 551.6 C1263 551.8 1261.6 553.6 1261.5 556 Z" fill="#86ab61"/>
+              <path d="M1268 564 L1275 564 L1274.2 569 L1268.8 569 Z" fill="url(#terracotta)"/>
+              <rect x="1267.5" y="562.8" width="8" height="1.8" rx=".5" fill="url(#terracotta-rim)"/>
+              <path d="M1271.5 562.8 v-3.4 M1271.5 560.6 l-2.2 -1.4 M1271.5 560 l2.4 -1.6" stroke="#7f9a64" stroke-width=".7" fill="none"/>
+              <!-- tiny trowel -->
+              <path d="M1249 568.6 L1255 567.4" stroke="#8c6a4a" stroke-width="1.1" stroke-linecap="round"/>
+              <path d="M1244.4 569 L1249.2 568.4 L1248.6 567 Z" fill="#c3c9ca"/>
+            </g>
+
+            <!-- the cat: my grey tabby, sitting on the bench -->
+            <g class="gh-cat" transform="translate(0 4)">
+              <path class="gh-cat__tail" d="M1242.4 564.4 C1248 565.4 1250.4 561.4 1248.6 556.4" fill="none" stroke="#7e8186" stroke-width="2" stroke-linecap="round"/>
+              <path d="M1232.5 565 C1231.5 559 1234 554 1238 554 C1242 554 1244.5 559 1243.5 565 Z" fill="#9c9fa4"/>
+              <ellipse cx="1238" cy="561" rx="2.2" ry="3.4" fill="#ecebe7"/>
+              <path d="M1233.5 559 q1.6 -.8 2.6 0 M1241.8 558.6 q-1.2 -.6 -2.1 .2 M1233.6 562 q1.4 -.6 2.2 0" stroke="#696c71" stroke-width=".7" fill="none" stroke-linecap="round"/>
+              <ellipse cx="1236.3" cy="565" rx="1.3" ry=".75" fill="#ecebe7"/>
+              <ellipse cx="1239.7" cy="565" rx="1.3" ry=".75" fill="#ecebe7"/>
+              <g class="gh-cat__head">
+                <path d="M1234.6 549.6 L1235 545.6 L1237.4 548 Z M1241.4 549.6 L1241 545.6 L1238.6 548 Z" fill="#a3a6ab"/>
+                <path d="M1235.3 548.4 L1235.5 546.8 L1236.6 547.9 Z M1240.7 548.4 L1240.5 546.8 L1239.4 547.9 Z" fill="#e7b4b9"/>
+                <circle cx="1238" cy="550.6" r="3.6" fill="#a3a6ab"/>
+                <path d="M1237 547.3 v1.4 M1238 547.1 v1.6 M1239 547.3 v1.4" stroke="#696c71" stroke-width=".45"/>
+                <g class="gh-cat__eyes">
+                  <ellipse cx="1236.6" cy="550.4" rx=".62" ry=".72" fill="#8c9a3e"/>
+                  <ellipse cx="1239.4" cy="550.4" rx=".62" ry=".72" fill="#8c9a3e"/>
+                </g>
+                <path d="M1237.6 551.9 h.8 l-.4 .5 z" fill="#d68f99"/>
+              </g>
+            </g>
+
+            <!-- the dog: my yellow Lab, resting on the floor -->
+            <g class="gh-dog">
+              <path class="gh-dog__tail" d="M1370.6 588 C1375 589.2 1379 587.6 1381.4 584.4" fill="none" stroke="#d9ad66" stroke-width="2.2" stroke-linecap="round"/>
+              <ellipse cx="1363.6" cy="585" rx="7.6" ry="6" fill="#e4bb76"/>
+              <ellipse cx="1352" cy="586.2" rx="15" ry="5.4" fill="#e9c27f"/>
+              <path d="M1340 590 Q1352 592.4 1366 590" stroke="#cf9f5a" stroke-width=".9" fill="none"/>
+              <path d="M1358 584 Q1362 581 1367 582.4" stroke="#d4a35e" stroke-width=".8" fill="none"/>
+              <ellipse cx="1360" cy="590.4" rx="4.2" ry="1.3" fill="#e4bb76"/>
+              <path d="M1341 588.6 L1329 590.4 M1343 590 L1331 591.4" stroke="#e4bb76" stroke-width="2.8" stroke-linecap="round"/>
+              <ellipse cx="1328.2" cy="590.4" rx="2" ry="1.1" fill="#efcc8e"/>
+              <ellipse cx="1330.2" cy="591.5" rx="2" ry="1.1" fill="#efcc8e"/>
+              <g class="gh-dog__head">
+                <path d="M1338.6 583.4 Q1340.2 579.4 1342.4 577" stroke="#c4536b" stroke-width="1.3" fill="none"/>
+                <ellipse cx="1335" cy="579" rx="5.6" ry="4.8" fill="#ebc785"/>
+                <ellipse cx="1329.6" cy="581" rx="3.4" ry="2.4" fill="#f0d29a"/>
+                <ellipse cx="1326.7" cy="580.3" rx="1.1" ry=".9" fill="#3a2b22"/>
+                <path d="M1328 582.6 q1.6 .8 3 0" stroke="#8a6440" stroke-width=".5" fill="none"/>
+                <path d="M1337 575.5 C1340.5 576 1341.5 580 1340 583.5 C1338 582.5 1336.6 579 1337 575.5 Z" fill="#c9974f"/>
+                <ellipse class="gh-dog__eye" cx="1332.6" cy="577.8" rx=".62" ry=".68" fill="#2d211b"/>
+              </g>
+            </g>
+
+            <!-- garden tools leaning in the corner -->
+            <path d="M1391 590 L1397 558" stroke="#8c6a4a" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M1393.4 557 L1401 559" stroke="#8d979b" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M1394.4 557.3 v2.4 M1396.4 557.8 v2.4 M1398.4 558.3 v2.4 M1400.2 558.8 v2.4" stroke="#8d979b" stroke-width=".6"/>
+            <path d="M1401 590 L1404 568" stroke="#a9825d" stroke-width="1.1" stroke-linecap="round"/>
+            <path d="M1402.2 567 L1405.8 567.6 L1404.6 574.6 Q1403.2 576.6 1402.4 574.2 Z" fill="#c3c9ca"/>
+          </g>
+
+          <!-- GOLDEN HOUR: a string of fairy lights inside the greenhouse -->
+          <g class="golden-only fairy-lights">
+            <path d="M1222 504 Q1240 516 1258 506 Q1279 518 1300 508 Q1321 518 1342 506 Q1360 516 1378 504 M1390 506 Q1418 516 1446 504 Q1474 512 1500 498" fill="none" stroke="#7a6a52" stroke-width=".6"/>
+            <g class="fairy-bulbs">
+              <circle cx="1231" cy="510" r="1.7"/><circle cx="1249" cy="510.5" r="1.7"/><circle cx="1268" cy="511" r="1.7"/>
+              <circle cx="1289" cy="512" r="1.7"/><circle cx="1311" cy="512" r="1.7"/><circle cx="1331" cy="511" r="1.7"/>
+              <circle cx="1351" cy="510.5" r="1.7"/><circle cx="1369" cy="509" r="1.7"/><circle cx="1404" cy="511" r="1.6"/>
+              <circle cx="1432" cy="510" r="1.6"/><circle cx="1460" cy="507" r="1.6"/><circle cx="1487" cy="503" r="1.6"/>
+            </g>
+          </g>
+
+          <!-- glints -->
+          <g stroke="#ffffff" stroke-opacity=".6" stroke-width="2" stroke-linecap="round">
+            <path d="M1226 560 L1246 520"/>
+            <path d="M1232 566 L1240 550"/>
+            <path d="M1398 560 L1416 524"/>
+            <path d="M1320 470 L1336 458"/>
+          </g>
+          <!-- frame: a soft shadow line first, then the white frame on top -->
+          <g fill="none" stroke-linejoin="round" stroke-linecap="round">
+            <g stroke="#b9b1a0" stroke-width="4.6">
+              <path id="greenhouse-frame" d="M1215 600 L1215 500 L1300 446 L1385 500 L1385 600 M1215 500 L1385 500 M1215 546 L1385 546 M1257 473 L1257 600 M1343 473 L1343 600 M1300 446 L1300 532 M1385 500 L1505 492 L1505 588 M1385 548 L1505 540 M1415 498 L1415 597 M1445 496 L1445 594 M1475 494 L1475 591 M1300 446 L1420 442 L1505 492 M1330 445 L1415 498 M1360 444 L1445 496 M1390 443 L1475 494"/>
+            </g>
+            <use href="#greenhouse-frame" stroke="#fbf9f3" stroke-width="2.6"/>
+          </g>
+          <!-- door -->
+          <rect x="1282" y="532" width="36" height="68" fill="#f5f0e4" fill-opacity=".45" stroke="#fbf9f3" stroke-width="2.4"/>
+          <circle cx="1312" cy="568" r="1.6" fill="#b49a6a"/>
+          <!-- handwritten sign hanging on the door -->
+          <g transform="rotate(-3 1300 544)">
+            <path d="M1290 539 L1300 533 L1310 539" fill="none" stroke="#8a7d6c" stroke-width=".6"/>
+            <circle cx="1300" cy="533" r=".8" fill="#8a7d6c"/>
+            <rect x="1279" y="538" width="42" height="11.5" rx="1.4" fill="#dcc29a" stroke="#a88a62" stroke-width=".5"/>
+            <text x="1300" y="546" text-anchor="middle" font-family="Caveat, cursive" font-size="6.4" font-weight="600" fill="#4f3b28">Growing Soon ♡</text>
+          </g>
+          <!-- base -->
+          <path d="M1213 591 L1387 591 L1387 603 L1213 603 Z" fill="#e7dfcf"/>
+          <path d="M1387 591 L1507 581 L1507 591 L1387 603 Z" fill="#d2c9b6"/>
+          <path d="M1213 603 L1387 603" stroke="#a69c88" stroke-width="1"/>
+        </g>
+        <g id="greenhouse-pots"></g>
+        <g id="gx-greenhouse"></g>      <!-- stacked pots by the greenhouse (garden-extras.js) -->
+
+        <!-- WILLOW TREE · trunk here; its weeping branches sway on their own layers -->
+        <g id="willow">
+          <g id="willow-canopy"></g>
+          <ellipse cx="292" cy="614" rx="80" ry="8" fill="url(#soft-shadow)"/>
+          <path d="M262 612 C272 540 266 470 248 404 C236 362 214 322 188 292 L206 284 C234 316 256 350 270 388 C278 340 298 300 330 266 L346 278 C316 312 298 356 292 410 C296 480 304 552 322 614 Z" fill="url(#bark)"/>
+          <path d="M276 600 C280 540 278 480 268 430 M300 590 C300 540 296 490 296 450" fill="none" stroke="#a89884" stroke-width="1.6" opacity=".6"/>
+          <path d="M268 612 C276 560 272 500 262 440" fill="none" stroke="#4e443b" stroke-width="2" opacity=".35"/>
+        </g>
+      </svg>
+
+      <!-- LAYERS · Willow branches (two layers sway at different speeds) -->
+      <svg class="layer layer-willow layer-willow--back" viewBox="0 0 1600 1000" aria-hidden="true">
+        <g id="willow-strands-back"></g>
+      </svg>
+      <svg class="layer layer-willow layer-willow--front" viewBox="0 0 1600 1000" aria-hidden="true">
+        <g id="willow-strands-front"></g>
+      </svg>
+
+      <!-- LAYER · Front flower-farm rows and path borders -->
+      <svg class="layer layer-midground-front" viewBox="0 0 1600 1000" aria-hidden="true">
+        <g id="field-rows-front"></g>
+        <g id="path-borders"></g>
+      </svg>
+
+      <!-- LAYER · Gravel courtyard where the planting beds sit -->
+      <svg class="layer layer-courtyard" viewBox="0 0 1600 1000" aria-hidden="true">
+        <path d="M0 728 C220 712 420 722 640 714 C860 706 1080 720 1300 712 C1440 707 1530 716 1600 712 L1600 1000 L0 1000 Z" fill="url(#gravel-grad)"/>
+        <path d="M0 728 C220 712 420 722 640 714 C860 706 1080 720 1300 712 C1440 707 1530 716 1600 712" fill="none" stroke="#7d8a62" stroke-opacity=".35" stroke-width="5" filter="url(#blur-sm)"/>
+        <g id="gravel"></g>
+        <g id="gravel-tufts"></g>
+      </svg>
+
+      <!-- LAYER · Flower borders around the courtyard (sway in the breeze) -->
+      <svg class="layer layer-breeze layer-courtyard-plants" viewBox="0 0 1600 1000" aria-hidden="true">
+        <g id="courtyard-borders"></g>
+      </svg>
+
+      <!-- LAYER · Potted flowers, buckets of cut stems, petals and clutter (garden-extras.js) -->
+      <svg class="layer gx-layer gx-layer--court" viewBox="0 0 1600 1000" aria-hidden="true">
+        <g id="gx-courtyard"></g>
+      </svg>
+
+      <!-- ==================== GARDEN OBJECTS (props) ==================== -->
+
+      <!-- STONE BIRDBATH by the path (a chickadee visits now and then) -->
+      <!-- BIRDBATH (its bowl is clickable through #birdbath-bowl, further down, above the beds) -->
+      <div class="prop birdbath" id="birdbath" style="--x:1160; --y:584; --w:100" aria-hidden="true">
+        <svg viewBox="0 0 90 120">
+          <ellipse cx="45" cy="116" rx="34" ry="4.5" fill="url(#soft-shadow)"/>
+          <path d="M24 116 Q26 106 34 104 L56 104 Q64 106 66 116 Z" fill="url(#stone)"/>
+          <path d="M36 104 C38 88 34 70 38 56 L52 56 C56 70 52 88 54 104 Z" fill="url(#stone)"/>
+          <path d="M35.5 82 Q45 85 54.5 82 M37 66 Q45 68 53 66" fill="none" stroke="#857e72" stroke-width="1" opacity=".7"/>
+          <path d="M6 42 Q45 72 84 42 Q80 56 60 60 L30 60 Q10 56 6 42 Z" fill="url(#stone)"/>
+          <path d="M14 52 Q45 66 76 52" fill="none" stroke="#7d766b" stroke-width="1" opacity=".5"/>
+          <ellipse cx="45" cy="42" rx="40" ry="8" fill="#d6d0c4"/>
+          <ellipse cx="45" cy="42" rx="40" ry="8" fill="none" stroke="#a39c90" stroke-width=".8"/>
+          <ellipse cx="45" cy="42.6" rx="34" ry="5.4" fill="url(#water)"/>
+          <path d="M14 40 Q45 34.5 76 40" fill="none" stroke="#ffffff" stroke-width="1" opacity=".75"/>
+          <ellipse cx="56" cy="41.4" rx="6" ry=".9" fill="#ffffff" opacity=".7"/>
+          <g fill="none" stroke="#ffffff" stroke-width=".7">
+            <ellipse class="ripple" cx="50" cy="42.6" rx="9" ry="1.6"/>
+            <ellipse class="ripple ripple--late" cx="38" cy="42.8" rx="7" ry="1.3"/>
+          </g>
+          <!-- moss and ivy -->
+          <g fill="#7f9a64" opacity=".55">
+            <ellipse cx="40" cy="100" rx="5" ry="2"/><ellipse cx="50" cy="74" rx="2.5" ry="1.5"/><ellipse cx="16" cy="46" rx="4" ry="1.4"/>
+          </g>
+          <path d="M28 116 C30 106 40 100 38 90 M60 116 C58 108 52 102 54 94" fill="none" stroke="#6f8a58" stroke-width="1.2"/>
+          <g fill="#7f9a64">
+            <ellipse cx="31" cy="108" rx="3.4" ry="2" transform="rotate(-30 31 108)"/>
+            <ellipse cx="38" cy="96" rx="3.4" ry="2" transform="rotate(20 38 96)"/>
+            <ellipse cx="58" cy="106" rx="3.4" ry="2" transform="rotate(30 58 106)"/>
+            <ellipse cx="54" cy="97" rx="3" ry="1.8" transform="rotate(-20 54 97)"/>
+          </g>
+          <!-- flowers tucked around the base -->
+          <g stroke="#6f8a58" stroke-width=".8">
+            <path d="M16 116 L15 102 M22 116 L23 98 M70 116 L71 101 M77 116 L76 105"/>
+          </g>
+          <use href="#bloom-daisy" transform="translate(15 101) scale(.75)"/>
+          <use href="#bloom-cosmos" transform="translate(23 97) scale(.8)" style="color:#efbcc4"/>
+          <use href="#bloom-cosmos" transform="translate(71 100) scale(.75)" style="color:#e39aa8"/>
+          <use href="#bloom-daisy" transform="translate(77 104) scale(.65)"/>
+          <!-- a robin who hops and pecks at the ground -->
+          <g class="robin">
+            <path d="M66 108 L59 104.5 L60.5 109.5 Z" fill="#5b524b"/>
+            <ellipse cx="71" cy="107.5" rx="6.5" ry="4.6" fill="#6b625a"/>
+            <path d="M68 110.5 Q74 114.5 78.5 107.5 Q76.5 104.5 73.5 105.5 Q70 108.5 68 110.5 Z" fill="#cf7d50"/>
+            <circle cx="77.5" cy="102.8" r="3.3" fill="#3d3833"/>
+            <circle cx="78.7" cy="102.3" r=".7" fill="#f6f1e6"/>
+            <circle cx="78.8" cy="102.3" r=".35" fill="#111"/>
+            <path d="M80.5 102.9 L83.6 103.5 L80.5 104.3 Z" fill="#e2b04a"/>
+            <path d="M70 111.8 V115.6 M73 111.8 V115.6" stroke="#7a5b3d" stroke-width=".6"/>
+          </g>
+
+          <!-- the visiting chickadee -->
+          <g class="bird" id="birdbath-bird">
+            <g class="bird__inner">
+              <path d="M8 34 L0 30.5 L1.5 36.5 Z" fill="#6f747a"/>
+              <ellipse cx="14" cy="33" rx="8" ry="6" fill="#959ba2"/>
+              <path d="M9 36 Q16 42 22 33.5 Q18 38.5 9 36 Z" fill="#e6d2b0"/>
+              <path d="M7.5 31 Q14 27.5 18.5 33 Q13 35.5 7.5 31 Z" fill="#6f747a"/>
+              <g class="bird__head">
+                <circle cx="21.5" cy="27.5" r="5" fill="#2c2c30"/>
+                <ellipse cx="22.6" cy="29" rx="3.4" ry="2.3" fill="#f6f3ec"/>
+                <path d="M20.5 31.5 Q23.5 33.5 26 30.5 L24 30.4 Z" fill="#2c2c30"/>
+                <circle cx="23.8" cy="26.8" r=".8" fill="#0f0f10"/>
+                <path d="M26.3 27 L29.6 27.7 L26.4 28.5 Z" fill="#3a3a3a"/>
+              </g>
+              <path d="M13 38.5 V41.5 M16 38.5 V41.5" stroke="#4a4a4a" stroke-width=".7"/>
+            </g>
+          </g>
+          <!-- the droplets of a splash (hidden until the chickadee bathes) -->
+          <g class="bird-splash" fill="#d8ecf0">
+            <circle cx="10" cy="40" r="1.1" style="--dx:-7px; --dy:-9px"/>
+            <circle cx="13" cy="40.5" r=".9" style="--dx:-3px; --dy:-12px"/>
+            <circle cx="16" cy="40.5" r="1" style="--dx:1px; --dy:-13px"/>
+            <circle cx="19" cy="40" r=".8" style="--dx:5px; --dy:-10px"/>
+            <circle cx="22" cy="40.2" r="1.1" style="--dx:9px; --dy:-8px"/>
+            <circle cx="15" cy="41" r=".7" style="--dx:-1px; --dy:-7px"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- MAILBOX → opens Contact -->
+      <button class="prop prop--interactive mailbox" type="button" style="--x:14; --y:515; --w:134"
+              data-open="contact" aria-label="Garden mailbox: say hello (Contact)">
+        <svg viewBox="0 0 100 250" aria-hidden="true">
+          <ellipse cx="50" cy="246" rx="28" ry="4.5" fill="url(#soft-shadow)"/>
+          <rect x="45" y="84" width="11" height="162" rx="2" fill="url(#weathered-wood)"/>
+          <path d="M47.5 90 V240" stroke="#8a7760" stroke-width=".8" opacity=".6"/>
+          <rect x="30" y="80" width="42" height="8" rx="2" fill="#9a8670"/>
+          <!-- climbing vine -->
+          <path d="M50 246 C40 220 62 200 50 180 C40 160 62 140 50 120 C44 108 56 96 50 88" fill="none" stroke="#6f8a58" stroke-width="2"/>
+          <g fill="#7f9a64">
+            <path d="M44 222 c-6 -1 -9 -5 -8 -8 c4 0 7 3 8 8 z"/>
+            <path d="M58 196 c6 -1 9 -5 8 -8 c-4 0 -7 3 -8 8 z"/>
+            <path d="M43 166 c-6 -1 -9 -5 -8 -8 c4 0 7 3 8 8 z"/>
+            <path d="M58 138 c6 -1 9 -5 8 -8 c-4 0 -7 3 -8 8 z"/>
+            <path d="M45 108 c-6 -1 -9 -5 -8 -8 c4 0 7 3 8 8 z"/>
+          </g>
+          <use href="#bloom-cosmos" transform="translate(57 206) scale(.75)" style="color:#efbcc4"/>
+          <use href="#bloom-cosmos" transform="translate(42 152) scale(.65)" style="color:#e39aa8"/>
+          <use href="#bloom-daisy" transform="translate(57 122) scale(.62)"/>
+          <!-- "Say Hello" sign hanging below the box -->
+          <path d="M33 88 L35 100 M67 88 L65 100" stroke="#a89064" stroke-width=".8"/>
+          <g transform="rotate(-3 50 108)">
+            <rect x="24" y="99" width="52" height="18" rx="2.5" fill="#d9bf95"/>
+            <rect x="24" y="99" width="52" height="18" rx="2.5" fill="none" stroke="#a88a62" stroke-width=".8"/>
+            <path d="M27 104 H50 M54 112 H73" stroke="#c4a679" stroke-width=".6"/>
+            <text x="50" y="112.5" text-anchor="middle" font-family="Caveat, cursive" font-size="11.5" font-weight="600" fill="#4f3b28">Say Hello</text>
+          </g>
+          <!-- mailbox body -->
+          <path d="M14 80 L14 48 Q14 28 34 28 L80 28 Q92 28 92 44 L92 80 Z" fill="#8fa37c"/>
+          <path d="M14 80 L14 48 Q14 28 34 28 L80 28 Q92 28 92 44 L92 80 Z" fill="none" stroke="#5f7357" stroke-width="1.2"/>
+          <path d="M20 40 Q22 33 34 33 L80 33" fill="none" stroke="#c4d2b2" stroke-width="3" stroke-linecap="round"/>
+          <path d="M16 74 H90" stroke="#5f7357" stroke-width="1" opacity=".4"/>
+          <path d="M14 80 L14 48 Q14 28 34 28" fill="none" stroke="#6b805f" stroke-width="3"/>
+          <use href="#bloom-cosmos" transform="translate(58 54) scale(1.35)" style="color:#f7e0dc"/>
+          <text x="58" y="72" font-size="5.5" text-anchor="middle" fill="#f8f3e7" font-family="Cormorant Garamond, serif" letter-spacing="1.2">LETTERS</text>
+          <!-- a letter peeking out -->
+          <g transform="rotate(-16 14 60)">
+            <rect x="0" y="50" width="24" height="15" fill="#fbf6ea" stroke="#d6c8ad" stroke-width=".8"/>
+            <path d="M0 50 L12 58 L24 50" fill="none" stroke="#d6c8ad" stroke-width=".8"/>
+            <circle cx="12" cy="58" r="1.8" fill="#c96f7f"/>
+          </g>
+          <!-- flag -->
+          <path d="M88 72 L88 14" stroke="#b06f7b" stroke-width="3" stroke-linecap="round"/>
+          <path d="M88 14 L102 14 L102 27 L88 27 Z" fill="#e39aa8"/>
+        </svg>
+        <span class="prop-sparkle" aria-hidden="true"></span>
+        <span class="prop-tag">Contact · say hello</span>
+      </button>
+
+      <!-- HUMMINGBIRD FEEDER on a shepherd's hook → click to invite a hummingbird (js/ambience.js) -->
+      <button class="prop prop--interactive feeder" type="button" id="feeder" style="--x:168; --y:500; --w:84"
+              aria-label="Hummingbird feeder: invite a hummingbird for a sip">
+        <svg viewBox="0 0 84 260" aria-hidden="true">
+          <ellipse cx="22" cy="256" rx="14" ry="2.6" fill="url(#soft-shadow)"/>
+          <path d="M22 256 V30 Q22 8 42 8 Q60 8 60 24" fill="none" stroke="#3f3a34" stroke-width="2.6" stroke-linecap="round"/>
+          <path d="M14 256 H30" stroke="#3f3a34" stroke-width="2" stroke-linecap="round"/>
+          <path d="M23.4 40 V250" stroke="#8a8178" stroke-width=".7" opacity=".6"/>
+          <!-- a little vine twining up the hook -->
+          <path d="M22 254 C14 236 30 222 22 206 C14 190 30 178 22 164" fill="none" stroke="#6f8a58" stroke-width="1.2"/>
+          <g fill="#7f9a64">
+            <path d="M18 236 c-5 -1 -8 -4 -7 -7 c3 0 6 3 7 7 z"/>
+            <path d="M26 214 c5 -1 8 -4 7 -7 c-3 0 -6 3 -7 7 z"/>
+            <path d="M18 188 c-5 -1 -8 -4 -7 -7 c3 0 6 3 7 7 z"/>
+          </g>
+          <use href="#bloom-cosmos" transform="translate(27 196) scale(.6)" style="color:#efbcc4"/>
+          <!-- the feeder -->
+          <path d="M60 24 V44" stroke="#6b6259" stroke-width=".8"/>
+          <path d="M52 44 Q60 37 68 44 L68 48 L52 48 Z" fill="#b8935a"/>
+          <path d="M53.5 41.5 Q60 38 66.5 41.5" fill="none" stroke="#e6cf9a" stroke-width=".8"/>
+          <path d="M53 48 Q49.5 66 52 84 Q60 89 68 84 Q70.5 66 67 48 Z" fill="#f6eeee" fill-opacity=".55" stroke="#ffffff" stroke-opacity=".8" stroke-width=".8"/>
+          <path d="M51.6 62 Q60 65 68.6 62 L68 84 Q60 89 52 84 Z" fill="#f0aab5" fill-opacity=".55"/>
+          <path d="M55 52 Q53.5 66 55 80" fill="none" stroke="#ffffff" stroke-width="1.4" opacity=".85"/>
+          <ellipse cx="60" cy="88" rx="16" ry="4.6" fill="#c4536b"/>
+          <path d="M44 88 Q60 99 76 88" fill="#a8435a"/>
+          <ellipse cx="60" cy="87" rx="12" ry="2.6" fill="#d76a80"/>
+          <g fill="#f0d282">
+            <circle cx="47" cy="88" r="1.9"/><circle cx="60" cy="91.4" r="1.9"/><circle cx="73" cy="88" r="1.9"/>
+          </g>
+          <g fill="#b98a2c"><circle cx="47" cy="88" r=".7"/><circle cx="60" cy="91.4" r=".7"/><circle cx="73" cy="88" r=".7"/></g>
+          <ellipse cx="60" cy="93" rx="18" ry="3.2" fill="none" stroke="#8a7d6c" stroke-width=".8"/>
+        </svg>
+        <span class="prop-sparkle" aria-hidden="true"></span>
+        <span class="prop-tag">Hummingbird feeder · click me</span>
+      </button>
+
+      <!-- WOODEN BENCH with straw hat, gloves, trowel and cut flowers (decorative) -->
+      <div class="prop bench" style="--x:1330; --y:612; --w:250" aria-hidden="true">
+        <svg viewBox="0 0 250 170">
+          <ellipse cx="125" cy="163" rx="130" ry="8" fill="url(#soft-shadow)"/>
+          <rect x="24" y="8" width="11" height="150" rx="2" fill="#917d65"/>
+          <rect x="215" y="8" width="11" height="150" rx="2" fill="#917d65"/>
+          <rect x="12" y="16" width="226" height="17" rx="3" fill="url(#weathered-wood)"/>
+          <rect x="12" y="40" width="226" height="15" rx="3" fill="url(#weathered-wood)"/>
+          <path d="M12 33 H238 M12 55 H238" stroke="#6f5e4a" stroke-width="1" opacity=".35"/>
+          <path d="M20 24 H120 M140 26 H230 M26 47 H90 M110 49 H228" stroke="#e0d4bf" stroke-width=".8" opacity=".8"/>
+          <path d="M60 22 q6 2 12 0 M170 44 q5 2 10 0" stroke="#8a765f" stroke-width=".7" fill="none"/>
+          <path d="M14 80 L236 80 L244 93 L6 93 Z" fill="#cab89e"/>
+          <path d="M30 86 H140 M160 88 H232" stroke="#e0d4bf" stroke-width=".8"/>
+          <rect x="5" y="92" width="240" height="11" rx="2" fill="#9d8970"/>
+          <path d="M5 103 H245" stroke="#5e4f3e" stroke-width="1.2" opacity=".35"/>
+          <rect x="18" y="102" width="12" height="58" rx="2" fill="#9a856c"/>
+          <rect x="220" y="102" width="12" height="58" rx="2" fill="#9a856c"/>
+          <rect x="30" y="138" width="190" height="5" fill="#86735d"/>
+          <!-- garden gloves draped over the edge -->
+          <path d="M60 91 C58 102 56 112 59 120 L67 121 C69 112 71 101 73 91 Z" fill="#b2bf98"/>
+          <path d="M70 91 C70 100 72 108 76 114 L82 112 C80 104 80 98 82 91 Z" fill="#9fae86"/>
+          <path d="M59 116 H67" stroke="#e3a9b0" stroke-width="2"/>
+          <!-- trowel leaning on the leg -->
+          <path d="M210 104 L205 128" stroke="#7d5c3f" stroke-width="5" stroke-linecap="round"/>
+          <path d="M200 128 L210 129 L208 151 Q204 160 201 150 Z" fill="#c3c9ca"/>
+          <path d="M204 131 L203 150" stroke="#ffffff" stroke-width=".8" opacity=".7"/>
+          <!-- bundle of freshly cut flowers -->
+          <g stroke="#6f8a58" stroke-width="1.1">
+            <path d="M92 86 L136 82"/><path d="M94 84 L136 84"/><path d="M96 88 L136 83"/>
+          </g>
+          <path d="M126 80 L132 88" stroke="#d6b47c" stroke-width="2.4"/>
+          <use href="#bloom-cosmos" transform="translate(92 84) scale(1.05)" style="color:#efbcc4"/>
+          <use href="#bloom-cosmos" transform="translate(98 78) scale(.9)" style="color:#e39aa8"/>
+          <use href="#bloom-daisy" transform="translate(90 77) scale(.9)"/>
+          <!-- straw hat -->
+          <ellipse cx="180" cy="86" rx="40" ry="5" fill="#2f281f" opacity=".15"/>
+          <ellipse cx="180" cy="83" rx="42" ry="9" fill="url(#straw)"/>
+          <path d="M158 82 C158 60 202 60 202 82 Z" fill="url(#straw)"/>
+          <path d="M158.6 77 C170 80.5 190 80.5 201.4 77 L202 82 C190 85 170 85 158 82 Z" fill="#e39aa8"/>
+          <path d="M200 80 Q211 86 206 98" stroke="#e39aa8" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M142 85 Q180 93 218 85 M150 81 Q180 88 210 81 M162 72 Q180 75 198 72" stroke="#b8975a" stroke-width=".7" fill="none" opacity=".8"/>
+          <path d="M166 68 Q180 64 194 68" stroke="#fff3cf" stroke-width="1.2" fill="none" opacity=".8"/>
+        </svg>
+      </div>
+
+      <!-- GREENHOUSE → "Growing Soon" pop-up (js/greenhouse.js). An invisible hit area
+           over the greenhouse drawing; it sits before the sketchbook so that stays on top. -->
+      <button class="prop prop--interactive greenhouse-peek" type="button" id="greenhouse-peek" style="--x:1213; --y:440; --w:296"
+              aria-label="Greenhouse: step inside">
+        <span class="prop-sparkle" aria-hidden="true"></span>
+        <span class="prop-tag">take a peek inside ♡</span>
+      </button>
+
+      <!-- THE LAKE → "A Few Thoughts from the Lake" (js/lake.js). An invisible hit area over
+           the open water between the willow and the greenhouse. -->
+      <button class="prop prop--interactive lake-peek" type="button" id="lake-peek" style="--x:600; --y:440; --w:600"
+              aria-label="The lake: visit A Few Thoughts from the Lake">
+        <span class="prop-sparkle" aria-hidden="true"></span>
+        <span class="prop-tag">visit the lake ♡</span>
+      </button>
+
+      <!-- THE WILLOW → "The Wishing Willow" (js/willow.js). An invisible hit area over the
+           trunk and the middle of the canopy, clear of the mailbox, the feeder and the beds. -->
+      <button class="prop prop--interactive willow-peek" type="button" id="willow-peek" style="--x:262; --y:140; --w:300"
+              aria-label="The willow tree: step beneath the Wishing Willow">
+        <span class="prop-sparkle" aria-hidden="true"></span>
+        <span class="prop-tag">step beneath the willow ♡</span>
+      </button>
+
+      <!-- SIGNPOST at the bend in the path (from the storyboard): each board points toward its place
+           and leads there. Sits in the gap between the Ranunculus and Cosmos blooms, clear of the lake.
+           Board shapes: 110 × 21 garden units, one every 24 down the post (css/garden.css). -->
+      <nav class="prop garden-signpost" style="--x:884; --y:508; --w:164" aria-label="Garden signpost">
+        <svg class="garden-signpost__art" viewBox="0 0 164 176" aria-hidden="true">
+          <ellipse cx="84" cy="172" rx="26" ry="4" fill="#3d2f22" opacity=".18"/>
+          <rect x="78" y="4" width="8" height="168" rx="2" fill="#8c6a4a"/>
+          <rect x="78" y="4" width="2.4" height="168" fill="#a98563"/>
+          <path d="M75 5 L82 -1 L89 5 Z" fill="#7a5b3f"/>
+          <!-- cosmos and daisies at its foot -->
+          <path d="M82 172 C88 162 98 160 104 162 C98 168 90 172 82 172 Z M84 171 C90 166 98 166 112 170 C102 174 92 174 84 171 Z M80 172 C77 167 73 166 70 168 C73 171 76 172 80 172 Z" fill="#7f9a64"/>
+          <path d="M94 172 C95 166 93 162 94 158 M106 172 C105 167 107 163 106 160 M88 172 C88 169 87 167 88 165" fill="none" stroke="#6f8a58" stroke-width="1.3"/>
+          <use href="#bloom-cosmos" transform="translate(94 157) scale(.9)" style="color:#efbcc4"/>
+          <use href="#bloom-cosmos" transform="translate(106 160) scale(.72)" style="color:#e39aa8"/>
+          <use href="#bloom-cosmos" transform="translate(88 164) scale(.55)" style="color:#f6dadb"/>
+          <use href="#bloom-daisy" transform="translate(100 168) scale(.62)"/>
+          <use href="#bloom-daisy" transform="translate(75 169) scale(.5)"/>
+        </svg>
+        <ul class="garden-signpost__boards">
+          <li><a class="signpost-board signpost-board--left" href="#work" aria-label="Projects" style="--i:0; --tilt:-2deg">
+            <svg viewBox="0 0 110 21" aria-hidden="true"><path class="signpost-board__wood" d="M1.5 10.5 L12 1 H108.5 Q109.5 1 109.5 2 V19 Q109.5 20 108.5 20 H12 Z"/><path class="signpost-board__grain" d="M14 4.2 H106"/><text x="61" y="14.9">PROJECTS</text></svg></a></li>
+          <li><a class="signpost-board signpost-board--right" href="#greenhouse" aria-label="Greenhouse" style="--i:1; --tilt:1.5deg">
+            <svg viewBox="0 0 110 21" aria-hidden="true"><path class="signpost-board__wood" d="M1.5 1 H98 L108.5 10.5 L98 20 H1.5 Q.5 20 .5 19 V2 Q.5 1 1.5 1 Z"/><path class="signpost-board__grain" d="M3 4.2 H96"/><text x="49" y="14.9">GREENHOUSE</text></svg></a></li>
+          <li><a class="signpost-board signpost-board--left" href="#lake" aria-label="Lake" style="--i:2; --tilt:-1deg">
+            <svg viewBox="0 0 110 21" aria-hidden="true"><path class="signpost-board__wood" d="M1.5 10.5 L12 1 H108.5 Q109.5 1 109.5 2 V19 Q109.5 20 108.5 20 H12 Z"/><path class="signpost-board__grain" d="M14 4.2 H106"/><text x="61" y="14.9">LAKE</text></svg></a></li>
+          <li><a class="signpost-board signpost-board--left" href="#willow" aria-label="Willow" style="--i:3; --tilt:2deg">
+            <svg viewBox="0 0 110 21" aria-hidden="true"><path class="signpost-board__wood" d="M1.5 10.5 L12 1 H108.5 Q109.5 1 109.5 2 V19 Q109.5 20 108.5 20 H12 Z"/><path class="signpost-board__grain" d="M14 4.2 H106"/><text x="61" y="14.9">WILLOW</text></svg></a></li>
+          <li><a class="signpost-board signpost-board--right" href="#about" aria-label="Notebook" style="--i:4; --tilt:-1.5deg">
+            <svg viewBox="0 0 110 21" aria-hidden="true"><path class="signpost-board__wood" d="M1.5 1 H98 L108.5 10.5 L98 20 H1.5 Q.5 20 .5 19 V2 Q.5 1 1.5 1 Z"/><path class="signpost-board__grain" d="M3 4.2 H96"/><text x="49" y="14.9">NOTEBOOK</text></svg></a></li>
+          <li><a class="signpost-board signpost-board--left" href="#contact" aria-label="Mailbox" style="--i:5; --tilt:1deg">
+            <svg viewBox="0 0 110 21" aria-hidden="true"><path class="signpost-board__wood" d="M1.5 10.5 L12 1 H108.5 Q109.5 1 109.5 2 V19 Q109.5 20 108.5 20 H12 Z"/><path class="signpost-board__grain" d="M14 4.2 H106"/><text x="61" y="14.9">MAILBOX</text></svg></a></li>
+        </ul>
+      </nav>
+
+      <!-- SKETCHBOOK on the bench → opens About -->
+      <button class="prop prop--interactive sketchbook" type="button" style="--x:1344; --y:592; --w:86"
+              data-open="about" aria-label="Sketchbook on the bench: open About Me">
+        <svg viewBox="0 0 60 72" aria-hidden="true">
+          <ellipse cx="32" cy="69" rx="24" ry="2.4" fill="#2f281f" opacity=".18"/>
+          <g transform="rotate(-9 30 40)">
+            <rect x="10.5" y="8.5" width="44" height="60" rx="2.5" fill="#d3c4a6"/>
+            <path d="M52 10 V66" stroke="#fffaf0" stroke-width="1.4"/>
+            <rect x="8" y="6" width="44" height="60" rx="2.5" fill="#efe4cb"/>
+            <rect x="8" y="6" width="7" height="60" rx="2" fill="#869b74"/>
+            <path d="M15 6 V66" stroke="#5f7357" stroke-width=".6" opacity=".6"/>
+            <rect x="42" y="6" width="3" height="60" fill="#e39aa8"/>
+            <!-- pressed-flower sketch -->
+            <path d="M29 47 C29 40 30 32 30 25" fill="none" stroke="#6b5a49" stroke-width=".7"/>
+            <path d="M29 41 C24 38 22 35 23 32 C27 34 29 37 29 41 M30 35 C34 32 36 29 35 26 C32 28 30 31 30 35" fill="none" stroke="#6b5a49" stroke-width=".6"/>
+            <use href="#bloom-cosmos" transform="translate(30 21) scale(.55)" style="color:#efbcc4"/>
+            <!-- handwritten label -->
+            <rect x="17" y="51" width="24" height="10" rx="1" fill="#fffaf0" transform="rotate(-3 29 56)"/>
+            <text x="29" y="58.6" text-anchor="middle" font-family="Caveat, cursive" font-size="7.4" font-weight="600" fill="#5a4636" transform="rotate(-3 29 56)">About Me</text>
+            <!-- pencil -->
+            <path d="M14 70 L50 62" stroke="#e7c86c" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M50 62 L54 61.2" stroke="#e8b9a0" stroke-width="2.2" stroke-linecap="round"/>
+          </g>
+        </svg>
+        <span class="prop-sparkle" aria-hidden="true"></span>
+        <span class="prop-tag">About me · open my sketchbook</span>
+      </button>
+
+      <!-- TERRACOTTA POTS overflowing with flowers (drawn by scenery.js) -->
+      <div class="prop pots" style="--x:1428; --y:735; --w:160" aria-hidden="true">
+        <svg viewBox="0 0 160 220"><g id="pot-cluster"></g></svg>
+      </div>
+
+      <!-- THE THREE PROJECT PLANTING BEDS (empty and ready for the game)
+           data-flower   = which seed belongs here
+           data-project  = the project page the grown flower will open
+           .bed-plant    = where the flower grows (data-stage: empty → seed → sprout → bud → bloom) -->
+      <button class="prop prop--interactive garden-bed" type="button" style="--x:380; --y:712; --w:260"
+              data-flower="snapdragon" data-project="projects/snapdragon.html" data-state="empty"
+              data-note="The Snapdragon bed is ready for planting. The growing game arrives soon; until then, Project 01 is under Work."
+              aria-label="Snapdragon planting bed, Project 01 (empty)">
+        <svg viewBox="0 0 260 175" aria-hidden="true"><use href="#bed-art"/></svg>
+        <span class="bed-plant" data-stage="empty"></span>
+        <span class="bed-hint hand" aria-hidden="true">plant me here</span>
+        <span class="bed-label"><span class="bed-label__no">No. 01</span><span class="bed-label__name">Snapdragon</span></span>
+        <span class="prop-tag">Project 01 · Snapdragon bed</span>
+      </button>
+
+      <button class="prop prop--interactive garden-bed" type="button" style="--x:680; --y:712; --w:260"
+              data-flower="ranunculus" data-project="projects/ranunculus.html" data-state="empty"
+              data-note="The Ranunculus bed is ready for planting. The growing game arrives soon; until then, Project 02 is under Work."
+              aria-label="Ranunculus planting bed, Project 02 (empty)">
+        <svg viewBox="0 0 260 175" aria-hidden="true"><use href="#bed-art"/></svg>
+        <span class="bed-plant" data-stage="empty"></span>
+        <span class="bed-hint hand" aria-hidden="true">plant me here</span>
+        <span class="bed-label"><span class="bed-label__no">No. 02</span><span class="bed-label__name">Ranunculus</span></span>
+        <span class="prop-tag">Project 02 · Ranunculus bed</span>
+      </button>
+
+      <button class="prop prop--interactive garden-bed" type="button" style="--x:980; --y:712; --w:260"
+              data-flower="cosmos" data-project="projects/cosmos.html" data-state="empty"
+              data-note="The Cosmos bed is ready for planting. The growing game arrives soon; until then, Project 03 is under Work."
+              aria-label="Cosmos planting bed, Project 03 (empty)">
+        <svg viewBox="0 0 260 175" aria-hidden="true"><use href="#bed-art"/></svg>
+        <span class="bed-plant" data-stage="empty"></span>
+        <span class="bed-hint hand" aria-hidden="true">plant me here</span>
+        <span class="bed-label"><span class="bed-label__no">No. 03</span><span class="bed-label__name">Cosmos</span></span>
+        <span class="prop-tag">Project 03 · Cosmos bed</span>
+      </button>
+
+      <!-- The galvanized stock-tank bed drawing, shared by all three beds above -->
+      <svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false">
+        <defs>
+          <clipPath id="bed-clip"><path d="M6 40 L12 158 Q14 170 34 171 L226 171 Q246 170 248 158 L254 40 Z"/></clipPath>
+          <g id="bed-art">
+            <ellipse cx="130" cy="171" rx="138" ry="10" fill="url(#soft-shadow)"/>
+            <ellipse cx="130" cy="170" rx="114" ry="3.5" fill="#2f281f" opacity=".3"/>
+            <path d="M6 40 L12 158 Q14 170 34 171 L226 171 Q246 170 248 158 L254 40 Z" fill="url(#galv-body)"/>
+            <g clip-path="url(#bed-clip)">
+              <rect x="0" y="40" width="260" height="135" filter="url(#metal-light)" opacity=".22"/>
+              <rect x="0" y="40" width="260" height="135" filter="url(#metal-dark)" opacity=".2"/>
+              <rect x="0" y="40" width="260" height="135" fill="url(#bed-depth)"/>
+              <rect x="50" y="40" width="36" height="135" fill="url(#sheen)" opacity=".5"/>
+              <rect x="152" y="40" width="14" height="135" fill="url(#sheen)" opacity=".3"/>
+              <g fill="url(#rib)">
+                <rect x="0" y="63" width="260" height="11"/>
+                <rect x="0" y="94" width="260" height="11"/>
+                <rect x="0" y="125" width="260" height="11"/>
+              </g>
+              <path d="M131 52 V171" stroke="#6e787d" stroke-opacity=".4" stroke-width="1"/>
+              <path d="M133 52 V171" stroke="#ffffff" stroke-opacity=".35" stroke-width=".8"/>
+              <g fill="#ffffff" opacity=".12">
+                <ellipse cx="96" cy="118" rx="18" ry="6"/><ellipse cx="206" cy="84" rx="12" ry="5"/><ellipse cx="34" cy="148" rx="10" ry="4"/>
+              </g>
+              <g fill="#7b6a4e" opacity=".12">
+                <ellipse cx="180" cy="160" rx="30" ry="6"/><ellipse cx="60" cy="164" rx="22" ry="4"/>
+              </g>
+            </g>
+            <path d="M12 158 Q14 170 34 171 L226 171 Q246 170 248 158" fill="none" stroke="#5c666b" stroke-opacity=".45" stroke-width="1.2"/>
+            <!-- rolled rim -->
+            <rect x="1" y="25" width="258" height="28" rx="14" fill="url(#galv-rim)"/>
+            <path d="M16 28.6 H244" stroke="#ffffff" stroke-opacity=".9" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M8 51 Q130 56 252 51" fill="none" stroke="#4f595e" stroke-opacity=".4" stroke-width="2"/>
+            <!-- soil -->
+            <rect x="11" y="31" width="238" height="16" rx="8" fill="url(#soil)"/>
+            <rect x="11" y="31" width="238" height="6" rx="3" fill="#1f160f" opacity=".45"/>
+            <g fill="#8a6f58" opacity=".75">
+              <circle cx="40" cy="40" r="1.2"/><circle cx="72" cy="43" r="1"/><circle cx="104" cy="39" r="1.3"/>
+              <circle cx="150" cy="42" r="1.1"/><circle cx="186" cy="39" r="1.2"/><circle cx="214" cy="43" r="1"/>
+              <circle cx="58" cy="38.5" r=".9"/><circle cx="168" cy="44" r=".9"/><circle cx="126" cy="44.5" r="1"/>
+              <circle cx="232" cy="40" r=".9"/><circle cx="24" cy="43" r=".8"/>
+            </g>
+            <g fill="#2e221a" opacity=".55">
+              <circle cx="88" cy="41" r="1.1"/><circle cx="136" cy="40" r="1.2"/><circle cx="200" cy="42" r="1"/><circle cx="30" cy="40.5" r=".9"/>
+            </g>
+            <!-- softly raised planting spot -->
+            <ellipse cx="130" cy="41.5" rx="30" ry="3.8" fill="#7a5f4b" opacity=".55"/>
+            <ellipse cx="128" cy="40.5" rx="16" ry="1.4" fill="#9a7d64" opacity=".5"/>
+            <!-- bolts -->
+            <g fill="#8b9599"><circle cx="9" cy="39" r="1.8"/><circle cx="251" cy="39" r="1.8"/></g>
+            <g fill="#ffffff" opacity=".7"><circle cx="8.5" cy="38.4" r=".6"/><circle cx="250.5" cy="38.4" r=".6"/></g>
+          </g>
+        </defs>
+      </svg>
+
+      <!-- WICKER BASKET with three seed packets (each packet is its own button) -->
+      <div class="prop seed-basket" style="--x:150; --y:770; --w:200">
+        <svg class="basket-back" viewBox="0 0 200 170" aria-hidden="true">
+          <ellipse cx="100" cy="163" rx="96" ry="8" fill="url(#soft-shadow)"/>
+          <path d="M34 74 C34 0 166 0 166 74" fill="none" stroke="#a9824c" stroke-width="9" stroke-linecap="round"/>
+          <path d="M34 74 C34 0 166 0 166 74" fill="none" stroke="#dcbd88" stroke-width="3" stroke-dasharray="6 4" stroke-linecap="round"/>
+          <ellipse cx="100" cy="74" rx="80" ry="15" fill="#6c4f31"/>
+          <path d="M20 74 Q100 52 180 74" fill="none" stroke="#a9824c" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+
+        <button class="seed-packet" type="button" data-flower="snapdragon" style="--left:13%; --top:9%; --tilt:-9deg"
+                aria-pressed="false" aria-label="Snapdragon seed packet">
+          <svg viewBox="0 0 60 84" aria-hidden="true">
+            <rect x="1" y="1" width="58" height="82" rx="2" fill="#fbf6ea" stroke="#d9cbb0" stroke-width=".8"/>
+            <rect x="1" y="1" width="58" height="9" rx="2" fill="#e5a3b0"/>
+            <rect x="6" y="14" width="48" height="40" fill="#f1e8d8"/>
+            <path d="M30 52 L30 20" stroke="#6f8a58" stroke-width="1.2"/>
+            <ellipse cx="25" cy="47" rx="5" ry="1.8" transform="rotate(-30 25 47)" fill="#7f9a64"/>
+            <ellipse cx="35" cy="44" rx="5" ry="1.8" transform="rotate(30 35 44)" fill="#7f9a64"/>
+            <g fill="#e28fa1" stroke="#b8667a" stroke-width=".35">
+              <ellipse cx="27" cy="40" rx="3.6" ry="3"/><ellipse cx="33" cy="37" rx="3.6" ry="3"/>
+              <ellipse cx="27" cy="33" rx="3.3" ry="2.8"/><ellipse cx="33" cy="30" rx="3.2" ry="2.7"/>
+              <ellipse cx="28" cy="26" rx="2.8" ry="2.4"/><ellipse cx="32" cy="23" rx="2.4" ry="2.1"/>
+              <ellipse cx="30" cy="19.5" rx="1.8" ry="1.6"/>
+            </g>
+            <g fill="#f6cbd2"><circle cx="26" cy="39" r="1.3"/><circle cx="34" cy="36" r="1.3"/><circle cx="26" cy="32" r="1.1"/></g>
+            <text x="30" y="63" font-size="6.6" text-anchor="middle" font-family="Cormorant Garamond, serif" fill="#5d4b3c" letter-spacing=".4">SNAPDRAGON</text>
+            <text x="30" y="72" font-size="4.2" text-anchor="middle" font-family="Jost, sans-serif" fill="#8a7a68" letter-spacing=".8">PROJECT 01</text>
+          </svg>
+          <span class="prop-tag">Snapdragon seeds</span>
+        </button>
+
+        <button class="seed-packet" type="button" data-flower="ranunculus" style="--left:37%; --top:6%; --tilt:3deg"
+                aria-pressed="false" aria-label="Ranunculus seed packet">
+          <svg viewBox="0 0 60 84" aria-hidden="true">
+            <rect x="1" y="1" width="58" height="82" rx="2" fill="#fbf6ea" stroke="#d9cbb0" stroke-width=".8"/>
+            <rect x="1" y="1" width="58" height="9" rx="2" fill="#efcd7d"/>
+            <rect x="6" y="14" width="48" height="40" fill="#f1e8d8"/>
+            <path d="M30 52 C30 44 31 38 30 32" fill="none" stroke="#6f8a58" stroke-width="1.2"/>
+            <path d="M30 46 C24 46 21 42 21 39 C26 39 29 42 30 46 Z" fill="#7f9a64"/>
+            <circle cx="30" cy="28" r="11" fill="#ecc07a"/>
+            <circle cx="30" cy="28" r="8.8" fill="#f3d394" stroke="#d9a964" stroke-width=".5"/>
+            <circle cx="30" cy="28" r="6.4" fill="#f7e0b2" stroke="#d9a964" stroke-width=".5"/>
+            <circle cx="30" cy="28" r="4" fill="#efc884" stroke="#d9a964" stroke-width=".5"/>
+            <circle cx="30" cy="28" r="1.8" fill="#a7965a"/>
+            <text x="30" y="63" font-size="6.6" text-anchor="middle" font-family="Cormorant Garamond, serif" fill="#5d4b3c" letter-spacing=".4">RANUNCULUS</text>
+            <text x="30" y="72" font-size="4.2" text-anchor="middle" font-family="Jost, sans-serif" fill="#8a7a68" letter-spacing=".8">PROJECT 02</text>
+          </svg>
+          <span class="prop-tag">Ranunculus seeds</span>
+        </button>
+
+        <button class="seed-packet" type="button" data-flower="cosmos" style="--left:60%; --top:10%; --tilt:11deg"
+                aria-pressed="false" aria-label="Cosmos seed packet">
+          <svg viewBox="0 0 60 84" aria-hidden="true">
+            <rect x="1" y="1" width="58" height="82" rx="2" fill="#fbf6ea" stroke="#d9cbb0" stroke-width=".8"/>
+            <rect x="1" y="1" width="58" height="9" rx="2" fill="#ecb9bd"/>
+            <rect x="6" y="14" width="48" height="40" fill="#f1e8d8"/>
+            <path d="M30 52 C31 46 29 40 30 34" fill="none" stroke="#6f8a58" stroke-width="1"/>
+            <path d="M30 46 L22 41 M30 46 L37 40 M30 42 L24 38 M26 41 L23 43" fill="none" stroke="#7f9a64" stroke-width=".7"/>
+            <use href="#bloom-cosmos" transform="translate(30 27) scale(1.9)" style="color:#efbcc4"/>
+            <text x="30" y="63" font-size="6.6" text-anchor="middle" font-family="Cormorant Garamond, serif" fill="#5d4b3c" letter-spacing=".4">COSMOS</text>
+            <text x="30" y="72" font-size="4.2" text-anchor="middle" font-family="Jost, sans-serif" fill="#8a7a68" letter-spacing=".8">PROJECT 03</text>
+          </svg>
+          <span class="prop-tag">Cosmos seeds</span>
+        </button>
+
+        <svg class="basket-front" viewBox="0 0 200 170" aria-hidden="true">
+          <path d="M20 74 Q100 96 180 74 L170 140 Q166 158 140 160 L60 160 Q34 158 30 140 Z" fill="url(#wicker)"/>
+          <path d="M20 74 Q100 96 180 74 L170 140 Q166 158 140 160 L60 160 Q34 158 30 140 Z" fill="url(#basket-shade)"/>
+          <path d="M28 118 Q100 134 172 118 M24 96 Q100 112 176 96" fill="none" stroke="#8a6234" stroke-width="2" opacity=".45"/>
+          <path d="M20 74 Q100 96 180 74" fill="none" stroke="#c09a60" stroke-width="8" stroke-linecap="round"/>
+          <path d="M20 74 Q100 96 180 74" fill="none" stroke="#e2c592" stroke-width="2.5" stroke-dasharray="5 4"/>
+          <path d="M36 82 q-6 10 2 14 q8 -4 2 -14" fill="#e39aa8"/>
+          <path d="M40 82 q10 6 6 16" fill="none" stroke="#e39aa8" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- BIRDBATH BOWL · an invisible button over the birdbath's bowl and its visitor: click to invite the
+           chickadee, or (while it's there) to watch it splash (js/ambience.js). It comes after the beds so
+           the Cosmos bed's tall planting area, which overlaps the bowl, doesn't catch the click. -->
+      <button class="prop birdbath-bowl" type="button" id="birdbath-bowl" style="--x:1163; --y:604; --w:92"
+              aria-label="Birdbath: invite the chickadee for a splash"></button>
+
+      <!-- WATERING CAN (will become draggable in the game) -->
+      <button class="prop prop--interactive watering-can" type="button" style="--x:1262; --y:826; --w:140"
+              data-tool="water" id="watering-can" aria-pressed="false"
+              aria-label="Watering can: drag it to a planted bed, or tap it and then tap a bed">
+        <svg viewBox="0 0 160 120" aria-hidden="true">
+          <ellipse cx="84" cy="113" rx="62" ry="7" fill="url(#soft-shadow)"/>
+          <path d="M118 50 C146 52 150 92 122 102" fill="none" stroke="#8d979b" stroke-width="6" stroke-linecap="round"/>
+          <path d="M44 96 L10 36 L16 33 L48 84 Z" fill="url(#galv-body)"/>
+          <ellipse cx="11" cy="33" rx="8" ry="4.5" transform="rotate(-35 11 33)" fill="#c9cfd0"/>
+          <ellipse cx="10" cy="32" rx="5" ry="2.6" transform="rotate(-35 10 32)" fill="#99a2a6"/>
+          <path d="M42 44 L122 44 L126 108 Q84 116 38 108 Z" fill="url(#galv-body)"/>
+          <path d="M41 62 Q82 68 123 62 M39 92 Q82 99 125 92" fill="none" stroke="#f0f3f2" stroke-opacity=".75" stroke-width="2.5"/>
+          <path d="M41 65 Q82 71 123 65 M39 95 Q82 102 125 95" fill="none" stroke="#5f696e" stroke-opacity=".4" stroke-width="1.5"/>
+          <path d="M38 108 Q84 116 126 108" fill="none" stroke="#5c666b" stroke-opacity=".5" stroke-width="1.2"/>
+          <ellipse cx="82" cy="44" rx="40" ry="6" fill="#dfe3e2"/>
+          <ellipse cx="82" cy="44" rx="33" ry="4" fill="#848e93"/>
+          <path d="M56 42 C60 10 104 10 108 42" fill="none" stroke="#9aa3a6" stroke-width="6" stroke-linecap="round"/>
+          <path d="M60 36 C64 16 100 16 104 36" fill="none" stroke="#eef1f1" stroke-width="1.4" stroke-linecap="round" opacity=".8"/>
+        </svg>
+        <span class="prop-tag">Watering can</span>
+      </button>
+
+      <!-- GARDEN LIFE · bees and a visiting hummingbird (animated in CSS, timed by js/ambience.js) -->
+      <div class="critters" aria-hidden="true">
+        <span class="bee" style="--x:760; --y:560; --path:bee-loop-a; --dur:16s"><svg viewBox="0 0 14 10"><use href="#bee-art"/></svg></span>
+        <span class="bee" style="--x:1040; --y:600; --path:bee-loop-b; --dur:21s"><svg viewBox="0 0 14 10"><use href="#bee-art"/></svg></span>
+        <span class="bee" style="--x:330; --y:690; --path:bee-loop-c; --dur:18s"><svg viewBox="0 0 14 10"><use href="#bee-art"/></svg></span>
+        <span class="bee" style="--x:1470; --y:700; --path:bee-loop-b; --dur:19s"><svg viewBox="0 0 14 10"><use href="#bee-art"/></svg></span>
+
+        <!-- Hummingbirds: two wander between flowers; the third answers the feeder -->
+        <span class="hummingbird" id="hummingbird-1">
+          <svg viewBox="0 0 40 30">
+            <path d="M30 16 L40 20 L38 13.5 Z" fill="#4f7058"/>
+            <ellipse cx="22" cy="15" rx="9" ry="4.6" transform="rotate(-12 22 15)" fill="url(#hb-body)"/>
+            <path d="M16 17 Q22 21 28 17" fill="#ece6d6"/>
+            <ellipse cx="15.5" cy="15" rx="3" ry="2.5" fill="#c4536b"/>
+            <circle cx="13.5" cy="11.5" r="3.6" fill="#5f8a68"/>
+            <circle cx="12.6" cy="11" r=".7" fill="#111"/>
+            <path d="M10.2 11.6 L1 13 L10.4 12.8 Z" fill="#333"/>
+            <g transform="rotate(25 22 6.5)"><ellipse class="hb-wing" cx="22" cy="6.5" rx="3" ry="8" fill="#e6efeb" opacity=".6"/></g>
+          </svg>
+        </span>
+        <span class="hummingbird" id="hummingbird-2">
+          <svg viewBox="0 0 40 30">
+            <path d="M30 16 L40 20 L38 13.5 Z" fill="#567a5e"/>
+            <ellipse cx="22" cy="15" rx="9" ry="4.6" transform="rotate(-12 22 15)" fill="url(#hb-body)"/>
+            <path d="M15 16.5 Q22 21.5 28 17" fill="#f3efe5"/>
+            <circle cx="13.5" cy="11.5" r="3.6" fill="#6b9474"/>
+            <circle cx="12.6" cy="11" r=".7" fill="#111"/>
+            <path d="M10.2 11.6 L1 13 L10.4 12.8 Z" fill="#333"/>
+            <g transform="rotate(25 22 6.5)"><ellipse class="hb-wing" cx="22" cy="6.5" rx="3" ry="8" fill="#e6efeb" opacity=".6"/></g>
+          </svg>
+        </span>
+        <span class="hummingbird" id="hummingbird-feeder">
+          <svg viewBox="0 0 40 30">
+            <path d="M30 16 L40 20 L38 13.5 Z" fill="#4f7058"/>
+            <ellipse cx="22" cy="15" rx="9" ry="4.6" transform="rotate(-12 22 15)" fill="url(#hb-body)"/>
+            <path d="M16 17 Q22 21 28 17" fill="#ece6d6"/>
+            <ellipse cx="15.5" cy="15" rx="3" ry="2.5" fill="#c4536b"/>
+            <circle cx="13.5" cy="11.5" r="3.6" fill="#5f8a68"/>
+            <circle cx="12.6" cy="11" r=".7" fill="#111"/>
+            <path d="M10.2 11.6 L1 13 L10.4 12.8 Z" fill="#333"/>
+            <g transform="rotate(25 22 6.5)"><ellipse class="hb-wing" cx="22" cy="6.5" rx="3" ry="8" fill="#e6efeb" opacity=".6"/></g>
+          </svg>
+        </span>
+
+        <!-- Butterflies (colours set per butterfly) -->
+        <span class="butterfly" style="--x:240; --y:640; --path:flit-a; --dur:28s; --wing:#f2d68c; --wing2:#e8c262"><svg viewBox="0 0 20 16"><use href="#butterfly-art"/></svg></span>
+        <span class="butterfly" style="--x:820; --y:566; --path:flit-b; --dur:34s; --wing:#fbf8f0; --wing2:#efe9da"><svg viewBox="0 0 20 16"><use href="#butterfly-art"/></svg></span>
+        <span class="butterfly" style="--x:1430; --y:676; --path:flit-c; --dur:30s; --wing:#e5964a; --wing2:#d5803a; --vein:#3b3128"><svg viewBox="0 0 20 16"><use href="#butterfly-art"/></svg></span>
+        <span class="butterfly" style="--x:1060; --y:606; --path:flit-a; --dur:36s; --wing:#bed1e2; --wing2:#a6bfd7"><svg viewBox="0 0 20 16"><use href="#butterfly-art"/></svg></span>
+
+        <!-- Sparrows resting on the fence posts -->
+        <span class="perched-bird" style="--x:738; --y:487; --delay:-2s"><svg viewBox="0 0 24 18"><use href="#sparrow-art"/></svg></span>
+        <span class="perched-bird perched-bird--flip" style="--x:1068; --y:487; --delay:-7s"><svg viewBox="0 0 24 18"><use href="#sparrow-art"/></svg></span>
+
+        <!-- A bunny by the front beds: ear twitches, nose wiggles and the odd little hop -->
+        <span class="gx-bunny" style="--x:330; --y:884; --w:62">
+          <svg viewBox="0 0 60 48">
+            <ellipse cx="33" cy="45.5" rx="25" ry="3.4" fill="#3b3128" opacity=".24"/>
+            <circle cx="51" cy="35" r="5" fill="#fbf6ee"/>
+            <path d="M18 40 C14 28 22 18 36 18 C50 18 56 30 52 40 C50 45.5 22 45.5 18 40 Z" fill="#b99c7c"/>
+            <ellipse cx="42" cy="35" rx="11" ry="9" fill="#a98b6b"/>
+            <path d="M34 31 Q42 26 49 32" fill="none" stroke="#e3d4bf" stroke-width="1.2" stroke-linecap="round" opacity=".8"/>
+            <ellipse cx="22" cy="35" rx="6" ry="8" fill="#efe3d2"/>
+            <ellipse cx="41" cy="44.2" rx="9" ry="2.4" fill="#a98b6b"/>
+            <ellipse cx="20" cy="44.2" rx="4" ry="2" fill="#efe3d2"/>
+            <ellipse cx="25.5" cy="44.4" rx="3.6" ry="1.8" fill="#e6d8c4"/>
+            <g class="gx-bunny__head">
+              <path d="M18.5 15 C15 4 17 -6 21.5 -7 C25.5 -6 25 4 23 15 Z" fill="#a98b6b"/>
+              <g class="gx-bunny__ear">
+                <path d="M22.5 14.5 C23.5 2 29 -6 32 -5 C35 -3 31 6 27 15.5 Z" fill="#bea283"/>
+                <path d="M25 12.5 C26.5 4 29.5 -2 31 -2.6 C32 -1 29.5 6 27 13 Z" fill="#eab7bb"/>
+              </g>
+              <circle cx="17" cy="22" r="10" fill="#bea283"/>
+              <ellipse cx="12.4" cy="26" rx="5.4" ry="4" fill="#ebdfce"/>
+              <circle cx="14" cy="19.6" r="1.7" fill="#2d241f"/>
+              <circle cx="13.4" cy="19" r=".55" fill="#ffffff"/>
+              <ellipse cx="19" cy="24.5" rx="2" ry="1.1" fill="#eab7bb" opacity=".55"/>
+              <ellipse class="gx-bunny__nose" cx="7.6" cy="24" rx="1.4" ry="1" fill="#d98f99"/>
+              <path d="M9 25.6 L1 24.4 M9 26.4 L1.4 27.6 M10 26.8 L3 30" stroke="#8a7a68" stroke-width=".35" opacity=".7"/>
+            </g>
+          </svg>
+        </span>
+
+        <!-- A squirrel at the foot of the willow with an acorn: tail flicks and a little head turn -->
+        <span class="gx-squirrel" style="--x:324; --y:574; --w:34">
+          <svg viewBox="0 0 50 52">
+            <ellipse cx="26" cy="49.5" rx="18" ry="2.4" fill="#3b3128" opacity=".18"/>
+            <g class="gx-squirrel__tail">
+              <path d="M30 46 C46 46 52 32 47 19 C43 9 33 5 29 12 C36 12 41 19 39 27 C37 35 30 38 28 42 Z" fill="#b9784e"/>
+              <path d="M31 13 C38 11 44 17 44 25 C44 33 39 39 33 43" fill="none" stroke="#dba67d" stroke-width="2.2" stroke-linecap="round" opacity=".75"/>
+            </g>
+            <path d="M15 48 C11 37 15 24 23 22 C31 22 34 35 32 48 Z" fill="#a8653f"/>
+            <ellipse cx="20.5" cy="38" rx="5" ry="8.4" fill="#f1dcc0"/>
+            <ellipse cx="18" cy="48.6" rx="5" ry="1.9" fill="#95583a"/>
+            <ellipse cx="29" cy="48.6" rx="4.4" ry="1.8" fill="#95583a"/>
+            <g class="gx-squirrel__head">
+              <path d="M20 12 L21.6 4.4 L25.4 11 Z" fill="#9d5d3b"/>
+              <path d="M21.4 6 L21 3 L22.6 5.4 Z" fill="#c78a5f"/>
+              <circle cx="19.5" cy="17.5" r="7.6" fill="#ad6a43"/>
+              <ellipse cx="13" cy="19.8" rx="4.2" ry="3.3" fill="#b8774f"/>
+              <ellipse cx="16.6" cy="21.6" rx="2.6" ry="1.6" fill="#f1dcc0"/>
+              <circle cx="16.2" cy="16.2" r="1.35" fill="#2a1f19"/>
+              <circle cx="15.8" cy="15.7" r=".45" fill="#ffffff"/>
+              <circle cx="9.2" cy="19" r=".95" fill="#3a2b22"/>
+            </g>
+            <!-- acorn held in the front paws -->
+            <g class="gx-squirrel__acorn">
+              <ellipse cx="14" cy="31.4" rx="3.8" ry="4.6" fill="#d2a465"/>
+              <ellipse cx="12.8" cy="31" rx="1" ry="2" fill="#f0cf96" opacity=".7"/>
+              <path d="M9.6 28.6 Q14 24.6 18.4 28.6 Q14 30.2 9.6 28.6 Z" fill="#7d5c3f"/>
+              <path d="M10.6 28 Q14 26.2 17.4 28" fill="none" stroke="#5e4330" stroke-width=".5"/>
+              <path d="M14 25.8 v-2" stroke="#6b4d34" stroke-width=".9" stroke-linecap="round"/>
+              <ellipse cx="10.6" cy="32.4" rx="2" ry="1.5" fill="#95583a"/>
+              <ellipse cx="17.4" cy="32.8" rx="2" ry="1.5" fill="#95583a"/>
+            </g>
+          </svg>
+        </span>
+
+        <!-- Distant birds gliding across the sky now and then -->
+        <span class="sky-birds" style="--x:-60; --y:300"><svg viewBox="0 0 60 24"><g fill="none" stroke="#5f6b66" stroke-width="1.1" stroke-linecap="round"><path d="M2 8 Q6 4 9 8 Q12 4 16 8"/><path d="M22 14 Q25.5 10.5 28 14 Q30.5 10.5 34 14"/><path d="M40 6 Q43 3 45.5 6 Q48 3 51 6"/></g></svg></span>
+        <svg class="svg-defs" width="0" height="0" focusable="false">
+          <defs>
+            <g id="bee-art">
+              <ellipse cx="7" cy="6" rx="4.5" ry="3" fill="#e5b947"/>
+              <path d="M6 3.2 V8.8 M8.4 3.4 V8.6" stroke="#3b3128" stroke-width="1.1"/>
+              <circle cx="11.2" cy="5.6" r="1.7" fill="#3b3128"/>
+              <g class="bee-wings"><ellipse cx="6" cy="2.2" rx="2.4" ry="1.6" fill="#fff" opacity=".8"/><ellipse cx="8.6" cy="2" rx="2" ry="1.4" fill="#fff" opacity=".65"/></g>
+            </g>
+            <g id="butterfly-art">
+              <g class="bf-wing bf-wing--l">
+                <path class="bf-upper" d="M10 8 C6 1 0 1 1 6 C2 9 7 9 10 8 Z"/>
+                <path class="bf-lower" d="M10 8.5 C6 10 3 14 6 15 C8 15.5 9.5 12 10 9 Z"/>
+              </g>
+              <g class="bf-wing bf-wing--r">
+                <path class="bf-upper" d="M10 8 C14 1 20 1 19 6 C18 9 13 9 10 8 Z"/>
+                <path class="bf-lower" d="M10 8.5 C14 10 17 14 14 15 C12 15.5 10.5 12 10 9 Z"/>
+              </g>
+              <path d="M10 4.5 V12.5" stroke="#3b3128" stroke-width="1.1" stroke-linecap="round"/>
+              <path d="M10 4.5 Q8.6 2.6 8 2 M10 4.5 Q11.4 2.6 12 2" stroke="#3b3128" stroke-width=".4" fill="none"/>
+            </g>
+            <g id="sparrow-art">
+              <path d="M4 10 L0 7 L1 12 Z" fill="#7a6650"/>
+              <ellipse cx="10" cy="11" rx="6.5" ry="4.5" fill="#9c8467"/>
+              <path d="M7 13 Q11 16 15 12" fill="#e2d6c2"/>
+              <path d="M5 9 Q10 7 13 11 Q9 12 5 9 Z" fill="#6f5a45"/>
+              <circle cx="16" cy="7.5" r="3.4" fill="#8a7259"/>
+              <path d="M13 6 Q16 3.5 19 6" fill="#6b5442"/>
+              <circle cx="17.3" cy="7.2" r=".6" fill="#111"/>
+              <path d="M19.2 7.6 L21.5 8.1 L19.2 8.8 Z" fill="#4a3f36"/>
+              <path d="M9 15 V17.5 M11.5 15 V17.5" stroke="#5a4a3c" stroke-width=".6"/>
+            </g>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- LAYER · Lush mixed flowers along the front edges (garden-extras.js) -->
+      <svg class="layer gx-layer gx-layer--edges" viewBox="0 0 1600 1000" aria-hidden="true">
+        <g id="gx-edges"></g>
+      </svg>
+
+      <!-- LAYER · Foreground grasses and soft out-of-focus blooms (sway gently) -->
+      <svg class="layer layer-breeze layer-foreground" viewBox="0 0 1600 1000" aria-hidden="true">
+        <g id="foreground-grass"></g>
+        <g id="foreground-bokeh" filter="url(#blur-md)" opacity=".85"></g>
+      </svg>
+
+      <!-- GOLDEN HOUR MODE (js/mode.js): warm light, evening shadows and fireflies.
+           Purely decorative layers that ignore clicks. -->
+      <div class="golden-only sunset-light" aria-hidden="true"></div>
+      <div class="golden-only sunset-shadow" aria-hidden="true"></div>
+      <div class="golden-only gx-golden-glow" aria-hidden="true"></div>
+      <div class="golden-only fireflies" aria-hidden="true">
+        <i style="--x:120; --y:760; --d:0s"></i><i style="--x:330; --y:700; --d:-2.4s"></i>
+        <i style="--x:560; --y:660; --d:-4.1s"></i><i style="--x:760; --y:690; --d:-1.2s"></i>
+        <i style="--x:980; --y:650; --d:-3.3s"></i><i style="--x:1180; --y:700; --d:-5.2s"></i>
+        <i style="--x:1300; --y:760; --d:-0.7s"></i><i style="--x:1520; --y:720; --d:-2.9s"></i>
+        <i style="--x:260; --y:930; --d:-3.8s"></i><i style="--x:1100; --y:950; --d:-1.8s"></i>
+        <i style="--x:700; --y:560; --d:-4.6s"></i><i style="--x:1450; --y:880; --d:-0.3s"></i>
+        <i style="--x:360; --y:560; --d:-1.5s"></i><i style="--x:420; --y:640; --d:-3.9s"></i>
+        <i style="--x:60; --y:860; --d:-2.2s"></i><i style="--x:1280; --y:700; --d:-4.4s"></i>
+        <i style="--x:1560; --y:820; --d:-1.0s"></i><i style="--x:900; --y:610; --d:-5.6s"></i>
+        <i style="--x:1520; --y:560; --d:-2.6s"></i><i style="--x:180; --y:700; --d:-0.9s"></i>
+      </div>
+
+      <!-- Reserved for the finale: golden-hour glow + butterflies after all three bloom -->
+      <div class="golden-hour" aria-hidden="true"></div>
+      <div class="butterflies" id="butterflies" aria-hidden="true"></div>
+
+      <!-- Soft light + paper texture over the whole illustration -->
+      <div class="scene-light" aria-hidden="true"></div>
+      <div class="paper-grain" aria-hidden="true"></div>
+    </main>
+  </div>
+
+  <!-- =====================================================================
+       WELCOME SCREEN
+       ===================================================================== -->
+  <section class="welcome" id="welcome" aria-labelledby="welcome-title">
+    <div class="welcome__card">
+      <svg class="welcome__sprig" viewBox="0 0 120 40" aria-hidden="true">
+        <path d="M6 30 C36 30 70 22 114 10" fill="none" stroke="#6f8a58" stroke-width="1.2"/>
+        <g fill="#8fa871">
+          <ellipse cx="30" cy="25" rx="7" ry="2.6" transform="rotate(-30 30 25)"/>
+          <ellipse cx="38" cy="32" rx="7" ry="2.6" transform="rotate(20 38 32)"/>
+          <ellipse cx="62" cy="19" rx="7" ry="2.6" transform="rotate(-30 62 19)"/>
+          <ellipse cx="70" cy="27" rx="7" ry="2.6" transform="rotate(15 70 27)"/>
+        </g>
+        <use href="#bloom-cosmos" transform="translate(98 14) scale(1.25)" style="color:#e5a3b0"/>
+        <use href="#bloom-round" transform="translate(84 21) scale(.8)" style="color:#efcd7d"/>
+      </svg>
+      <h1 class="welcome__title" id="welcome-title">A Day in Bloom</h1>
+      <p class="welcome__subtitle">An Interactive Portfolio Garden</p>
+      <span class="welcome__rule" aria-hidden="true"></span>
+      <p class="welcome__name">Avery Hearder</p>
+      <p class="welcome__role">Interior Design Portfolio</p>
+      <a class="btn-bloom" href="#garden" id="enter-garden">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21 C12 15 12 11 12 7 M12 13 C8 13 6 10 6 7 C10 7 12 10 12 13 M12 10 C15 10 18 8 18 5 C15 5 12 7 12 10" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Enter the Garden
+      </a>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       INSTRUCTION BAR · guides visitors through the growing game
+       (js/game.js updates the text and steps)
+       ===================================================================== -->
+  <div class="instruction-bar" id="instruction-bar">
+    <svg class="instruction-bar__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21 C12 15 12 11 12 7 M12 13 C8 13 6 10 6 7 C10 7 12 10 12 13 M12 10 C15 10 18 8 18 5 C15 5 12 7 12 10" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+    <p class="instruction-bar__text" id="instruction-text" aria-live="polite">Every great idea starts with a seed. Choose a flower to begin.</p>
+    <ol class="growth-steps" aria-label="How to grow a flower">
+      <li data-step="choose" class="is-current"><span>Choose a seed</span></li>
+      <li data-step="plant"><span>Plant it</span></li>
+      <li data-step="water"><span>Water</span></li>
+      <li data-step="sun"><span>Give it sun</span></li>
+      <li data-step="bloom"><span>Watch it bloom</span></li>
+      <li data-step="explore"><span>Open the project</span></li>
+    </ol>
+    <button type="button" class="instruction-bar__reset" id="garden-reset" hidden>↺ <span class="instruction-bar__reset-label">start over</span></button>
+  </div>
+
+  <!-- Small garden messages + mobile hint -->
+  <p class="garden-note" id="garden-note" role="status" aria-live="polite"></p>
+  <p class="swipe-hint" id="swipe-hint" aria-hidden="true">Swipe to wander ↔</p>
+
+  <!-- =====================================================================
+       PANELS: Work, About (the journal), Contact
+       ===================================================================== -->
+  <div class="panel-layer" id="panel-layer">
+    <a class="panel-backdrop" href="#garden" tabindex="-1" aria-label="Close and return to the garden"></a>
+
+    <!-- WORK -->
+    <article class="panel panel--work" id="panel-work" aria-labelledby="work-title" hidden>
+      <a class="panel-close" href="#garden" aria-label="Close and return to the garden">Return to garden ×</a>
+      <p class="eyebrow">Selected Work</p>
+      <h2 class="panel-title" id="work-title">Three projects, three flowers</h2>
+      <p class="panel-intro">Each project in this portfolio grows from a seed: a first idea, developed through research and drawing into a finished interior. Plant a seed in the garden to watch a project bloom, or open one below.</p>
+
+      <ul class="project-cards">
+        <li>
+          <a class="project-card project-card--snapdragon" href="projects/snapdragon.html">
+            <span class="project-card__flower" aria-hidden="true">
+              <svg viewBox="0 0 60 60"><path d="M30 56 L30 14" stroke="#6f8a58" stroke-width="1.4"/><g fill="#e28fa1"><ellipse cx="26" cy="44" rx="5" ry="4"/><ellipse cx="34" cy="39" rx="5" ry="4"/><ellipse cx="26" cy="33" rx="4.5" ry="3.6"/><ellipse cx="34" cy="28" rx="4" ry="3.3"/><ellipse cx="28" cy="22" rx="3.4" ry="3"/><ellipse cx="31" cy="16" rx="2.4" ry="2.2"/></g></svg>
+            </span>
+            <span class="project-card__text">
+              <span class="project-card__no">Project 01 · Snapdragon</span>
+              <span class="project-card__title">LumiEdge</span>
+              <span class="project-card__meta">Product Design · Runner-Up, Napoleon Design Competition · <time datetime="2025-11">November 2025</time></span>
+            </span>
+            <span class="project-card__arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li>
+          <a class="project-card project-card--ranunculus" href="projects/ranunculus.html">
+            <span class="project-card__flower" aria-hidden="true">
+              <svg viewBox="0 0 60 60"><path d="M30 56 L30 34" stroke="#6f8a58" stroke-width="1.4"/><circle cx="30" cy="26" r="15" fill="#ecc07a"/><circle cx="30" cy="26" r="11.5" fill="#f3d394" stroke="#d9a964" stroke-width=".6"/><circle cx="30" cy="26" r="8" fill="#f7e0b2" stroke="#d9a964" stroke-width=".6"/><circle cx="30" cy="26" r="4.6" fill="#efc884" stroke="#d9a964" stroke-width=".6"/><circle cx="30" cy="26" r="2" fill="#a7965a"/></svg>
+            </span>
+            <span class="project-card__text">
+              <span class="project-card__no">Project 02 · Ranunculus</span>
+              <span class="project-card__title">Modunest</span>
+              <span class="project-card__meta">Workplace Interior Design · Independent Academic Project · <time datetime="2024-12">December 2024</time></span>
+            </span>
+            <span class="project-card__arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li>
+          <a class="project-card project-card--cosmos" href="projects/cosmos.html">
+            <span class="project-card__flower" aria-hidden="true">
+              <svg viewBox="0 0 60 60"><path d="M30 56 C31 46 29 38 30 30" fill="none" stroke="#6f8a58" stroke-width="1.2"/><use href="#bloom-cosmos" transform="translate(30 24) scale(2.4)" style="color:#efbcc4"/></svg>
+            </span>
+            <span class="project-card__text">
+              <span class="project-card__no">Project 03 · Cosmos</span>
+              <span class="project-card__title">Lucy’s Cottage</span>
+              <span class="project-card__meta">Accessible Residential Renovation · Interdisciplinary Group Project · <time datetime="2026-04">April 2026</time></span>
+            </span>
+            <span class="project-card__arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      </ul>
+    </article>
+
+    <!-- ABOUT · a personal junk journal with three spreads: About, Skills, Hello
+         (styles in css/journal.css; tabs handled in js/main.js)
+         PHOTOS: save your photos in assets/images/ with the file names below.
+         Until a photo is there, its frame shows a labelled placeholder. -->
+    <article class="panel panel--journal" id="panel-about" aria-labelledby="about-title" hidden>
+      <div class="journal" id="journal" data-tab="about">
+
+        <!-- notebook tabs -->
+        <div class="journal-tabs" role="tablist" aria-label="Notebook pages">
+          <button type="button" role="tab" class="journal-tab journal-tab--blush" id="jtab-about" data-journal-tab="about" aria-controls="jspread-about" aria-selected="true">About</button>
+          <button type="button" role="tab" class="journal-tab journal-tab--butter" id="jtab-skills" data-journal-tab="skills" aria-controls="jspread-skills" aria-selected="false" tabindex="-1">Skills</button>
+          <button type="button" role="tab" class="journal-tab journal-tab--lake" id="jtab-little-things" data-journal-tab="little-things" aria-controls="jspread-little-things" aria-selected="false" tabindex="-1">Little Things</button>
+          <button type="button" role="tab" class="journal-tab journal-tab--sage" id="jtab-hello" data-journal-tab="hello" aria-controls="jspread-hello" aria-selected="false" tabindex="-1">Hello</button>
+        </div>
+
+        <div class="journal-book">
+          <a class="panel-close journal-close" href="#garden" aria-label="Close the notebook and return to the garden">Return to garden ×</a>
+
+          <div class="journal-spreads">
+
+            <!-- ================= SPREAD 1 · ABOUT ================= -->
+            <section class="journal-spread is-current" id="jspread-about" role="tabpanel" aria-labelledby="jtab-about">
+              <div class="journal-page journal-page--left">
+                <p class="eyebrow">From the sketchbook</p>
+                <h2 class="panel-title journal-title" id="about-title">About Me</h2>
+                <p class="hand journal-hello">hello &amp; welcome to my garden ✿</p>
+
+                <div class="paper-card paper-card--torn journal-text">
+                  <p>I’m Avery Hearder, a fourth-year Honours Bachelor of Interior Design student at Georgian College. I’m drawn to the way thoughtful interiors can shape everyday life, from how a space functions to how it feels to spend time in. I enjoy exploring materiality, space planning, and the small details that make an interior feel considered, comfortable, and welcoming.</p>
+                </div>
+
+                <h3 class="journal-heading">Design Approach</h3>
+                <div class="paper-card paper-card--lined journal-text">
+                  <svg class="paper-clip" style="top:-14px; right:28px" viewBox="0 0 16 46" aria-hidden="true"><path d="M5 10 V36 a4 4 0 0 0 8 0 V6 a3 3 0 0 0 -6 0 V32" fill="none" stroke="#8d979b" stroke-width="1.6" stroke-linecap="round"/></svg>
+                  <p>I believe interior design is about more than creating beautiful spaces. It’s about understanding how people live, what makes them feel comfortable, and how thoughtful design can make everyday experiences better.</p>
+                  <p>I’m drawn to the process behind a finished space — the questions, sketches, research, collaboration and little decisions that bring an idea to life.</p>
+                  <p><em>A Day in Bloom</em> reflects that approach. Just like a garden, good design takes curiosity, care and time to grow.</p>
+                </div>
+                <span class="journal-folio" aria-hidden="true">1</span>
+              </div>
+
+              <div class="journal-binding" aria-hidden="true"></div>
+
+              <div class="journal-page journal-page--right journal-collage journal-collage--about">
+                <!-- MAIN PORTRAIT: tulip field -->
+                <figure class="polaroid photo-slot collage-portrait">
+                  <span class="washi washi--sage" style="top:-10px; left:50%; transform:translateX(-50%) rotate(-3deg)"></span>
+                  <div class="photo-slot__frame" style="--ratio: 4 / 5">
+                    <img src="assets/images/web/avery-tulips.jpg" loading="lazy" decoding="async" style="object-position: 50% 62%" alt="Avery standing in a tulip field holding a basket, with a windmill in the distance">
+                    <span class="photo-slot__missing">Main portrait<br><small>assets/images/avery-tulips.png</small></span>
+                  </div>
+                  <figcaption>tulip season ✿</figcaption>
+                </figure>
+
+                <!-- flower field by the barn -->
+                <figure class="polaroid photo-slot collage-field">
+                  <span class="washi washi--blush" style="top:-9px; right:10px; transform:rotate(8deg); width:60px"></span>
+                  <div class="photo-slot__frame" style="--ratio: 4 / 5">
+                    <img src="assets/images/web/avery-flowerfarm.jpg" loading="lazy" decoding="async" alt="Avery in a flower field beside a dark barn">
+                    <span class="photo-slot__missing">Flower field photo<br><small>assets/images/avery-flowerfarm.png</small></span>
+                  </div>
+                  <figcaption>field days</figcaption>
+                </figure>
+
+                <div class="collage-keepsakes" aria-hidden="true">
+                  <svg class="keepsake keepsake--pressed" viewBox="0 0 60 110">
+                    <path d="M30 108 C31 90 27 70 30 40" fill="none" stroke="#6f8a58" stroke-width="1.4"/>
+                    <path d="M29 90 C22 86 18 80 16 74 M29 90 C24 84 22 80 22 76 M30 78 C37 74 40 68 42 62 M30 78 C35 72 36 68 36 64 M29 62 C24 58 22 54 21 49" fill="none" stroke="#7f9a64" stroke-width=".9" stroke-linecap="round"/>
+                    <use href="#bloom-cosmos" transform="translate(30 28) scale(2.4)" style="color:#efc2c9"/>
+                    <rect x="12" y="92" width="36" height="12" fill="#efe6d2" opacity=".85" transform="rotate(-6 30 98)"/>
+                  </svg>
+                  <p class="hand keepsake-note">spaces should feel<br>like coming home ♡</p>
+                </div>
+
+                <button type="button" class="journal-turn hand" data-journal-tab="skills">turn the page: Skills →</button>
+                <span class="journal-folio" aria-hidden="true">2</span>
+              </div>
+            </section>
+
+            <!-- ================= SPREAD 2 · SKILLS ================= -->
+            <section class="journal-spread" id="jspread-skills" role="tabpanel" aria-labelledby="jtab-skills">
+              <div class="journal-page journal-page--left">
+                <p class="eyebrow">Studies &amp; skills</p>
+                <h2 class="journal-title" id="skills-title">Skills &amp; Education</h2>
+
+                <div class="paper-card journal-education">
+                  <span class="washi washi--butter" style="top:-9px; left:18px; transform:rotate(-6deg)"></span>
+                  <h3 class="journal-heading">Education</h3>
+                  <p class="journal-education__program">Honours Bachelor of Interior Design</p>
+                  <p>Georgian College</p>
+                  <p class="journal-education__year">Fourth-Year Student</p>
+                </div>
+
+                <div class="skills-grid">
+                  <div class="paper-card skills-card">
+                    <h3 class="skills-card__title">Software</h3>
+                    <ul class="tag-list">
+                      <li>Autodesk Revit</li>
+                      <li>AutoCAD</li>
+                      <li>SketchUp</li>
+                      <li>Enscape</li>
+                      <li>20/20 Design</li>
+                      <li>Claude Code / AI-Assisted Web Development</li>
+                    </ul>
+                  </div>
+                  <div class="paper-card skills-card">
+                    <h3 class="skills-card__title">Design Skills</h3>
+                    <ul class="tag-list tag-list--blush">
+                      <li>Space Planning</li>
+                      <li>Concept Development</li>
+                      <li>Technical Drawing &amp; Documentation</li>
+                      <li>3D Modelling &amp; Visualization</li>
+                      <li>Material &amp; Finish Selection</li>
+                      <li>Design Presentation</li>
+                      <li>Hand Sketching &amp; Rendering</li>
+                    </ul>
+                  </div>
+                </div>
+                <span class="journal-folio" aria-hidden="true">3</span>
+              </div>
+
+              <div class="journal-binding" aria-hidden="true"></div>
+
+              <div class="journal-page journal-page--right journal-collage journal-collage--skills">
+                <!-- pets together in the snow -->
+                <figure class="polaroid photo-slot collage-pets">
+                  <span class="washi washi--lake" style="top:-10px; left:50%; transform:translateX(-50%) rotate(4deg)"></span>
+                  <div class="photo-slot__frame" style="--ratio: 1 / 1">
+                    <img src="assets/images/web/avery-pets.jpg" loading="lazy" decoding="async" alt="Avery's yellow Labrador and grey tabby cat together in the snow">
+                    <span class="photo-slot__missing">Dog &amp; cat photo<br><small>assets/images/avery-pets.png</small></span>
+                  </div>
+                  <figcaption>snow day with my two ♡</figcaption>
+                </figure>
+
+                <!-- my grey tabby -->
+                <figure class="keepsake keepsake--cat" aria-hidden="true">
+                  <svg class="sticker" viewBox="0 0 80 80">
+                    <path d="M55 68 C72 68 76 55 69 46" fill="none" stroke="#7e8186" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M57 64 C66 64 70 58 68 52" fill="none" stroke="#5f6267" stroke-width="2" stroke-dasharray="3 4" stroke-linecap="round"/>
+                    <path d="M21 72 C17 53 23 39 36 37 C50 35 59 49 57 72 Z" fill="#9c9fa4"/>
+                    <path d="M27 50 q5 -3 9 0 M25 58 q6 -3 11 0 M44 48 q5 -2 9 1 M45 57 q5 -2 10 1" fill="none" stroke="#696c71" stroke-width="2" stroke-linecap="round"/>
+                    <ellipse cx="38" cy="58" rx="8" ry="12" fill="#ecebe7"/>
+                    <ellipse cx="31" cy="71" rx="5" ry="3" fill="#ecebe7"/><ellipse cx="45" cy="71" rx="5" ry="3" fill="#ecebe7"/>
+                    <path d="M24 25 L25 9 L35 18 Z M52 25 L51 9 L41 18 Z" fill="#a3a6ab"/>
+                    <path d="M26.5 21 L27 13 L32 18 Z M49.5 21 L49 13 L44 18 Z" fill="#e7b4b9"/>
+                    <ellipse cx="38" cy="29" rx="15" ry="13" fill="#a3a6ab"/>
+                    <path d="M33 18 l1.5 6 M38 17 v7 M43 18 l-1.5 6" stroke="#696c71" stroke-width="1.6" stroke-linecap="round"/>
+                    <path d="M24 29 q4 -1 6 1 M52 29 q-4 -1 -6 1" stroke="#696c71" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+                    <ellipse cx="32.5" cy="29" rx="2.4" ry="2.8" fill="#c9cf86"/><ellipse cx="43.5" cy="29" rx="2.4" ry="2.8" fill="#c9cf86"/>
+                    <ellipse cx="32.5" cy="29.3" rx=".8" ry="2.2" fill="#2c2c2c"/><ellipse cx="43.5" cy="29.3" rx=".8" ry="2.2" fill="#2c2c2c"/>
+                    <path d="M36.6 34 h2.8 l-1.4 1.6 z" fill="#d68f99"/>
+                    <path d="M38 35.6 q-2 2.2 -4 1 M38 35.6 q2 2.2 4 1" fill="none" stroke="#5c5c5c" stroke-width=".7"/>
+                    <path d="M29 34 L18 32 M29 35.5 L18 37 M47 34 L58 32 M47 35.5 L58 37" stroke="#f4f2ee" stroke-width=".6"/>
+                  </svg>
+                  <figcaption class="hand">my little shadow ♡</figcaption>
+                </figure>
+
+                <!-- my yellow lab -->
+                <figure class="polaroid keepsake keepsake--lab" aria-hidden="true">
+                  <span class="washi washi--plain" style="top:-9px; left:50%; transform:translateX(-50%) rotate(5deg); width:56px"></span>
+                  <svg viewBox="0 0 80 70">
+                    <rect width="80" height="70" fill="#cfe0d8"/>
+                    <rect y="44" width="80" height="26" fill="#a3b882"/>
+                    <circle cx="66" cy="12" r="7" fill="#f7e3a8"/>
+                    <path d="M18 70 C18 52 26 44 40 44 C54 44 62 52 62 70 Z" fill="#e4bb76"/>
+                    <path d="M22 24 C12 26 10 40 16 48 C20 46 24 38 26 30 Z" fill="#c9974f"/>
+                    <path d="M58 24 C68 26 70 40 64 48 C60 46 56 38 54 30 Z" fill="#c9974f"/>
+                    <ellipse cx="40" cy="31" rx="17" ry="16" fill="#ebc785"/>
+                    <ellipse cx="40" cy="40" rx="10" ry="8" fill="#f4dcaa"/>
+                    <ellipse cx="40" cy="35.5" rx="4" ry="3" fill="#3a2b22"/>
+                    <path d="M40 38.5 V42 M40 42 q-3 3 -6 1 M40 42 q3 3 6 1" fill="none" stroke="#3a2b22" stroke-width=".9"/>
+                    <path d="M37.5 44 q2.5 6 5 0 Z" fill="#e48b98"/>
+                    <circle cx="33" cy="28" r="1.8" fill="#2d211b"/><circle cx="47" cy="28" r="1.8" fill="#2d211b"/>
+                    <circle cx="33.5" cy="27.4" r=".5" fill="#fff"/><circle cx="47.5" cy="27.4" r=".5" fill="#fff"/>
+                    <path d="M28 56 Q40 62 52 56" fill="none" stroke="#c4536b" stroke-width="2.4"/>
+                  </svg>
+                  <figcaption>my sunshine</figcaption>
+                </figure>
+
+                <button type="button" class="journal-turn hand" data-journal-tab="little-things">turn the page: Little Things →</button>
+                <span class="journal-folio" aria-hidden="true">4</span>
+              </div>
+            </section>
+
+            <!-- ================= SPREAD 3 · LITTLE THINGS ================= -->
+            <section class="journal-spread" id="jspread-little-things" role="tabpanel" aria-labelledby="jtab-little-things">
+              <div class="journal-page journal-page--left lt-left">
+                <p class="eyebrow">Little things I love</p>
+                <h2 class="journal-title" id="little-things-title">Little Things</h2>
+                <p class="hand journal-hello">a few favourite things ✿</p>
+
+                <svg class="sticker lt-mixer" viewBox="0 0 70 64" aria-hidden="true">
+                  <rect x="8" y="54" width="48" height="7" rx="3" fill="#e5a2b0"/>
+                  <path d="M42 54 L42 26 Q42 20 48 20 L53 20 L53 54 Z" fill="#efb6c2"/>
+                  <path d="M10 14 Q10 6 20 6 L52 6 Q61 6 61 14 L61 21 Q61 26 55 26 L20 26 Q10 26 10 20 Z" fill="#f2bfca"/>
+                  <path d="M16 10 H46" stroke="#ffffff" stroke-width="1.8" opacity=".65" stroke-linecap="round"/>
+                  <rect x="55" y="11" width="7" height="3" rx="1.5" fill="#d98a9c"/>
+                  <path d="M22 26 V35 M18 35 Q22 42 26 35" stroke="#9aa3a6" stroke-width="1.4" fill="none"/>
+                  <path d="M9 36 H37 Q37 53 23 54 Q9 53 9 36 Z" fill="#cdd3d5"/>
+                  <path d="M9 36 H37" stroke="#eef1f1" stroke-width="1.6"/>
+                  <path d="M14 40 Q15 48 21 51" stroke="#ffffff" stroke-width="1.4" fill="none" opacity=".7" stroke-linecap="round"/>
+                </svg>
+
+                <div class="lt-recipe-row">
+                <!-- RECIPE CARD · tap the front to flip it over. The back has two pages:
+                     1 = ingredients, 2 = instructions.
+                     ✎ DRAFT RECIPE: review before publishing. Edit the lines below to change it. -->
+                <div class="recipe">
+                  <span class="washi washi--gingham" style="top:-10px; left:26px; transform:rotate(-7deg)"></span>
+                  <span class="washi washi--gingham" style="top:-9px; right:26px; transform:rotate(6deg)"></span>
+                  <div class="recipe-card" id="recipe-card">
+                    <div class="recipe-card__inner">
+                      <!-- front -->
+                      <div class="recipe-card__face recipe-card__front">
+                        <p class="recipe-card__from">from Avery’s kitchen</p>
+                        <h3 class="recipe-card__title">Brown Butter Salted Chocolate Chip Cookies</h3>
+                        <p class="recipe-card__meta"><span>Bake: 350°F · 11–13 min</span><span>Chill: at least 1 hour</span></p>
+                        <button type="button" class="recipe-flip" aria-controls="recipe-back" aria-expanded="false">
+                          <span class="hand">tap the card for the recipe ↻</span>
+                        </button>
+                      </div>
+                      <!-- back: two recipe pages -->
+                      <div class="recipe-card__face recipe-card__back" id="recipe-back" inert>
+                        <div class="recipe-pages" data-page="1">
+                          <section class="recipe-page recipe-page--1" aria-label="Ingredients">
+                            <h4 class="recipe-card__heading">Ingredients <span>1 / 2</span></h4>
+                            <ul class="recipe-list">
+                              <li>170 g unsalted butter</li>
+                              <li>150 g brown sugar</li>
+                              <li>70 g granulated sugar</li>
+                              <li>1 egg + 1 egg yolk</li>
+                              <li>2 tsp vanilla</li>
+                              <li>230 g flour</li>
+                              <li>½ tsp baking soda</li>
+                              <li>¾ tsp fine salt</li>
+                              <li>180 g chocolate chips</li>
+                              <li>Flaky sea salt</li>
+                            </ul>
+                            <div class="recipe-card__nav">
+                              <button type="button" class="recipe-flip-back hand">↺ flip back</button>
+                              <button type="button" class="recipe-page-turn hand" data-recipe-page="2">instructions →</button>
+                            </div>
+                          </section>
+                          <section class="recipe-page recipe-page--2" aria-label="Instructions" inert>
+                            <h4 class="recipe-card__heading">Instructions <span>2 / 2</span></h4>
+                            <ol class="recipe-steps">
+                              <li>Brown butter until golden. Cool for 10–15 minutes.</li>
+                              <li>Mix with sugars, egg, yolk, and vanilla.</li>
+                              <li>Stir in dry ingredients, then chocolate.</li>
+                              <li>Chill dough for at least 1 hour.</li>
+                              <li>Scoop onto a lined baking sheet.</li>
+                              <li>Bake at 350°F for 11–13 minutes.</li>
+                              <li>Sprinkle with flaky salt and cool.</li>
+                            </ol>
+                            <div class="recipe-card__nav">
+                              <button type="button" class="recipe-page-turn hand" data-recipe-page="1">← ingredients</button>
+                              <button type="button" class="recipe-flip-back hand">↺ flip back</button>
+                            </div>
+                          </section>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- the cookie photo, taped in beside the recipe -->
+                <div class="lt-photo-col">
+                  <figure class="polaroid lt-cookie-photo">
+                    <span class="washi washi--gingham" style="top:-10px; left:50%; transform:translateX(-50%) rotate(-4deg); width:66px"></span>
+                    <div class="photo-slot__frame" style="--ratio: 4 / 5">
+                      <img src="assets/images/web/avery-cookies.jpg" loading="lazy" decoding="async" alt="A tray of brown butter salted chocolate chip cookies sprinkled with flaky salt, beside a candle and oven mitts">
+                    </div>
+                    <figcaption>fresh from the oven ♡</figcaption>
+                  </figure>
+
+                <svg class="sticker lt-cookie" viewBox="0 0 60 60" aria-hidden="true">
+                  <path d="M30 4 C44 4 56 14 56 29 C56 44 45 56 30 56 C15 56 4 45 4 30 C4 16 15 4 30 4 Z" fill="#d39c5d"/>
+                  <path d="M30 8 C42 8 51 16 52 28 C44 20 22 16 10 24 C13 14 21 8 30 8 Z" fill="#e6bb7f" opacity=".75"/>
+                  <g fill="#573726">
+                    <path d="M18 20 l6 -1 2 5 -5 3 -4 -3z"/><path d="M34 15 l5 1 1 5 -5 2 -3 -4z"/>
+                    <path d="M40 32 l6 0 1 5 -5 3 -4 -3z"/><path d="M22 36 l5 -1 3 4 -4 4 -5 -2z"/>
+                    <path d="M30 26 l4 0 1 4 -4 2 -3 -3z"/><path d="M13 30 l3 0 1 3 -3 2 -2 -2z"/>
+                  </g>
+                  <g fill="#ffffff"><rect x="26" y="21" width="1.8" height="1.8"/><rect x="38" y="27" width="1.6" height="1.6"/><rect x="20" y="31" width="1.6" height="1.6"/><rect x="34" y="42" width="1.8" height="1.8"/><rect x="44" y="20" width="1.4" height="1.4"/></g>
+                  <path d="M12 42 Q20 50 32 50" stroke="#b07a44" stroke-width="1.2" fill="none" opacity=".6"/>
+                </svg>
+                </div>
+                </div>
+                <span class="journal-folio" aria-hidden="true">5</span>
+              </div>
+
+              <div class="journal-binding" aria-hidden="true"></div>
+
+              <div class="journal-page journal-page--right journal-collage journal-collage--little">
+                <!-- PINK VINYL · spins slowly; opens the playlist set in js/little-things.js -->
+                <div class="lt-music">
+                  <button type="button" class="lt-record" id="lt-record" aria-haspopup="dialog" aria-controls="music-dialog" aria-describedby="lt-record-status">
+                    <span class="visually-hidden">Pink vinyl record: choose a music player for my playlist</span>
+                    <span class="lt-record__hover hand" aria-hidden="true">a little background music? ♡</span>
+                    <!-- the disc is its own little drawing (the part of the picture from 44,6 to 124,86), so the
+                         whole thing can spin smoothly behind the sleeve -->
+                    <span class="lt-record__art" aria-hidden="true">
+                    <!-- the record's soft shadow, drawn once: the outline of the sleeve and disc together -->
+                    <svg class="lt-record__shadow" viewBox="0 0 130 92" aria-hidden="true">
+                      <g opacity=".2" fill="#3c2d1e"><circle cx="84" cy="46" r="40"/><rect x="2" y="4" width="84" height="84"/></g>
+                    </svg>
+                    <svg class="lt-record__disc" viewBox="44 6 80 80" aria-hidden="true">
+                      <g>
+                        <circle cx="84" cy="46" r="40" fill="#e8a4b3"/>
+                        <g fill="none" stroke="#d48a9c" stroke-width=".7">
+                          <circle cx="84" cy="46" r="35"/><circle cx="84" cy="46" r="30"/><circle cx="84" cy="46" r="25"/><circle cx="84" cy="46" r="19"/>
+                        </g>
+                        <path d="M58 22 A35 35 0 0 1 110 24" fill="none" stroke="#ffffff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M64 74 A33 33 0 0 0 104 76" fill="none" stroke="#ffffff" stroke-opacity=".25" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="84" cy="46" r="12" fill="#fbf1ea"/>
+                        <circle cx="84" cy="46" r="12" fill="none" stroke="#d48a9c" stroke-width=".6"/>
+                        <path d="M84 40 q-3 -3 -5 0 q0 3 5 6 q5 -3 5 -6 q-2 -3 -5 0z" fill="#e39aa8"/>
+                        <circle cx="84" cy="46" r="1.4" fill="#5a3a3f"/>
+                      </g>
+                    </svg>
+                    <svg class="lt-record__sleeve" viewBox="0 0 130 92" aria-hidden="true">
+                      <rect x="2" y="4" width="84" height="84" fill="#f4e8d6"/>
+                      <rect x="2" y="4" width="84" height="84" fill="none" stroke="#d9c7a8" stroke-width="1"/>
+                      <g fill="none" stroke="#bccca8" stroke-width="2.4">
+                        <path d="M2 70 Q44 52 86 70"/><path d="M2 78 Q44 60 86 78"/><path d="M2 86 Q44 68 86 86"/>
+                      </g>
+                      <circle cx="44" cy="33" r="14" fill="#efc3c8"/>
+                      <path d="M37 39 L41 25 L48 25 L50 39 Z" fill="#b77a52" opacity=".9"/>
+                      <text x="8" y="16" font-family="Jost, sans-serif" font-size="5.5" letter-spacing="1.6" fill="#7a4553">SIDE A</text>
+                      <text x="44" y="60" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-size="8" fill="#5a2f3a">summer favourites</text>
+                    </svg>
+                    </span>
+                  </button>
+                  <p class="hand lt-music__caption">on repeat: Taylor Swift<br>&amp; a little country ♪</p>
+                  <p class="hand lt-music__status" id="lt-record-status">tap the record for music ♪</p>
+                </div>
+
+                <figure class="keepsake keepsake--latte" aria-hidden="true">
+                  <svg viewBox="0 0 70 118">
+                    <ellipse cx="35" cy="114" rx="22" ry="3" fill="#2f281f" opacity=".16"/>
+                    <path d="M50 2 L42 40" stroke="#9db08b" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M10 28 L60 28 L54 110 Q35 114 16 110 Z" fill="#f4ede2" opacity=".55"/>
+                    <path d="M11.4 46 L58.6 46 L54 110 Q35 114 16 110 Z" fill="#b8865d"/>
+                    <path d="M11.4 46 L58.6 46 L57.3 64 Q35 70 12.7 64 Z" fill="#efe0c8"/>
+                    <path d="M12.7 64 Q35 70 57.3 64 L56.6 74 Q35 82 13.4 74 Z" fill="#d6b48f"/>
+                    <g fill="#ffffff" opacity=".55" stroke="#ffffff" stroke-opacity=".8" stroke-width=".6">
+                      <rect x="18" y="36" width="12" height="11" rx="2.5" transform="rotate(-12 24 41)"/>
+                      <rect x="33" y="40" width="12" height="11" rx="2.5" transform="rotate(10 39 45)"/>
+                      <rect x="24" y="52" width="11" height="10" rx="2.5" transform="rotate(4 29 57)"/>
+                    </g>
+                    <path d="M8 26 H62 L61 31 H9 Z" fill="#e8dfd0" opacity=".9"/>
+                    <path d="M16 36 L13.6 100" stroke="#ffffff" stroke-width="2" opacity=".55" stroke-linecap="round"/>
+                    <g fill="#ffffff" opacity=".7"><circle cx="47" cy="86" r="1"/><circle cx="51" cy="94" r=".8"/><circle cx="45" cy="99" r=".7"/></g>
+                    <rect x="20" y="78" width="30" height="14" rx="2" fill="#fbf6ea" opacity=".95"/>
+                    <text x="35" y="88" text-anchor="middle" font-family="Caveat, cursive" font-size="8" fill="#6b5a49">iced latte</text>
+                  </svg>
+                </figure>
+
+                <div class="lt-pressed" aria-hidden="true">
+                  <span class="washi washi--plain" style="top:46%; left:50%; transform:translate(-50%, -50%) rotate(-8deg); width:70px"></span>
+                  <svg class="keepsake--pressed" viewBox="0 0 60 110">
+                    <path d="M30 108 C31 90 27 70 30 40" fill="none" stroke="#6f8a58" stroke-width="1.4"/>
+                    <path d="M29 90 C22 86 18 80 16 74 M29 90 C24 84 22 80 22 76 M30 78 C37 74 40 68 42 62 M30 78 C35 72 36 68 36 64 M29 62 C24 58 22 54 21 49" fill="none" stroke="#7f9a64" stroke-width=".9" stroke-linecap="round"/>
+                    <use href="#bloom-cosmos" transform="translate(30 28) scale(2.4)" style="color:#efc2c9"/>
+                  </svg>
+                  <svg class="keepsake--daisy" viewBox="0 0 50 90">
+                    <path d="M25 88 C26 70 23 52 25 30" fill="none" stroke="#6f8a58" stroke-width="1.3"/>
+                    <path d="M25 66 C18 64 15 58 15 54 C21 55 24 60 25 66 Z M25 54 C31 52 34 47 34 43 C29 44 26 48 25 54 Z" fill="#7f9a64"/>
+                    <use href="#bloom-daisy" transform="translate(25 22) scale(2.3)"/>
+                  </svg>
+                </div>
+
+                <svg class="sticker lt-boots" viewBox="0 0 76 64" aria-hidden="true">
+                  <path d="M12 4 L28 4 L29 38 C30 43 36 45 46 47 C53 48 55 54 53 58 L12 58 L10 52 Z" fill="#b77a52"/>
+                  <path d="M12 4 L28 4 L28.4 14 L11.6 14 Z" fill="#8f5a3a"/>
+                  <path d="M10 52 L53 52 L53 58 L12 58 Z" fill="#6e4329"/>
+                  <path d="M16 20 C20 26 22 32 20 38" fill="none" stroke="#f1d9b5" stroke-width="1" stroke-dasharray="2 1.6"/>
+                  <path d="M22 44 l1.4 2.8 3 .4 -2.2 2 .6 3 -2.8 -1.5 -2.8 1.5 .6 -3 -2.2 -2 3 -.4 z" fill="#f2d58f"/>
+                  <g transform="translate(18 2)">
+                    <path d="M12 4 L28 4 L29 38 C30 43 36 45 46 47 C53 48 55 54 53 58 L12 58 L10 52 Z" fill="#c98e63"/>
+                    <path d="M12 4 L28 4 L28.4 14 L11.6 14 Z" fill="#9b6544"/>
+                    <path d="M10 52 L53 52 L53 58 L12 58 Z" fill="#74472c"/>
+                    <path d="M16 20 C20 26 22 32 20 38" fill="none" stroke="#f1d9b5" stroke-width="1" stroke-dasharray="2 1.6"/>
+                  </g>
+                </svg>
+
+                <button type="button" class="journal-turn hand" data-journal-tab="hello">turn the page: Hello →</button>
+                <span class="journal-folio" aria-hidden="true">6</span>
+              </div>
+            </section>
+
+            <!-- ================= SPREAD 4 · HELLO ================= -->
+            <section class="journal-spread" id="jspread-hello" role="tabpanel" aria-labelledby="jtab-hello">
+              <div class="journal-page journal-page--left">
+                <p class="eyebrow">A note tucked inside</p>
+                <h2 class="journal-title" id="hello-title">Hello</h2>
+
+                <!-- the postcard: message on the left, contact preview on the right -->
+                <div class="hello-postcard">
+                  <span class="washi washi--sage" style="top:-10px; left:26px; transform:rotate(-5deg)"></span>
+                  <div class="hello-postcard__message">
+                    <p class="hand hello-postcard__greeting">Hello there!</p>
+                    <p class="hand hello-postcard__text">Thanks for visiting my little garden. If you’d like to connect, collaborate, or chat about design, I’d love to hear from you.</p>
+                    <p class="hand hello-postcard__sign">Avery ✿</p>
+                  </div>
+                  <div class="hello-postcard__address">
+                    <svg class="hello-postcard__stamp" viewBox="0 0 60 74" aria-hidden="true">
+                      <rect x="2" y="2" width="56" height="70" fill="#fffaf0" stroke="#e2d6c0" stroke-width="3" stroke-dasharray="2.5 2.5"/>
+                      <rect x="8" y="8" width="44" height="58" fill="#f1c9c8"/>
+                      <use href="#bloom-cosmos" transform="translate(30 34) scale(2.2)" style="color:#fffaf0"/>
+                      <text x="30" y="60" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="7" fill="#7a4553" letter-spacing="1">BLOOM</text>
+                    </svg>
+                    <ul class="hello-contacts">
+                      <li><span>Email</span><div class="copy-email"><a href="mailto:averyvhearder@icloud.com">averyvhearder@icloud.com</a><!--
+                        copy email ♡ (js/copy-email.js) --><button class="copy-email__button" type="button" data-copy="averyvhearder@icloud.com" aria-label="Copy email address" title="Copy email address">
+                          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8.5" y="8.5" width="10" height="11.5" rx="2.2" fill="#fffaf0" stroke="currentColor" stroke-width="1.5"/><path d="M15.5 6 V5.6 C15.5 4.4 14.6 3.5 13.4 3.5 H7.6 C6.4 3.5 5.5 4.4 5.5 5.6 V14 C5.5 15.2 6.4 16.1 7.6 16.1 H8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13.5 12.4 C13.5 11.5 12.2 11.1 11.8 12.1 C11.4 11.1 10.1 11.5 10.1 12.4 C10.1 13.4 11.8 14.4 11.8 14.4 C11.8 14.4 13.5 13.4 13.5 12.4 Z" fill="#e3a1ae"/></svg>
+                        </button><em class="copy-email__note" role="status" aria-live="polite"></em></div></li>
+                      <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/averyhearder/" target="_blank" rel="noopener">in/averyhearder</a></li>
+                      <li><span>Design Instagram</span><a href="https://www.instagram.com/violainedesign/" target="_blank" rel="noopener">@violainedesign</a></li>
+                      <li><span>From</span>Ontario, Canada</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <a class="btn-bloom journal-contact-btn" href="#contact">Visit my contact page →</a>
+                <span class="journal-folio" aria-hidden="true">7</span>
+              </div>
+
+              <div class="journal-binding" aria-hidden="true"></div>
+
+              <div class="journal-page journal-page--right journal-collage journal-collage--hello">
+                <!-- Muskoka photo -->
+                <figure class="polaroid photo-slot collage-muskoka">
+                  <span class="washi washi--lake" style="top:-10px; left:24px; transform:rotate(-6deg)"></span>
+                  <div class="photo-slot__frame" style="--ratio: 4 / 5">
+                    <img src="assets/images/web/avery-muskoka.jpg" loading="lazy" decoding="async" style="object-position: 50% 70%" alt="Avery's photo from Muskoka by the lake">
+                    <span class="photo-slot__missing">Muskoka photo<br><small>assets/images/avery-muskoka.png</small></span>
+                  </div>
+                  <figcaption>lake days, always</figcaption>
+                </figure>
+
+                <figure class="keepsake keepsake--postcard" aria-hidden="true">
+                  <svg viewBox="0 0 170 112">
+                    <rect width="170" height="112" rx="2" fill="#fbf7ee"/>
+                    <rect x="6" y="6" width="158" height="100" fill="#cfe0e3"/>
+                    <rect x="6" y="6" width="158" height="52" fill="#f4e6cf"/>
+                    <circle cx="122" cy="34" r="12" fill="#f7d98f" opacity=".9"/>
+                    <path d="M6 58 L164 58 L164 106 L6 106 Z" fill="#8fb2c1"/>
+                    <path d="M6 58 L20 40 L26 50 L34 30 L44 52 L54 38 L64 56 L80 44 L92 58 Z" fill="#4f6b58"/>
+                    <path d="M110 58 L120 44 L128 54 L138 36 L150 56 L164 46 L164 58 Z" fill="#5f7b66"/>
+                    <path d="M20 66 H60 M80 74 H130 M30 86 H90" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.2"/>
+                    <path d="M6 106 L6 88 Q40 80 70 92 L80 106 Z" fill="#b9ad98"/>
+                    <g transform="translate(40 74)">
+                      <path d="M0 18 L4 0 L14 0 L16 18 Z" fill="#e39aa8"/>
+                      <path d="M-4 18 L22 18 L20 22 L-2 22 Z" fill="#d48797"/>
+                      <path d="M-2 22 L-2 30 M20 22 L20 30" stroke="#b06f7b" stroke-width="2"/>
+                      <path d="M-6 12 L24 12" stroke="#d48797" stroke-width="2.4"/>
+                    </g>
+                    <text x="12" y="20" font-family="Cormorant Garamond, serif" font-style="italic" font-size="9" fill="#4f5d4a">Greetings from</text>
+                    <text x="12" y="34" font-family="Cormorant Garamond, serif" font-size="14" letter-spacing="2" fill="#3d4739">MUSKOKA</text>
+                    <g fill="none" stroke="#6b5a49" stroke-width=".7" opacity=".55">
+                      <circle cx="140" cy="80" r="10"/>
+                      <path d="M150 76 q4 -2 8 0 M150 80 q4 -2 8 0 M150 84 q4 -2 8 0"/>
+                    </g>
+                  </svg>
+                </figure>
+
+                <svg class="keepsake keepsake--daisy" viewBox="0 0 50 90" aria-hidden="true">
+                  <path d="M25 88 C26 70 23 52 25 30" fill="none" stroke="#6f8a58" stroke-width="1.3"/>
+                  <path d="M25 66 C18 64 15 58 15 54 C21 55 24 60 25 66 Z M25 54 C31 52 34 47 34 43 C29 44 26 48 25 54 Z" fill="#7f9a64"/>
+                  <use href="#bloom-daisy" transform="translate(25 22) scale(2.3)"/>
+                </svg>
+
+                <button type="button" class="journal-turn hand" data-journal-tab="about">← back to the beginning</button>
+                <span class="journal-folio" aria-hidden="true">8</span>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- CONTACT (the mailbox) -->
+    <article class="panel panel--contact" id="panel-contact" aria-labelledby="contact-title" hidden>
+      <a class="panel-close" href="#garden" aria-label="Close and return to the garden">Return to garden ×</a>
+      <p class="eyebrow">From the mailbox</p>
+      <h2 class="panel-title" id="contact-title">Let’s Grow Something Together</h2>
+      <p class="panel-intro">Have a project, opportunity, or question in mind? I’d love to hear from you.</p>
+
+      <dl class="contact-list">
+        <div><dt>Email</dt><dd class="copy-email"><a href="mailto:averyvhearder@icloud.com">averyvhearder@icloud.com</a><!--
+          copy email ♡ (js/copy-email.js) --><button class="copy-email__button" type="button" data-copy="averyvhearder@icloud.com" aria-label="Copy email address" title="Copy email address">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8.5" y="8.5" width="10" height="11.5" rx="2.2" fill="#fffaf0" stroke="currentColor" stroke-width="1.5"/><path d="M15.5 6 V5.6 C15.5 4.4 14.6 3.5 13.4 3.5 H7.6 C6.4 3.5 5.5 4.4 5.5 5.6 V14 C5.5 15.2 6.4 16.1 7.6 16.1 H8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13.5 12.4 C13.5 11.5 12.2 11.1 11.8 12.1 C11.4 11.1 10.1 11.5 10.1 12.4 C10.1 13.4 11.8 14.4 11.8 14.4 C11.8 14.4 13.5 13.4 13.5 12.4 Z" fill="#e3a1ae"/></svg>
+          </button><span class="copy-email__note" role="status" aria-live="polite"></span></dd></div>
+        <div><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/averyhearder/" target="_blank" rel="noopener">linkedin.com/in/averyhearder</a></dd></div>
+        <div><dt>Design Instagram</dt><dd><a href="https://www.instagram.com/violainedesign/" target="_blank" rel="noopener">@violainedesign</a></dd></div>
+        <div><dt>Location</dt><dd>Ontario, Canada</dd></div>
+        <div><dt>Education</dt><dd>Fourth-Year Honours Bachelor of Interior Design Student at Georgian College</dd></div>
+      </dl>
+
+      <svg class="contact-stamp" viewBox="0 0 60 74" aria-hidden="true">
+        <rect x="2" y="2" width="56" height="70" fill="#fffaf0" stroke="#e2d6c0" stroke-width="3" stroke-dasharray="2.5 2.5"/>
+        <rect x="8" y="8" width="44" height="58" fill="#f1c9c8"/>
+        <use href="#bloom-cosmos" transform="translate(30 34) scale(2.2)" style="color:#fffaf0"/>
+        <text x="30" y="60" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="7" fill="#7a4553" letter-spacing="1">BLOOM</text>
+      </svg>
+    </article>
+  </div>
+
+  <script src="js/scenery.js"></script>
+  <script src="js/main.js"></script>
+  <!-- the browser tab's icon and title follow where you are (js/tab-bloom.js) -->
+  <script src="js/tab-bloom.js"></script>
+  <script src="js/intro.js"></script>
+  <script src="js/ambience.js"></script>
+  <!-- =====================================================================
+       MUSIC POP-UP · opens from the pink record in the Little Things notebook
+       (links are set at the top of js/little-things.js)
+       ===================================================================== -->
+  <dialog class="music-dialog" id="music-dialog" aria-labelledby="music-title">
+    <div class="music-card">
+      <span class="washi washi--gingham music-card__tape" aria-hidden="true"></span>
+      <svg class="music-card__flowers" viewBox="0 0 70 70" aria-hidden="true">
+        <path d="M14 66 C20 50 30 38 44 30 M30 44 C26 36 28 28 34 24 M38 34 C46 32 52 26 54 18" fill="none" stroke="#7f9a64" stroke-width="1.2" stroke-linecap="round"/>
+        <use href="#bloom-cosmos" transform="translate(48 22) scale(1.6)" style="color:#efbcc4"/>
+        <use href="#bloom-cosmos" transform="translate(30 20) scale(1.1)" style="color:#f6dadb"/>
+        <use href="#bloom-daisy" transform="translate(58 40) scale(1)"/>
+      </svg>
+      <button type="button" class="music-card__x" data-music-close aria-label="Close">×</button>
+
+      <p class="music-card__eyebrow">from the record player</p>
+      <h2 class="music-card__title hand" id="music-title">choose your player ♡</h2>
+      <p class="music-card__sub">the same little playlist, wherever you like to listen</p>
+
+      <ul class="music-options" id="music-options"></ul>
+
+      <button type="button" class="music-card__close hand" data-music-close>maybe later ✿</button>
+    </div>
+  </dialog>
+
+  <!-- =====================================================================
+       INSIDE THE GREENHOUSE · an illustrated room you step into (#greenhouse)
+       Uses the garden's 1600 × 1000 units, so objects are placed with --x/--y/--w.
+       The cat and dog are copied in from the greenhouse outside (js/greenhouse.js).
+       ===================================================================== -->
+  <section class="gh-room" id="greenhouse-room" role="dialog" aria-modal="true" aria-labelledby="gh-room-title" hidden>
+    <h2 class="visually-hidden" id="gh-room-title">Inside the greenhouse</h2>
+    <div class="gh-room__viewport" id="gh-room-viewport">
+      <div class="gh-room__scene">
+        <svg class="gh-room__art" viewBox="0 0 1600 1000" aria-hidden="true">
+          <defs>
+            <linearGradient id="gh-wall" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#e6eee4"/>
+              <stop offset=".55" stop-color="#eef0e2"/>
+              <stop offset="1" stop-color="#f5ecd9"/>
+            </linearGradient>
+            <linearGradient id="gh-floor" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#cfae8a"/>
+              <stop offset="1" stop-color="#b48f6a"/>
+            </linearGradient>
+            <linearGradient id="gh-wood" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#c49b70"/>
+              <stop offset="1" stop-color="#9c7650"/>
+            </linearGradient>
+            <radialGradient id="gh-sunlight" cx=".78" cy=".08" r=".75">
+              <stop offset="0" stop-color="#fff6d8" stop-opacity=".9"/>
+              <stop offset="1" stop-color="#fff6d8" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- glass walls with the garden beyond -->
+          <rect width="1600" height="824" fill="url(#gh-wall)"/>
+          <rect width="1600" height="824" fill="url(#gh-sunlight)"/>
+          <g filter="url(#blur-md)" opacity=".8">
+            <ellipse cx="120" cy="690" rx="260" ry="120" fill="#b5c79b"/>
+            <ellipse cx="520" cy="720" rx="300" ry="110" fill="#a7bd8e"/>
+            <ellipse cx="960" cy="700" rx="320" ry="120" fill="#c3d3ab"/>
+            <ellipse cx="1420" cy="680" rx="300" ry="130" fill="#aec396"/>
+            <ellipse cx="300" cy="560" rx="200" ry="90" fill="#cbd9b6"/>
+            <ellipse cx="1200" cy="540" rx="240" ry="90" fill="#d3dfbf"/>
+          </g>
+          <g filter="url(#blur-sm)" opacity=".75">
+            <circle cx="260" cy="660" r="9" fill="#efbcc4"/><circle cx="420" cy="690" r="8" fill="#f0d282"/>
+            <circle cx="640" cy="672" r="9" fill="#fffaf0"/><circle cx="1010" cy="660" r="8" fill="#e39aa8"/>
+            <circle cx="1180" cy="700" r="9" fill="#f0d282"/><circle cx="1380" cy="650" r="8" fill="#efbcc4"/>
+          </g>
+
+          <!-- soft beams of sunlight -->
+          <g fill="#ffffff" opacity=".2" filter="url(#blur-md)">
+            <path d="M1150 0 L1330 0 L980 824 L760 824 Z"/>
+            <path d="M1410 0 L1530 0 L1270 824 L1110 824 Z"/>
+          </g>
+
+          <!-- greenhouse frame -->
+          <g fill="none" stroke-linecap="round">
+            <g stroke="#cfc6b3" stroke-width="16">
+              <path id="gh-room-frame" d="M160 122 V812 M480 122 V812 M800 122 V812 M1120 122 V812 M1440 122 V812 M0 330 H1600 M0 590 H1600"/>
+              <path d="M0 96 L100 0 M300 96 L380 0 M600 96 L660 0 M1000 96 L940 0 M1300 96 L1220 0 M1600 96 L1500 0"/>
+            </g>
+            <use href="#gh-room-frame" stroke="#fbf9f3" stroke-width="11"/>
+            <path d="M0 96 L100 0 M300 96 L380 0 M600 96 L660 0 M1000 96 L940 0 M1300 96 L1220 0 M1600 96 L1500 0" stroke="#fbf9f3" stroke-width="10"/>
+          </g>
+          <rect y="94" width="1600" height="30" fill="#f4efe6"/>
+          <rect y="120" width="1600" height="5" fill="#cfc6b3"/>
+          <g stroke="#ffffff" stroke-opacity=".7" stroke-width="5" stroke-linecap="round">
+            <path d="M210 300 L250 220"/><path d="M226 312 L240 284"/><path d="M1180 520 L1220 440"/>
+          </g>
+
+          <!-- climbing vines around the window frames (drawn by js/greenhouse-flowers.js) -->
+          <g id="ghf-climbers"></g>
+
+          <!-- fairy lights along the roof beam (they glow and twinkle more in Golden Hour) -->
+          <g class="fairy-lights">
+            <path d="M0 132 Q80 176 160 134 Q240 178 320 136 Q400 180 480 136 Q560 180 640 136 M960 136 Q1040 180 1120 136 Q1200 178 1280 134 Q1360 176 1440 132 Q1520 174 1600 130" fill="none" stroke="#7a6a52" stroke-width="2"/>
+            <g class="fairy-bulbs">
+              <circle cx="40" cy="152" r="6"/><circle cx="120" cy="153" r="6"/><circle cx="200" cy="154" r="6"/>
+              <circle cx="280" cy="155" r="6"/><circle cx="360" cy="156" r="6"/><circle cx="440" cy="156" r="6"/>
+              <circle cx="520" cy="157" r="6"/><circle cx="600" cy="156" r="6"/><circle cx="1000" cy="156" r="6"/>
+              <circle cx="1080" cy="157" r="6"/><circle cx="1160" cy="156" r="6"/><circle cx="1240" cy="155" r="6"/>
+              <circle cx="1320" cy="154" r="6"/><circle cx="1400" cy="153" r="6"/><circle cx="1480" cy="152" r="6"/>
+              <circle cx="1560" cy="151" r="6"/>
+            </g>
+          </g>
+
+          <!-- hanging welcome sign -->
+          <path d="M690 124 L690 154 M910 124 L910 154" stroke="#8a7d6c" stroke-width="2"/>
+          <g transform="rotate(-1.5 800 180)">
+            <rect x="630" y="152" width="340" height="58" rx="8" fill="#dcc29a" stroke="#a88a62" stroke-width="2"/>
+            <text x="800" y="192" text-anchor="middle" font-family="Caveat, cursive" font-size="34" font-weight="600" fill="#4f3b28">welcome to the greenhouse ✿</text>
+          </g>
+
+          <!-- botanical sketches pinned to the glass above the bench -->
+          <g>
+            <g transform="rotate(-4 620 445)">
+              <rect x="560" y="372" width="120" height="150" fill="#fbf7ee"/>
+              <rect x="598" y="364" width="44" height="14" fill="#efc3c8" opacity=".85"/>
+              <!-- soft watercolour washes behind the pencil lines -->
+              <g opacity=".7">
+                <path d="M620 505 V410" stroke="#a9c58a" stroke-width="4"/>
+                <ellipse cx="612" cy="481" rx="11" ry="8" fill="#f2a7b8"/><ellipse cx="629" cy="467" rx="10" ry="8" fill="#f6b3c2"/>
+                <ellipse cx="612" cy="453" rx="9" ry="7" fill="#f2a7b8"/><ellipse cx="628" cy="440" rx="8" ry="7" fill="#f8c4cf"/>
+                <ellipse cx="614" cy="428" rx="7" ry="6" fill="#f6b3c2"/><ellipse cx="623" cy="417" rx="5" ry="5" fill="#f9d0d9"/>
+                <path d="M620 495 C608 493 602 486 600 478 C610 480 618 486 620 495 Z M620 492 C632 490 638 482 640 474 C630 476 622 483 620 492 Z" fill="#a9c58a"/>
+              </g>
+              <g fill="none" stroke="#6b5a49" stroke-width="1.6">
+                <path d="M620 505 V410"/>
+                <ellipse cx="614" cy="480" rx="9" ry="7"/><ellipse cx="627" cy="466" rx="9" ry="7"/><ellipse cx="614" cy="452" rx="8" ry="6"/>
+                <ellipse cx="626" cy="439" rx="7" ry="6"/><ellipse cx="616" cy="427" rx="6" ry="5"/><ellipse cx="622" cy="416" rx="4" ry="4"/>
+                <path d="M620 495 C610 492 604 486 602 480 M620 492 C630 489 636 483 638 477"/>
+              </g>
+              <text x="620" y="517" text-anchor="middle" font-family="Caveat, cursive" font-size="13" fill="#8a7a68">snapdragon</text>
+            </g>
+            <g transform="rotate(2 765 430)">
+              <rect x="700" y="352" width="130" height="160" fill="#fbf7ee"/>
+              <rect x="745" y="344" width="44" height="14" fill="#f1d898" opacity=".85"/>
+              <g opacity=".7">
+                <path d="M765 498 V452" stroke="#a9c58a" stroke-width="4"/>
+                <circle cx="764" cy="421" r="32" fill="#f6c39a"/><circle cx="765" cy="420" r="22" fill="#f9d3b0"/>
+                <circle cx="766" cy="419" r="13" fill="#f3b58a"/>
+                <path d="M765 480 C752 479 744 470 742 460 C754 461 763 469 765 480 Z" fill="#a9c58a"/>
+              </g>
+              <g fill="none" stroke="#6b5a49" stroke-width="1.6">
+                <path d="M765 498 V452"/>
+                <circle cx="765" cy="420" r="30"/><circle cx="765" cy="420" r="22"/><circle cx="766" cy="419" r="14"/><circle cx="766" cy="419" r="6"/>
+                <path d="M765 480 C754 478 746 470 744 462 C754 463 762 470 765 480 Z"/>
+              </g>
+              <text x="765" y="508" text-anchor="middle" font-family="Caveat, cursive" font-size="13" fill="#8a7a68">ranunculus</text>
+            </g>
+            <g transform="rotate(-2 910 448)">
+              <rect x="850" y="374" width="120" height="150" fill="#fbf7ee"/>
+              <rect x="888" y="366" width="44" height="14" fill="#bccca8" opacity=".85"/>
+              <g opacity=".7">
+                <path d="M910 508 C912 480 906 460 910 440" stroke="#a9c58a" stroke-width="4" fill="none"/>
+                <g transform="translate(910 424)" fill="#f4b6c4">
+                  <ellipse cy="-14" rx="6.5" ry="13"/><ellipse cy="-14" rx="6.5" ry="13" transform="rotate(45)"/>
+                  <ellipse cy="-14" rx="6.5" ry="13" transform="rotate(90)"/><ellipse cy="-14" rx="6.5" ry="13" transform="rotate(135)"/>
+                  <ellipse cy="-14" rx="6.5" ry="13" transform="rotate(180)"/><ellipse cy="-14" rx="6.5" ry="13" transform="rotate(225)"/>
+                  <ellipse cy="-14" rx="6.5" ry="13" transform="rotate(270)"/><ellipse cy="-14" rx="6.5" ry="13" transform="rotate(315)"/>
+                </g>
+              </g>
+              <g fill="none" stroke="#6b5a49" stroke-width="1.6">
+                <path d="M910 508 C912 480 906 460 910 440"/>
+                <g transform="translate(910 424)">
+                  <ellipse cy="-14" rx="5" ry="12"/><ellipse cy="-14" rx="5" ry="12" transform="rotate(45)"/>
+                  <ellipse cy="-14" rx="5" ry="12" transform="rotate(90)"/><ellipse cy="-14" rx="5" ry="12" transform="rotate(135)"/>
+                  <ellipse cy="-14" rx="5" ry="12" transform="rotate(180)"/><ellipse cy="-14" rx="5" ry="12" transform="rotate(225)"/>
+                  <ellipse cy="-14" rx="5" ry="12" transform="rotate(270)"/><ellipse cy="-14" rx="5" ry="12" transform="rotate(315)"/>
+                  <circle r="5" fill="#f0d282" fill-opacity=".6"/>
+                </g>
+              </g>
+              <text x="910" y="519" text-anchor="middle" font-family="Caveat, cursive" font-size="13" fill="#8a7a68">cosmos</text>
+            </g>
+          </g>
+
+          <!-- tiled floor -->
+          <rect y="806" width="1600" height="20" fill="#e7dfcf"/>
+          <rect y="824" width="1600" height="176" fill="url(#gh-floor)"/>
+          <g stroke="#8f6f50" stroke-opacity=".3" stroke-width="2" fill="none">
+            <path d="M0 864 H1600 M0 914 H1600 M0 970 H1600"/>
+            <path d="M800 824 V1000 M640 824 L520 1000 M480 824 L240 1000 M320 824 L-40 1000 M960 824 L1080 1000 M1120 824 L1360 1000 M1280 824 L1640 1000"/>
+          </g>
+          <!-- woven rug and scattered petals (js/greenhouse-flowers.js) -->
+          <g id="ghf-rug"></g>
+
+          <!-- left plant shelf -->
+          <g>
+            <ellipse cx="235" cy="832" rx="190" ry="12" fill="url(#soft-shadow)"/>
+            <rect x="70" y="360" width="16" height="472" fill="#8c6a4a"/>
+            <rect x="384" y="360" width="16" height="472" fill="#8c6a4a"/>
+            <rect x="58" y="468" width="354" height="14" rx="3" fill="url(#gh-wood)"/>
+            <rect x="58" y="608" width="354" height="14" rx="3" fill="url(#gh-wood)"/>
+            <rect x="58" y="748" width="354" height="14" rx="3" fill="url(#gh-wood)"/>
+            <!-- top shelf: leafy pots -->
+            <path d="M104 430 L156 430 L150 468 L110 468 Z" fill="url(#terracotta)"/>
+            <ellipse cx="130" cy="420" rx="36" ry="22" fill="#7f9a64"/><ellipse cx="118" cy="408" rx="18" ry="14" fill="#93ad76"/>
+            <path d="M200 436 L244 436 L239 468 L205 468 Z" fill="url(#terracotta)"/>
+            <path d="M222 436 V392 M222 410 L204 396 M222 402 L240 388" stroke="#6f8a58" stroke-width="3" fill="none"/>
+            <use href="#bloom-daisy" transform="translate(222 388) scale(2.2)"/>
+            <path d="M290 424 L350 424 L343 468 L297 468 Z" fill="url(#terracotta)"/>
+            <ellipse cx="320" cy="416" rx="38" ry="18" fill="#86a169"/>
+            <path d="M292 430 C282 470 296 500 288 540 M348 430 C360 466 350 492 358 520" fill="none" stroke="#7f9a64" stroke-width="6" stroke-dasharray="6 4" stroke-linecap="round"/>
+            <!-- middle shelf: glass jars and stacked pots -->
+            <rect x="104" y="548" width="40" height="60" rx="8" fill="#dcebea" fill-opacity=".7" stroke="#ffffff" stroke-width="2"/>
+            <rect x="108" y="574" width="32" height="30" rx="6" fill="#b98a5a" opacity=".7"/>
+            <rect x="160" y="562" width="34" height="46" rx="7" fill="#dcebea" fill-opacity=".7" stroke="#ffffff" stroke-width="2"/>
+            <rect x="164" y="582" width="26" height="22" rx="5" fill="#e3c36a" opacity=".7"/>
+            <path d="M228 574 L290 574 L284 608 L234 608 Z" fill="url(#terracotta)"/>
+            <path d="M232 556 L286 556 L280 574 L238 574 Z" fill="url(#terracotta)"/>
+            <path d="M318 572 L366 572 L360 608 L324 608 Z" fill="url(#terracotta)"/>
+            <ellipse cx="342" cy="564" rx="30" ry="14" fill="#8fa871"/>
+            <!-- bottom shelf: seed tray and a little fern -->
+            <rect x="96" y="726" width="150" height="22" rx="3" fill="#b77654"/>
+            <g stroke="#6f8a58" stroke-width="2" fill="#8fb069">
+              <path d="M116 726 v-16 M146 726 v-18 M176 726 v-16 M206 726 v-18 M232 726 v-14" fill="none"/>
+              <ellipse cx="111" cy="708" rx="6" ry="3"/><ellipse cx="121" cy="707" rx="6" ry="3"/>
+              <ellipse cx="141" cy="706" rx="6" ry="3"/><ellipse cx="151" cy="705" rx="6" ry="3"/>
+              <ellipse cx="171" cy="708" rx="6" ry="3"/><ellipse cx="181" cy="707" rx="6" ry="3"/>
+              <ellipse cx="201" cy="706" rx="6" ry="3"/><ellipse cx="211" cy="705" rx="6" ry="3"/>
+            </g>
+            <path d="M290 712 L350 712 L344 748 L296 748 Z" fill="url(#terracotta)"/>
+            <path d="M320 712 C300 690 286 680 270 676 M320 712 C330 688 346 676 366 672 M320 712 C318 690 320 674 326 660" fill="none" stroke="#86a169" stroke-width="5" stroke-dasharray="5 3" stroke-linecap="round"/>
+          </g>
+          <!-- flowers added to the shelves (js/greenhouse-flowers.js) -->
+          <g id="ghf-shelf"></g>
+
+          <!-- the potting bench -->
+          <g>
+            <ellipse cx="790" cy="886" rx="330" ry="14" fill="url(#soft-shadow)"/>
+            <rect x="525" y="622" width="22" height="262" fill="#8c6a4a"/>
+            <rect x="1033" y="622" width="22" height="262" fill="#8c6a4a"/>
+            <rect x="525" y="790" width="530" height="14" fill="#9c7a55"/>
+            <rect x="500" y="600" width="580" height="22" rx="3" fill="url(#gh-wood)"/>
+            <rect x="500" y="600" width="580" height="4" fill="#d9b88d"/>
+            <rect x="515" y="622" width="550" height="14" fill="#9c7a55"/>
+            <path d="M560 610 H700 M760 614 H960" stroke="#e2c9a4" stroke-width="1.6" opacity=".7"/>
+            <!-- lower shelf: crate of seedlings, little watering can, stacked pots -->
+            <rect x="560" y="740" width="140" height="50" fill="#b48c62"/>
+            <path d="M560 756 H700 M560 772 H700" stroke="#8f6c4b" stroke-width="3"/>
+            <g fill="#8fb069"><ellipse cx="582" cy="736" rx="12" ry="7"/><ellipse cx="612" cy="732" rx="13" ry="8"/><ellipse cx="646" cy="734" rx="12" ry="7"/><ellipse cx="678" cy="736" rx="11" ry="6"/></g>
+            <path d="M742 790 L748 744 L826 744 L832 790 Z" fill="url(#galv-body)"/>
+            <path d="M748 744 L712 718" stroke="#a9b1b3" stroke-width="7" stroke-linecap="round"/>
+            <path d="M766 742 C770 716 806 716 810 742" fill="none" stroke="#a9b1b3" stroke-width="6"/>
+            <path d="M890 790 L960 790 L954 760 L896 760 Z" fill="url(#terracotta)"/>
+            <path d="M888 766 L962 766 L956 740 L894 740 Z" fill="url(#terracotta)"/>
+            <path d="M886 746 L964 746 L958 722 L892 722 Z" fill="url(#terracotta)"/>
+            <!-- on top: seedling tray, a flowering pot, twine and trowel -->
+            <rect x="700" y="582" width="150" height="18" rx="3" fill="#b77654"/>
+            <g stroke="#6f8a58" stroke-width="2.4" fill="#8fb069">
+              <path d="M720 582 v-18 M750 582 v-20 M780 582 v-18 M810 582 v-20 M836 582 v-16" fill="none"/>
+              <ellipse cx="714" cy="563" rx="7" ry="3.5"/><ellipse cx="726" cy="562" rx="7" ry="3.5"/>
+              <ellipse cx="744" cy="561" rx="7" ry="3.5"/><ellipse cx="756" cy="560" rx="7" ry="3.5"/>
+              <ellipse cx="774" cy="563" rx="7" ry="3.5"/><ellipse cx="786" cy="562" rx="7" ry="3.5"/>
+              <ellipse cx="804" cy="561" rx="7" ry="3.5"/><ellipse cx="816" cy="560" rx="7" ry="3.5"/>
+            </g>
+          </g>
+          <!-- tea towel, clippings, scissors and greenery around the bench (js/greenhouse-flowers.js) -->
+          <g id="ghf-bench"></g>
+
+          <!-- the cat sits on the bench and the dog rests beside it (filled in by js/greenhouse.js) -->
+          <g transform="translate(640 600) scale(7) translate(-1238 -566)"><g id="gh-room-cat"></g></g>
+
+          <!-- right wall shelf for "Growing Soon" -->
+          <g>
+            <rect x="1160" y="575" width="360" height="16" rx="3" fill="url(#gh-wood)"/>
+            <path d="M1196 591 L1196 630 L1236 591 Z M1484 591 L1484 630 L1444 591 Z" fill="#8c6a4a"/>
+          </g>
+          <!-- a bucket of stems beside the bouquet bar, and the wooden stool behind the Lab (js/greenhouse-flowers.js) -->
+          <g id="ghf-station-floor"></g>
+          <g id="ghf-stool"></g>
+
+          <g transform="translate(1300 905) scale(5) translate(-1354 -592)"><g id="gh-room-dog"></g></g>
+
+          <!-- GOLDEN HOUR: peach evening light through the glass -->
+          <g class="golden-only">
+            <rect width="1600" height="1000" fill="#ffc7a0" opacity=".08"/>
+            <g fill="#ffd8ae" opacity=".3" filter="url(#blur-md)">
+              <path d="M1150 0 L1330 0 L980 824 L760 824 Z"/>
+              <path d="M1410 0 L1530 0 L1270 824 L1110 824 Z"/>
+            </g>
+          </g>
+        </svg>
+        <!-- swaying flower layers, falling petals and dust motes are added here by js/greenhouse-flowers.js -->
+
+        <!-- the sketchbook → opens a handwritten note -->
+        <button class="prop prop--interactive gh-sketchbook" type="button" id="gh-sketchbook" style="--x:868; --y:532; --w:118"
+                aria-haspopup="dialog" aria-controls="gh-note" aria-label="Sketchbook: read a note about my design process">
+          <svg viewBox="0 0 118 70" aria-hidden="true">
+            <ellipse cx="60" cy="66" rx="54" ry="5" fill="#2f281f" opacity=".18"/>
+            <path d="M8 62 L60 66 L112 62 L104 18 L60 24 L16 18 Z" fill="#efe4cb"/>
+            <path d="M60 24 L60 66" stroke="#cdbb98" stroke-width="1.4"/>
+            <path d="M16 18 L60 24 L104 18 L102 12 L60 18 L18 12 Z" fill="#d6c6a6"/>
+            <g fill="none" stroke="#6b5a49" stroke-width="1">
+              <path d="M30 56 C30 46 31 38 30 30 M30 44 C25 41 23 38 24 35 M74 34 h20 M72 40 h24 M74 46 h18 M72 52 h22"/>
+              <circle cx="30" cy="27" r="5"/>
+            </g>
+            <path d="M18 30 L44 58" stroke="#e7c86c" stroke-width="3" stroke-linecap="round"/>
+            <path d="M44 58 L47 61" stroke="#e8b9a0" stroke-width="3" stroke-linecap="round"/>
+            <rect x="56" y="10" width="8" height="58" rx="2" fill="#869b74" opacity=".9"/>
+          </svg>
+          <span class="prop-sparkle" aria-hidden="true"></span>
+          <span class="prop-tag">open my sketchbook ♡</span>
+        </button>
+
+        <!-- the "Growing Soon" shelf (pots listed in js/greenhouse.js) -->
+        <div class="prop gh-shelf" style="--x:1160; --y:388; --w:360">
+          <div class="gh-shelf__sign">
+            <p class="gh-shelf__title hand">Growing Soon ♡</p>
+            <p class="gh-shelf__sub">Upcoming Projects &amp; Ideas</p>
+          </div>
+          <ul class="gh-shelf__pots" id="gh-pots"></ul>
+        </div>
+
+        <!-- the bouquet bar → make your own bouquet (js/bouquet.js). The whole flower cart is
+             drawn inside this button (js/greenhouse-flowers.js), in room units, and only the
+             cart itself responds to taps, so the sketchbook nearby stays easy to reach.
+             The jar on top shows the visitor's finished bouquet. -->
+        <button class="prop prop--interactive gh-station" type="button" id="gh-station" style="--x:900; --y:430; --w:290"
+                aria-haspopup="dialog" aria-controls="gh-bouquet" aria-label="Bouquet bar: make your own bouquet">
+          <svg viewBox="900 430 290 490" aria-hidden="true">
+            <rect class="gh-station__hit" x="918" y="604" width="244" height="312" rx="14"/>
+            <g id="ghf-station"></g>
+            <g id="gh-station-jar"></g>
+          </svg>
+          <span class="prop-sparkle" aria-hidden="true"></span>
+          <span class="prop-sparkle gh-station__twinkle gh-station__twinkle--2" aria-hidden="true"></span>
+          <span class="prop-sparkle gh-station__twinkle gh-station__twinkle--3" aria-hidden="true"></span>
+          <span class="prop-tag">make a bouquet ♡</span>
+        </button>
+
+        <!-- a little cream speaker on the stool → the playlist card (js/greenhouse.js) -->
+        <button class="prop prop--interactive gh-speaker" type="button" id="gh-speaker" style="--x:1247; --y:686; --w:86"
+                aria-haspopup="dialog" aria-controls="music-dialog" aria-label="Little speaker: choose a playlist to listen to">
+          <svg viewBox="0 0 86 66" aria-hidden="true">
+            <defs>
+              <pattern id="gh-grille" width="3.2" height="3.2" patternUnits="userSpaceOnUse">
+                <rect width="3.2" height="3.2" fill="#ece2cc"/><circle cx="1.6" cy="1.6" r=".75" fill="#d6c7a8"/>
+              </pattern>
+            </defs>
+            <ellipse cx="43" cy="64" rx="38" ry="2.6" fill="#2f281f" opacity=".2"/>
+            <rect x="9" y="60" width="8" height="4" rx="1" fill="#6b5442"/>
+            <rect x="69" y="60" width="8" height="4" rx="1" fill="#6b5442"/>
+            <!-- cream body with a soft top edge -->
+            <rect x="3" y="8" width="80" height="54" rx="4.5" fill="#efe6d1" stroke="#c9b997" stroke-width="1"/>
+            <path d="M6 9.4 H80" stroke="#fffaf0" stroke-width="1.6" stroke-linecap="round"/>
+            <!-- woven grille with a stitched edge -->
+            <rect x="8" y="19" width="70" height="38" rx="2.5" fill="url(#gh-grille)"/>
+            <rect x="9.6" y="20.6" width="66.8" height="34.8" rx="2" fill="none" stroke="#c8b48e" stroke-width=".7" stroke-dasharray="1.6 1.2"/>
+            <!-- brass control strip: knobs and a little power light -->
+            <rect x="8" y="11.5" width="70" height="5.5" rx="1.4" fill="#c9a96a"/>
+            <path d="M9 12.4 H77" stroke="#ead3a0" stroke-width=".8"/>
+            <g fill="#e9dfc6" stroke="#9c7f4c" stroke-width=".6">
+              <circle cx="46" cy="14.2" r="2"/><circle cx="54" cy="14.2" r="2"/><circle cx="62" cy="14.2" r="2"/><circle cx="70" cy="14.2" r="2"/>
+            </g>
+            <circle class="gh-speaker__light" cx="38.5" cy="14.2" r="1.3"/>
+            <!-- a small brass plate with a pressed flower -->
+            <rect x="34" y="23" width="18" height="7" rx="3.5" fill="#d6b97c"/>
+            <use href="#bloom-cosmos" transform="translate(43 26.5) scale(.32)" style="color:#efbcc4"/>
+          </svg>
+          <span class="gh-speaker__notes" aria-hidden="true"><i>♪</i><i>♫</i><i>♪</i></span>
+          <span class="prop-sparkle" aria-hidden="true"></span>
+          <span class="prop-tag">a little music? ♡</span>
+        </button>
+      </div>
+    </div>
+
+    <button type="button" class="gh-room__back" id="gh-room-back">← back to the garden ♡</button>
+    <div class="gh-room__light" aria-hidden="true"></div>
+    <div class="golden-only gh-room__evening" aria-hidden="true"></div>
+    <div class="golden-only gh-room__glow" aria-hidden="true"></div>
+  </section>
+
+  <!-- =====================================================================
+       A FEW THOUGHTS FROM THE LAKE · a lakeside scene you step into (#lake)
+       Uses the garden's 1600 × 1000 units. The scenery is painted on the first visit,
+       and the boat ride, the fish and the notes are run by js/lake.js (styles in css/lake.css).
+       ===================================================================== -->
+  <section class="lake-room" id="lake-room" role="dialog" aria-modal="true" aria-labelledby="lake-title" hidden>
+    <h2 class="visually-hidden" id="lake-title">A Few Thoughts from the Lake</h2>
+    <div class="lake-room__viewport" id="lake-viewport">
+      <div class="lake-room__scene" id="lake-scene">
+        <svg class="lake-room__art" viewBox="0 0 1600 1000" aria-hidden="true">
+          <defs>
+            <linearGradient id="lk-sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#c6d9de"/><stop offset=".72" stop-color="#e7eee7"/><stop offset="1" stop-color="#f5f0e1"/>
+            </linearGradient>
+            <linearGradient id="lk-sky-gold" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#d9a9b4"/><stop offset=".55" stop-color="#f3c6ab"/><stop offset="1" stop-color="#fbe2bf"/>
+            </linearGradient>
+            <linearGradient id="lk-water" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#bcd2cf"/><stop offset=".3" stop-color="#97b8b6"/><stop offset="1" stop-color="#5d8788"/>
+            </linearGradient>
+            <linearGradient id="lk-water-gold" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#f6cfb2"/><stop offset=".4" stop-color="#d9a9a0"/><stop offset="1" stop-color="#8a7f86"/>
+            </linearGradient>
+            <linearGradient id="lk-wood" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#cfae84"/><stop offset="1" stop-color="#a8845e"/>
+            </linearGradient>
+          </defs>
+          <!-- sky, clouds, far hills and the far shore (js/lake.js paints the trees, lilies and shore) -->
+          <rect width="1600" height="352" fill="url(#lk-sky)"/>
+          <g class="golden-only">
+            <rect width="1600" height="352" fill="url(#lk-sky-gold)" opacity=".85"/>
+            <circle cx="1185" cy="318" r="44" fill="#ffe6b8" opacity=".95"/>
+            <circle cx="1185" cy="318" r="80" fill="#ffd9a0" opacity=".3"/>
+          </g>
+          <g id="lk-clouds" fill="#ffffff" filter="url(#blur-md)" opacity=".65"></g>
+          <path d="M0 316 C160 292 300 304 460 296 C620 288 760 308 920 300 C1080 292 1240 284 1400 296 C1500 304 1560 298 1600 300 L1600 350 L0 350 Z" fill="#b6c8c4" filter="url(#blur-sm)"/>
+          <g id="lk-treeline"></g>
+          <rect y="342" width="1600" height="658" fill="url(#lk-water)"/>
+          <rect class="golden-only" y="342" width="1600" height="658" fill="url(#lk-water-gold)" opacity=".45"/>
+          <g id="lk-reflections" opacity=".2"></g>
+          <path d="M0 344 H1600" stroke="#ffffff" stroke-opacity=".55" stroke-width="2"/>
+          <g class="golden-only" fill="#fff0c8" filter="url(#blur-sm)" opacity=".75" id="lk-glint"></g>
+          <g id="lk-cottage"></g>
+          <g id="lk-lilies"></g>
+          <g id="lk-bank"></g>
+          <g id="lk-dock"></g>
+          <g id="lk-cattails"></g>
+        </svg>
+
+        <!-- soft light moving on the water -->
+        <svg class="lk-shimmer" viewBox="0 0 1600 1000" aria-hidden="true"><g id="lk-shimmer" stroke="#ffffff" stroke-linecap="round"></g></svg>
+
+        <!-- life on the lake (drawn by js/lake.js) -->
+        <div class="lk-ducks" aria-hidden="true" id="lk-ducks" title="a little quack ♡"></div>
+        <span class="lk-at lk-loon" aria-hidden="true" id="lk-loon" style="--x:1150; --y:410; --w:56"></span>
+        <span class="lk-at lk-dragonfly" aria-hidden="true" style="--x:1400; --y:700; --w:58; --path:lk-flit-a; --dur:15s"></span>
+        <span class="lk-at lk-dragonfly lk-dragonfly--2" aria-hidden="true" style="--x:470; --y:820; --w:52; --path:lk-flit-b; --dur:18s"></span>
+        <span class="lk-at lk-lantern" aria-hidden="true" id="lk-lantern" style="--x:458; --y:586; --w:44"></span>
+        <span class="golden-only lk-at lk-lantern-glow" aria-hidden="true" style="--x:380; --y:520; --w:200"></span>
+
+        <!-- a swan with her own lane, and little frogs on the lily pads (drawn by js/lake.js) -->
+        <button type="button" class="lk-swan" id="lk-swan" aria-label="The swan: say hello"></button>
+        <div id="lk-frogs"></div>
+
+        <!-- the rowboat, tied to the dock: click it to take a little ride -->
+        <button type="button" class="lk-boat" id="lk-boat" aria-label="The rowboat: take a little ride">
+          <span class="lk-boat__bob" id="lk-boat-art" aria-hidden="true"></span>
+          <span class="prop-tag">take a little ride ♡</span>
+        </button>
+        <button type="button" class="lk-bottle" id="lk-bottle" hidden aria-haspopup="dialog" aria-controls="lk-note" aria-label="A message in a bottle: open your little message">
+          <span class="lk-bottle__glow" aria-hidden="true"></span>
+          <span class="lk-bottle__art" id="lk-bottle-art" aria-hidden="true"></span>
+          <span class="lk-bottle__glint" aria-hidden="true"></span>
+          <span class="prop-tag lk-bottle__tag" aria-hidden="true">a little message for you ♡</span>
+        </button>
+
+        <!-- GOLDEN HOUR: fireflies over the shallows -->
+        <div class="golden-only fireflies" aria-hidden="true">
+          <i style="--x:300; --y:820; --d:0s"></i><i style="--x:420; --y:900; --d:-2.1s"></i><i style="--x:1460; --y:700; --d:-3.4s"></i>
+          <i style="--x:1540; --y:800; --d:-1.2s"></i><i style="--x:1260; --y:860; --d:-4.6s"></i><i style="--x:160; --y:900; --d:-2.8s"></i>
+          <i style="--x:540; --y:640; --d:-0.6s"></i><i style="--x:1380; --y:620; --d:-5.1s"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSIDE THE ROWBOAT · the view during the ride, looking out over the bow (js/lake.js).
+         The far shore and the water pan slowly past as you row; the boat rocks gently. -->
+    <div class="lk-pov" id="lk-pov" hidden>
+      <div class="lk-pov__scene" id="lk-pov-scene">
+        <svg class="lk-pov__sky" viewBox="0 0 1600 1000" aria-hidden="true">
+          <rect width="1600" height="474" fill="url(#lk-sky)"/>
+          <g class="golden-only">
+            <rect width="1600" height="474" fill="url(#lk-sky-gold)" opacity=".85"/>
+            <circle cx="980" cy="438" r="70" fill="#ffd9a0" opacity=".35"/>
+            <circle cx="980" cy="444" r="40" fill="#ffe6b8"/>
+          </g>
+          <g id="lk-pov-clouds" fill="#ffffff" filter="url(#blur-md)" opacity=".65"></g>
+          <rect y="470" width="1600" height="530" fill="url(#lk-water)"/>
+          <rect class="golden-only" y="470" width="1600" height="530" fill="url(#lk-water-gold)" opacity=".5"/>
+          <g class="golden-only" id="lk-pov-glint" fill="#fff0c8" filter="url(#blur-sm)" opacity=".8"></g>
+        </svg>
+        <div class="lk-pov__world" id="lk-pov-world">
+          <svg class="lk-pov__far" viewBox="0 0 3200 1000" aria-hidden="true"><g id="lk-pov-far"></g></svg>
+          <div class="lk-pov__near" id="lk-pov-near">
+            <svg viewBox="0 0 3200 1000" aria-hidden="true"><g id="lk-pov-pads"></g></svg>
+            <span class="lk-pov__at lk-swan-pov" id="lk-pov-swan" style="--x:1180; --y:560; --w:120"></span>
+            <span class="lk-pov__at lk-ducks-pov" id="lk-pov-ducks" style="--x:2050; --y:600; --w:230"></span>
+            <span class="lk-pov__at lk-loon-pov" id="lk-pov-loon" style="--x:420; --y:520; --w:70"></span>
+          </div>
+        </div>
+        <svg class="lk-shimmer lk-pov__shimmer" viewBox="0 0 1600 1000" aria-hidden="true"><g id="lk-pov-shimmer" stroke="#ffffff" stroke-linecap="round"></g></svg>
+        <!-- lily pads, reeds and ripples passing alongside as you row forward (js/lake.js) -->
+        <div class="lk-pov__pass" id="lk-pov-pass" aria-hidden="true"></div>
+        <!-- the bow wave, peeling away along both sides of the boat while you're moving -->
+        <svg class="lk-wake" viewBox="0 0 1600 1000" aria-hidden="true">
+          <g fill="none" stroke="#ffffff" stroke-opacity=".75" stroke-width="3" stroke-linecap="round">
+            <path d="M786 748 Q650 790 470 870"/><path d="M780 762 Q620 820 420 930" stroke-opacity=".45"/>
+            <path d="M814 748 Q950 790 1130 870"/><path d="M820 762 Q980 820 1180 930" stroke-opacity=".45"/>
+          </g>
+        </svg>
+
+        <!-- fishing: the line, the bobber (one tap reels in the fish) and the leaping fish -->
+        <svg class="lk-line" viewBox="0 0 1600 1000" aria-hidden="true"><path id="lk-line" pathLength="1" fill="none" stroke="#fffaf0" stroke-opacity=".9" stroke-width="2"/></svg>
+        <button type="button" class="lk-bobber" id="lk-bobber" hidden aria-label="A fish is nibbling: reel it in">
+          <span class="lk-bobber__art" id="lk-bobber-art" aria-hidden="true"></span>
+          <span class="lk-bobber__hint hand" aria-hidden="true">tap to reel in ♡</span>
+        </button>
+        <div class="lk-jump" id="lk-jump" aria-hidden="true"></div>
+
+        <!-- your rowboat: the bow, the seats, the fishing rod and a little tackle box -->
+        <div class="lk-pov__boat" id="lk-pov-boat" aria-hidden="true"></div>
+        <div class="golden-only fireflies" aria-hidden="true">
+          <i style="--x:520; --y:760; --d:-1s"></i><i style="--x:1120; --y:720; --d:-3.2s"></i><i style="--x:640; --y:640; --d:-2.2s"></i><i style="--x:1020; --y:600; --d:-4.4s"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- the ride's controls, always within reach -->
+    <div class="lk-controls">
+      <p class="lk-status hand" id="lk-status" aria-live="polite">the rowboat is waiting at the dock ♡</p>
+      <div class="lk-controls__row">
+        <button type="button" class="lk-btn lk-btn--primary hand" id="lk-ride">take a little ride ♡</button>
+        <button type="button" class="lk-btn lk-btn--primary hand" id="lk-skip" hidden>skip the ride</button>
+        <button type="button" class="lk-btn hand" id="lk-read" aria-haspopup="dialog" aria-controls="lk-thoughts" aria-label="read the thoughts"><span class="lk-long">read the </span>thoughts</button>
+        <button type="button" class="lk-btn lk-btn--back hand" id="lk-back" aria-label="back to the garden">← <span class="lk-long">back to the </span>garden ♡</button>
+      </div>
+    </div>
+    <div class="lake-room__light" aria-hidden="true"></div>
+    <div class="golden-only lake-room__evening" aria-hidden="true"></div>
+  </section>
+
+  <!-- =====================================================================
+       THE WISHING WILLOW · a secret nook beneath the willow's branches (#willow)
+       Stage 1: the scene itself. The hollow and the writing desk are drawn ready to
+       become interactive later, and the open spaces among the branches are kept clear
+       for visitors' paper notes. Painted on the first visit by js/willow.js.
+       ===================================================================== -->
+  <section class="willow-room" id="willow-room" role="dialog" aria-modal="true" aria-labelledby="willow-title" hidden>
+    <h2 class="visually-hidden" id="willow-title">The Wishing Willow</h2>
+    <div class="willow-room__viewport" id="willow-viewport">
+      <div class="willow-room__scene" id="willow-scene">
+        <svg class="willow-room__art" viewBox="0 0 1600 1000" aria-hidden="true">
+          <defs>
+            <linearGradient id="wl-air" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#b9cba3"/><stop offset=".55" stop-color="#d9e3c7"/><stop offset="1" stop-color="#cbd8b4"/>
+            </linearGradient>
+            <radialGradient id="wl-light" cx=".5" cy=".38" r=".6">
+              <stop offset="0" stop-color="#fbf6e2" stop-opacity=".9"/><stop offset="1" stop-color="#fbf6e2" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="wl-moss" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#9db882"/><stop offset="1" stop-color="#7a9a62"/>
+            </linearGradient>
+            <linearGradient id="wl-bark" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#6f6252"/><stop offset=".35" stop-color="#a39380"/><stop offset=".6" stop-color="#8f806c"/><stop offset="1" stop-color="#5f5446"/>
+            </linearGradient>
+            <linearGradient id="wl-wood" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#cfae84"/><stop offset="1" stop-color="#a8845e"/>
+            </linearGradient>
+            <radialGradient id="wl-hollow" cx=".5" cy=".55" r=".55">
+              <stop offset="0" stop-color="#2a211a"/><stop offset=".75" stop-color="#3d3127"/><stop offset="1" stop-color="#55463a"/>
+            </radialGradient>
+          </defs>
+          <!-- soft green light inside the canopy, with brightness glowing through the far branches -->
+          <rect width="1600" height="1000" fill="url(#wl-air)"/>
+          <rect width="1600" height="1000" fill="url(#wl-light)"/>
+          <g id="wl-curtain"></g>      <!-- the far curtain of willow strands -->
+          <g id="wl-ground"></g>       <!-- moss, roots, wildflowers and mushrooms -->
+          <g id="wl-trunk"></g>        <!-- the great trunk, its limbs and the little hollow -->
+          <g id="wl-sign"></g>
+          <g id="wl-desk"></g>         <!-- the writing desk, stationery and the stool -->
+        </svg>
+        <!-- the hollow's little lantern, glowing softly (brighter at golden hour) -->
+        <span class="wl-lantern-glow" aria-hidden="true"></span>
+        <!-- dappled sunlight drifting softly through the leaves -->
+        <div class="wl-dapple" aria-hidden="true"></div>
+        <svg class="wl-beams" viewBox="0 0 1600 1000" aria-hidden="true"><g id="wl-beams"></g></svg>
+        <!-- the nearest strands frame the nook and sway gently, with ribbons tied on -->
+        <svg class="wl-strands wl-strands--back" viewBox="0 0 1600 1000" aria-hidden="true"><g id="wl-strands-back"></g></svg>
+        <svg class="wl-strands wl-strands--mid" viewBox="0 0 1600 1000" aria-hidden="true"><g id="wl-strands-mid"></g></svg>
+        <svg class="wl-strands wl-strands--front" viewBox="0 0 1600 1000" aria-hidden="true"><g id="wl-strands-front"></g></svg>
+        <!-- a little wooden rope swing on the thick left limb (drawn by js/willow.js): it sways in
+             the breeze, and a click sends it a little higher -->
+        <button class="wl-swing" type="button" id="wl-swing" style="--x:103; --y:32; --w:160" aria-label="The rope swing: stay a little while">
+          <span class="wl-swing__push"><span class="wl-swing__sway" id="wl-swing-art" aria-hidden="true"></span></span>
+          <span class="prop-tag">stay a little while ♡</span>
+        </button>
+        <!-- the writing desk → "a little wish ♡" (js/willow.js). An invisible button over the
+             desk and its stool; the drawing itself stays exactly as it is. -->
+        <button class="prop prop--interactive wl-desk-btn" type="button" id="wl-desk-btn" style="--x:1022; --y:592; --w:332"
+                aria-haspopup="dialog" aria-controls="wl-wish" aria-label="Writing desk: leave a little wish">
+          <span class="prop-sparkle" aria-hidden="true"></span>
+          <span class="prop-tag hand" id="wl-desk-tag">leave a little wish ♡</span>
+        </button>
+        <!-- the visitor's own wishes (up to eight), each hanging from a willow branch once they
+             hang it (made by js/willow.js). Only ever their own: nothing here comes from anyone else. -->
+        <div class="wl-wishes" id="wl-wishes"></div>
+        <!-- GOLDEN HOUR: fireflies beneath the branches -->
+        <div class="golden-only fireflies" aria-hidden="true">
+          <i style="--x:520; --y:760; --d:0s"></i><i style="--x:640; --y:600; --d:-2.4s"></i><i style="--x:1000; --y:640; --d:-1.3s"></i>
+          <i style="--x:1220; --y:560; --d:-3.6s"></i><i style="--x:380; --y:520; --d:-4.8s"></i><i style="--x:1400; --y:780; --d:-0.8s"></i>
+          <i style="--x:880; --y:420; --d:-2.9s"></i><i style="--x:260; --y:860; --d:-5.4s"></i>
+        </div>
+      </div>
+    </div>
+    <p class="wl-toast hand" id="wl-toast" role="status" aria-live="polite"></p>
+    <p class="wl-greeting hand" id="wl-greeting" role="status" aria-live="polite">welcome back ♡ your little wishes are right where you left them.</p>
+    <button type="button" class="gh-room__back" id="willow-back">← back to the garden ♡</button>
+    <div class="willow-room__light" aria-hidden="true"></div>
+    <div class="golden-only willow-room__evening" aria-hidden="true"></div>
+    <div class="golden-only willow-room__glow" aria-hidden="true"></div>
+  </section>
+
+  <!-- A little wish (js/willow.js): a private stationery card at the willow's writing desk.
+       The wish stays only in this page's memory: nothing is saved or shared. -->
+  <dialog class="music-dialog wl-wish" id="wl-wish" aria-labelledby="wl-wish-title" aria-describedby="wl-wish-question">
+    <div class="music-card wl-wish__card">
+      <span class="washi music-card__tape" aria-hidden="true"></span>
+      <svg class="wl-wish__flower" viewBox="0 0 70 90" aria-hidden="true">
+        <path d="M30 88 C32 70 30 52 36 30" fill="none" stroke="#7f9a64" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M32 68 C24 64 20 56 22 50 C28 54 32 60 32 68 Z M34 52 C42 48 46 40 44 34 C38 38 34 44 34 52 Z" fill="#9db08b"/>
+        <path d="M33 78 C27 76 24 72 25 68 C29 70 32 73 33 78 Z" fill="#b5c4a5"/>
+        <use href="#bloom-cosmos" transform="translate(37 24) scale(1.9)" style="color:#efbcc4"/>
+        <use href="#bloom-daisy" transform="translate(54 46) scale(.9)"/>
+      </svg>
+      <button type="button" class="music-card__x" data-wish-close aria-label="Close">×</button>
+
+      <h2 class="music-card__title hand" id="wl-wish-title">a little wish ♡</h2>
+      <p class="music-card__sub">Understanding what makes someone feel at home is where thoughtful design begins.</p>
+      <p class="wl-wish__question" id="wl-wish-question">What makes a place feel like home to you?</p>
+
+      <!-- writing -->
+      <div class="wl-wish__write" id="wl-wish-write">
+        <label class="visually-hidden" for="wl-wish-text">Your wish</label>
+        <textarea class="wl-wish__text hand" id="wl-wish-text" rows="4" maxlength="180"
+                  placeholder="A warm kitchen, Sunday mornings, my favourite people..." aria-describedby="wl-wish-count"></textarea>
+        <div class="wl-wish__row">
+          <span class="wl-wish__count" id="wl-wish-count">0/180</span>
+          <button type="button" class="wl-wish__button hand" id="wl-wish-preview" disabled>preview my wish ♡</button>
+        </div>
+      </div>
+
+      <!-- preview: their wish on a little handwritten note -->
+      <div class="wl-wish__preview" id="wl-wish-preview-view" hidden>
+        <figure class="wl-note">
+          <span class="wl-note__hole" aria-hidden="true"></span>
+          <svg class="wl-note__sprig" viewBox="0 0 40 30" aria-hidden="true">
+            <path d="M4 26 C12 20 20 14 34 6" fill="none" stroke="#7f9a64" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M14 19 C10 14 10 10 12 8 C15 11 15 15 14 19 Z M22 14 C24 9 28 7 31 8 C29 11 26 13 22 14 Z" fill="#9db08b"/>
+            <use href="#bloom-cosmos" transform="translate(34 7) scale(.8)" style="color:#efbcc4"/>
+          </svg>
+          <blockquote class="wl-note__text hand" id="wl-note-text"></blockquote>
+          <figcaption class="wl-note__sign hand">a wish beneath the willow ♡</figcaption>
+        </figure>
+        <!-- choose a ribbon to tie it on with -->
+        <p class="wl-ribbons__label hand" id="wl-ribbons-label">choose a ribbon</p>
+        <div class="wl-ribbons" role="radiogroup" aria-labelledby="wl-ribbons-label" id="wl-ribbons">
+          <button type="button" class="wl-ribbon" role="radio" aria-checked="true" data-ribbon="pink" style="--ribbon:#e3a9b0; --ribbon-edge:#c58a93" aria-label="Dusty pink ribbon"></button>
+          <button type="button" class="wl-ribbon" role="radio" aria-checked="false" data-ribbon="sage" style="--ribbon:#a9bc94; --ribbon-edge:#7f9468" aria-label="Sage green ribbon"></button>
+          <button type="button" class="wl-ribbon" role="radio" aria-checked="false" data-ribbon="butter" style="--ribbon:#f2d58f; --ribbon-edge:#c9a96a" aria-label="Butter yellow ribbon"></button>
+          <button type="button" class="wl-ribbon" role="radio" aria-checked="false" data-ribbon="lavender" style="--ribbon:#c9b8de; --ribbon-edge:#9d89b8" aria-label="Soft lavender ribbon"></button>
+        </div>
+        <div class="wl-wish__row wl-wish__row--center">
+          <button type="button" class="wl-wish__button wl-wish__button--soft hand" id="wl-wish-edit">edit my wish</button>
+          <button type="button" class="wl-wish__button hand" id="wl-wish-hang">hang my wish ♡</button>
+        </div>
+        <!-- once it's hanging: take it down (with a gentle second step) -->
+        <div class="wl-wish__remove" id="wl-wish-remove" hidden>
+          <button type="button" class="wl-wish__link hand" id="wl-remove-ask">take down this wish</button>
+          <span class="wl-wish__confirm" id="wl-remove-confirm" hidden>
+            <span class="hand">take it down?</span>
+            <button type="button" class="wl-wish__link wl-wish__link--yes hand" id="wl-remove-yes">yes, take it down</button>
+            <button type="button" class="wl-wish__link hand" id="wl-remove-no">keep it</button>
+          </span>
+        </div>
+      </div>
+
+      <p class="wl-wish__private hand" id="wl-wish-privacy">just between you and the willow ♡ saved in this browser only</p>
+      <button type="button" class="music-card__close hand" data-wish-close>close the card ✿</button>
+    </div>
+  </dialog>
+
+  <!-- A catch from the lake: one thought about Interior Design (js/lake.js) -->
+  <dialog class="music-dialog lk-catch" id="lk-catch" aria-labelledby="lk-catch-title" aria-describedby="lk-catch-text">
+    <div class="music-card lk-card">
+      <span class="washi washi--sage music-card__tape" aria-hidden="true"></span>
+      <div class="lk-card__fish" id="lk-catch-fish" aria-hidden="true"></div>
+      <p class="music-card__eyebrow" id="lk-catch-no">catch 01</p>
+      <h2 class="music-card__title hand" id="lk-catch-title"></h2>
+      <p class="lk-card__thought" id="lk-catch-text"></p>
+      <button type="button" class="lk-card__button hand" id="lk-release">let it swim ♡</button>
+    </div>
+  </dialog>
+
+  <!-- The message in a bottle -->
+  <dialog class="music-dialog lk-note" id="lk-note" aria-labelledby="lk-note-title">
+    <div class="music-card lk-card lk-card--note">
+      <span class="washi washi--gingham music-card__tape" aria-hidden="true"></span>
+      <button type="button" class="music-card__x" data-lk-close aria-label="Close">×</button>
+      <svg class="lk-card__envelope" viewBox="0 0 40 28" aria-hidden="true">
+        <rect x="2" y="2" width="36" height="24" rx="3" fill="#fffaf0" stroke="#b0697a" stroke-width="1.6"/>
+        <path d="M3 4 L20 16 L37 4" fill="none" stroke="#b0697a" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M20 21 c-2 -2 -5 -3 -5 -5.4 c0 -1.4 1.1 -2.4 2.4 -2.4 c1.1 0 1.9 .7 2.6 1.6 c.7 -.9 1.5 -1.6 2.6 -1.6 c1.3 0 2.4 1 2.4 2.4 c0 2.4 -3 3.4 -5 5.4 z" fill="#efbcc4"/>
+      </svg>
+      <p class="music-card__eyebrow">a little note from Avery</p>
+      <h2 class="music-card__title hand lk-card__headline" id="lk-note-title">Keep the name. Change the conversation. ♡</h2>
+      <p class="lk-card__thought">I believe the future of Interior Design is about showing the world what thoughtful design can really do.</p>
+      <p class="lk-card__sign hand">Avery ♡</p>
+      <div class="lk-card__actions">
+        <button type="button" class="lk-card__button hand" id="lk-again">ride again ♡</button>
+        <button type="button" class="lk-card__button lk-card__button--soft hand" id="lk-home">back to the garden ♡</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- All five thoughts at once, for anyone who'd rather read than fish -->
+  <dialog class="music-dialog lk-thoughts" id="lk-thoughts" aria-labelledby="lk-thoughts-title">
+    <div class="music-card lk-card lk-card--list">
+      <span class="washi washi--sage music-card__tape" aria-hidden="true"></span>
+      <button type="button" class="music-card__x" data-lk-close aria-label="Close">×</button>
+      <p class="music-card__eyebrow">on interior design</p>
+      <h2 class="music-card__title hand" id="lk-thoughts-title">a few thoughts from the lake ♡</h2>
+      <p class="music-card__sub">Behind every beautiful space is a deeper story about how people live, move and feel.</p>
+      <ol class="lk-list" id="lk-list"></ol>
+      <div class="lk-list__note">
+        <p class="music-card__eyebrow">a little note from Avery</p>
+        <p class="hand lk-list__headline">Keep the name. Change the conversation. ♡</p>
+        <p class="lk-card__thought">I believe the future of Interior Design is about showing the world what thoughtful design can really do.</p>
+        <p class="lk-card__sign hand">Avery ♡</p>
+      </div>
+      <button type="button" class="music-card__close hand" data-lk-close>back to the lake ✿</button>
+    </div>
+  </dialog>
+
+  <!-- The sketchbook's note (shares the music card styling) -->
+  <dialog class="music-dialog gh-note" id="gh-note" aria-labelledby="gh-note-title">
+    <div class="music-card">
+      <span class="washi washi--sage music-card__tape" aria-hidden="true"></span>
+      <svg class="music-card__flowers" viewBox="0 0 70 70" aria-hidden="true">
+        <path d="M14 66 C20 50 30 38 44 30 M30 44 C26 36 28 28 34 24 M38 34 C46 32 52 26 54 18" fill="none" stroke="#7f9a64" stroke-width="1.2" stroke-linecap="round"/>
+        <use href="#bloom-cosmos" transform="translate(48 22) scale(1.6)" style="color:#efbcc4"/>
+        <use href="#bloom-daisy" transform="translate(30 20) scale(1.1)"/>
+        <use href="#bloom-round" transform="translate(58 40) scale(1)" style="color:#efcd7d"/>
+      </svg>
+      <button type="button" class="music-card__x" data-note-close aria-label="Close">×</button>
+      <p class="music-card__eyebrow">from the sketchbook</p>
+      <h2 class="music-card__title hand" id="gh-note-title">a little note ♡</h2>
+      <p class="gh-note__text hand">Every project starts with a little curiosity. From early sketches and ideas to thoughtful spaces and final details, I love watching a concept grow into something meaningful.</p>
+      <p class="gh-note__sign hand">Avery ✿</p>
+      <button type="button" class="music-card__close hand" data-note-close>close the sketchbook ✿</button>
+    </div>
+  </dialog>
+
+  <!-- Make your own bouquet (js/bouquet.js; shares the music card styling) -->
+  <dialog class="music-dialog gh-bouquet" id="gh-bouquet" aria-labelledby="gh-bouquet-title">
+    <div class="music-card gh-bouquet__card">
+      <span class="washi washi--gingham music-card__tape" aria-hidden="true"></span>
+      <button type="button" class="music-card__x" data-bouquet-close aria-label="Close">×</button>
+      <p class="music-card__eyebrow">at the bouquet bar</p>
+      <h2 class="music-card__title hand" id="gh-bouquet-title">make a little bouquet ♡</h2>
+      <p class="music-card__sub" id="gh-bouquet-sub">Colour, texture and balance can completely change how something feels, whether it’s a bouquet or a room.</p>
+
+      <div class="gh-bouquet__body">
+        <figure class="gh-bouquet__stage">
+          <svg id="gh-bouquet-stage" viewBox="10 20 280 312" role="img" aria-label="Your bouquet, in a glass jar"></svg>
+          <figcaption class="gh-bouquet__message" id="gh-bouquet-message" hidden>
+            <span class="hand gh-bouquet__note">a little bouquet for you ♡</span>
+            <span class="gh-bouquet__from">freshly gathered in the greenhouse</span>
+          </figcaption>
+        </figure>
+
+        <div class="gh-bouquet__picker">
+          <ul class="gh-bouquet__stems" id="gh-bouquet-stems" aria-label="Buckets of flowers"></ul>
+          <p class="gh-bouquet__count hand" id="gh-bouquet-count" aria-live="polite">an empty jar, ready for flowers</p>
+          <!-- after finishing: keep the bouquet as a picture -->
+          <div class="gh-bouquet__keep" id="gh-bouquet-keep" hidden>
+            <button type="button" class="gh-bouquet__save hand" id="gh-bouquet-save">save my bouquet ♡</button>
+            <button type="button" class="gh-bouquet__send hand" id="gh-bouquet-send">send my bouquet ♡</button>
+          </div>
+          <p class="gh-bouquet__keep-note" id="gh-bouquet-keep-note" aria-live="polite"></p>
+          <div class="gh-bouquet__actions">
+            <button type="button" class="gh-bouquet__clear hand" id="gh-bouquet-clear">clear bouquet</button>
+            <button type="button" class="gh-bouquet__finish hand" id="gh-bouquet-finish">finish bouquet ♡</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="js/little-things.js"></script>
+  <script src="js/greenhouse-flowers.js"></script>
+  <script src="js/garden-extras.js"></script>
+  <script src="js/greenhouse.js"></script>
+  <script src="js/bouquet.js"></script>
+  <script src="js/lake.js"></script>
+  <script src="js/willow.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/mode.js"></script>
+  <script src="js/flowers.js"></script>
+  <script src="js/game.js"></script>
+  <!-- copy email ♡ on the Contact panel -->
+  <script src="js/copy-email.js"></script>
+  <!-- the floral cursor (desktop mouse only) -->
+  <script src="js/bloom-cursor.js"></script>
+</body>
+</html>

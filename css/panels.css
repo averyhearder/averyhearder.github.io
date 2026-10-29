@@ -1,0 +1,233 @@
+/* ==========================================================================
+   A Day in Bloom · Work / Contact panels
+   Paper sheets that slide in over the garden.
+   (The About journal has its own file: css/journal.css)
+   ========================================================================== */
+
+.panel-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.panel-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(50, 58, 46, .32);
+  opacity: 0;
+  transition: opacity .45s var(--ease);
+}
+
+.panel-layer.is-open { pointer-events: auto; }
+.panel-layer.is-open .panel-backdrop { opacity: 1; }
+
+.panel {
+  position: relative;
+  width: min(640px, 100%);
+  height: 100%;
+  overflow-y: auto;
+  padding: 92px clamp(22px, 5vw, 60px) 64px;
+  background:
+    linear-gradient(90deg, rgba(120, 100, 70, .07), transparent 18px),
+    var(--grain-soft),
+    var(--cream);
+  background-size: auto, 220px, auto;
+  box-shadow: -20px 0 50px rgba(61, 71, 57, .18);
+  transform: translateX(104%);
+  transition: transform .55s var(--ease);
+}
+
+.panel.is-active { transform: none; }
+
+/* A closed panel must never sit invisibly on top of an open one */
+.panel[hidden] { display: none !important; }
+
+.panel-close {
+  position: absolute;
+  top: 79px;
+  right: clamp(22px, 5vw, 60px);
+  padding: 3px 0;   /* a 24px-tall target; the words stay exactly where they were */
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink-soft);
+}
+.panel-close:hover { color: var(--ink); }
+
+.panel .eyebrow { margin-top: 2.2rem; }
+
+.panel-title {
+  font-size: clamp(2.2rem, 5vw, 3.1rem);
+  font-weight: 400;
+  margin-bottom: 1.2rem;
+}
+.panel-title:focus { outline: none; }
+
+.panel-intro { color: var(--ink-soft); }
+.panel em { color: var(--ink-soft); }
+
+/* The Contact panel looks like a letter */
+.panel--contact {
+  background:
+    linear-gradient(90deg, rgba(120, 100, 70, .07), transparent 18px),
+    linear-gradient(180deg, rgba(227, 169, 176, .16), transparent 220px),
+    var(--grain-soft),
+    var(--cream);
+  background-size: auto, auto, 220px, auto;
+}
+
+/* ---- Work: project cards ------------------------------------------------ */
+.project-cards {
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.project-card {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 1rem 1.2rem;
+  border-radius: 14px;
+  text-decoration: none;
+  background: rgba(255, 255, 255, .55);
+  border: 1px solid rgba(157, 176, 139, .35);
+  transition: transform .35s var(--ease), box-shadow .35s, background-color .35s;
+}
+
+.project-card:hover {
+  transform: translateY(-2px);
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(61, 71, 57, .12);
+}
+
+.project-card__flower {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+}
+.project-card__flower svg { width: 56px; height: 56px; }
+
+.project-card--snapdragon .project-card__flower { background: rgba(229, 163, 176, .28); }
+.project-card--ranunculus .project-card__flower { background: rgba(239, 205, 125, .32); }
+.project-card--cosmos .project-card__flower { background: rgba(236, 185, 189, .3); }
+
+.project-card__text { display: flex; flex-direction: column; }
+
+.project-card__no {
+  font-size: .68rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.project-card__title {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  line-height: 1.15;
+}
+
+.project-card__meta { font-size: .85rem; color: var(--ink-soft); }
+
+.project-card__arrow {
+  font-size: 1.3rem;
+  color: var(--sage-deep);
+  transition: transform .35s var(--ease);
+}
+.project-card:hover .project-card__arrow { transform: translateX(4px); }
+
+/* ---- Contact ------------------------------------------------------------ */
+.contact-list { margin: 2rem 0 0; }
+
+.contact-list > div {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(157, 176, 139, .4);
+}
+
+.contact-list dt {
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding-top: .2rem;
+}
+
+.contact-list dd { margin: 0; }
+.contact-list a {
+  color: var(--sage-deep);
+  text-underline-offset: 4px;
+  overflow-wrap: anywhere;
+}
+.contact-list a:hover { color: var(--ink); }
+
+/* copy email ♡ (js/copy-email.js): a tiny copy button beside the address, and a handwritten thank-you */
+.copy-email { display: flex; flex-wrap: wrap; align-items: center; gap: .15rem .5rem; }
+.copy-email__button {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin: -6px 0;          /* (a comfortable target without making the row taller) */
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: var(--sage-deep);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color .2s, transform .25s cubic-bezier(.3, 1.4, .5, 1);
+}
+.copy-email__button svg { width: 20px; height: 20px; }
+.copy-email__button:hover { background: rgba(201, 213, 185, .35); transform: rotate(-6deg); }
+.copy-email.is-copied .copy-email__button { background: rgba(241, 201, 200, .45); }
+.copy-email__note {
+  font-family: var(--hand);
+  font-style: normal;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  color: #b8737f;
+  opacity: 0;
+  transform: translateY(3px) rotate(-2deg);
+  transition: opacity .25s ease, transform .3s ease;
+}
+.copy-email.is-copied .copy-email__note,
+.copy-email.is-failed .copy-email__note { opacity: 1; transform: rotate(-2deg); }
+.copy-email.is-failed .copy-email__note { color: var(--ink-soft); }
+@media (max-width: 760px) {
+  .copy-email__button { width: 44px; height: 44px; margin: -10px 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .copy-email__button,
+  .copy-email__note { transition: none; }
+}
+
+.contact-stamp {
+  display: block;
+  width: 64px;
+  margin: 2.4rem 0 0 auto;
+  transform: rotate(6deg);
+  filter: drop-shadow(0 4px 8px rgba(60, 45, 30, .15));
+}
+
+@media (max-width: 480px) {
+  .contact-list > div { grid-template-columns: 1fr; gap: .2rem; }
+}
+
+/* Phones: the "Return to garden" link sits below both header rows (never under the light and
+   sound controls), with a comfortable tap area */
+@media (max-width: 560px) {
+  .panel { padding-top: calc(var(--header-h) + 40px); }
+  .panel-close { top: var(--header-h); padding: 12px 0; }
+  .panel:not(.panel--journal) > .eyebrow { margin-top: .6rem; }
+}

@@ -1,0 +1,4 @@
+# Windows and OneDrive folder files (never part of the website)
+desktop.ini
+Thumbs.db
+.DS_Store

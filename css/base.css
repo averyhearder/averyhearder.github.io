@@ -1,0 +1,201 @@
+/* ==========================================================================
+   A Day in Bloom · base styles
+   Colours, fonts, header/navigation and buttons shared by every page.
+   ========================================================================== */
+
+/* ---- Palette & fonts: change a colour here and it updates everywhere ---- */
+:root {
+  --sage: #9db08b;
+  --sage-light: #c9d5b9;
+  --sage-deep: #5f7357;
+  --cream: #f8f3e7;
+  --cream-deep: #efe6d2;
+  --butter: #f2d58f;
+  --dusty-pink: #e3a9b0;
+  --blush: #f1c9c8;
+  --lake: #a8c3cf;
+  --wood: #a5845f;
+  --wood-dark: #6f5640;
+  --ink: #3d4739;
+  --ink-soft: #646d5c;
+
+  --serif: "Cormorant Garamond", "Cormorant", Georgia, "Times New Roman", serif;
+  --sans: "Jost", "Helvetica Neue", Arial, sans-serif;
+  --hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+  --ease: cubic-bezier(.22, .61, .36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--cream);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  line-height: 1.05;
+  margin: 0;
+}
+
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+img, svg { max-width: 100%; }
+
+/* selected text: a soft dusty pink, with the text staying dark and easy to read */
+::selection { background: #f2c9d0; color: #3d4739; }
+
+:focus-visible {
+  outline: 2px solid var(--sage-deep);
+  outline-offset: 3px;
+}
+
+.eyebrow {
+  margin: 0 0 .6rem;
+  font-size: .72rem;
+  font-weight: 400;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* Text for screen readers only */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Hidden drawing supplies (gradients, shapes) */
+.svg-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ---- Header & navigation ---------------------------------------------- */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 16px clamp(16px, 3vw, 32px);
+  pointer-events: none;
+}
+
+.site-header > * { pointer-events: auto; }
+
+.brand {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.35rem;
+  text-decoration: none;
+  color: var(--ink);
+  padding: .25rem .9rem;
+  border-radius: 999px;
+  background: rgba(248, 243, 231, .7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: opacity .8s var(--ease);
+}
+
+.site-nav {
+  display: flex;
+  gap: .15rem;
+  margin-left: auto;
+  padding: .3rem;
+  border-radius: 999px;
+  background: rgba(248, 243, 231, .7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .6) inset, 0 6px 20px rgba(61, 71, 57, .08);
+}
+
+.site-nav a {
+  padding: .4rem .85rem;
+  border-radius: 999px;
+  font-size: .7rem;
+  font-weight: 400;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  transition: background-color .3s, color .3s;
+}
+
+.site-nav a:hover { background: rgba(157, 176, 139, .25); }
+
+.site-nav a[aria-current="page"] {
+  background: var(--sage-deep);
+  color: var(--cream);
+}
+
+/* Phones: a compact two-row header. Row one is the menu; row two (in the garden and its
+   rooms) holds the light and sound controls at the right. Anything that sits at the top of
+   a page starts below --header-h, so nothing ever hides behind them. */
+@media (max-width: 560px) {
+  :root { --header-h: 128px; }
+  .brand { display: none; }
+  .site-nav { margin: 0 auto; }
+  .site-nav a { padding: .75rem .6rem; letter-spacing: .14em; }   /* about 40px tall: easy to tap */
+}
+
+/* ---- The main "Enter the Garden" style button ------------------------- */
+.btn-bloom {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .95rem 2.3rem;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-style: italic;
+  letter-spacing: .02em;
+  text-decoration: none;
+  color: var(--cream);
+  background: var(--sage-deep);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .18),
+    inset 0 0 0 5px var(--sage-deep),
+    inset 0 0 0 6px rgba(248, 243, 231, .45),
+    0 10px 30px rgba(61, 71, 57, .25);
+  cursor: pointer;
+  transition: transform .4s var(--ease), background-color .4s, box-shadow .4s;
+}
+
+.btn-bloom svg { width: 1.2em; height: 1.2em; }
+
+.btn-bloom:hover {
+  transform: translateY(-2px);
+  background: #546650;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .18),
+    inset 0 0 0 5px #546650,
+    inset 0 0 0 6px rgba(248, 243, 231, .55),
+    0 14px 36px rgba(61, 71, 57, .3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition: none !important;
+  }
+}

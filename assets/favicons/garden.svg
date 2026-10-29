@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- The garden: a little sprout opening its first pink flower (browser-tab icon) -->
+  <ellipse cx="32" cy="58.5" rx="19" ry="4.5" fill="#a5845f"/>
+  <path d="M32 57 C33 47 31 39 32 27" fill="none" stroke="#6f8a58" stroke-width="3" stroke-linecap="round"/>
+  <path d="M32 47 C24 47 17.5 42 15.5 34 C23.5 34 30 39 32 47 Z" fill="#8fa871" stroke="#6f8a58" stroke-width="1"/>
+  <path d="M32 41 C40 41 46.5 36 48.5 28 C40.5 28 34 33 32 41 Z" fill="#9db584" stroke="#6f8a58" stroke-width="1"/>
+  <g transform="translate(32 17)" fill="#f0b8c2" stroke="#d98d9d" stroke-width="1">
+    <circle cy="-7" r="6.2"/>
+    <circle cy="-7" r="6.2" transform="rotate(72)"/>
+    <circle cy="-7" r="6.2" transform="rotate(144)"/>
+    <circle cy="-7" r="6.2" transform="rotate(216)"/>
+    <circle cy="-7" r="6.2" transform="rotate(288)"/>
+  </g>
+  <circle cx="32" cy="17" r="4.4" fill="#e6b84f"/>
+</svg>

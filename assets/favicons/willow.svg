@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- The Wishing Willow: a long, slender sage willow leaf (browser-tab icon) -->
+  <g transform="rotate(38 32 32)">
+    <path d="M32 61 L32 56" stroke="#6f8a58" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M32 2.5 C39.5 16 40 42 32 57 C24 42 24.5 16 32 2.5 Z" fill="#9db584" stroke="#5f7a4c" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M32 7 L32 54" stroke="#e4ecd6" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M32 22 L36.5 17 M32 32 L37 26.5 M32 42 L36.5 37 M32 27 L27.5 22 M32 37 L27 31.5" stroke="#c9d6b4" stroke-width="1" stroke-linecap="round"/>
+  </g>
+</svg>

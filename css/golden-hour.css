@@ -1,0 +1,231 @@
+/* ==========================================================================
+   A Day in Bloom · Daytime / Golden Hour (js/mode.js)
+   Golden Hour fades warm layers in over the existing garden and greenhouse;
+   Daytime is untouched. Every golden layer ignores clicks.
+   ========================================================================== */
+
+/* ---- The light toggle and the sound button: a little parchment tag ----------- */
+.garden-controls {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  margin-left: auto;
+  --tag-paper: #f6eedc;
+  --tag-edge: #d8c7a5;
+  --tag-ink: #6b4f3a;
+}
+.garden-controls + .site-nav { margin-left: .6rem; }
+
+.mode-toggle,
+.sound-toggle {
+  border: 1px solid var(--tag-edge);
+  background:
+    radial-gradient(ellipse at 30% 0, rgba(255, 255, 255, .55), transparent 70%),
+    var(--tag-paper);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .7) inset, 0 4px 14px rgba(90, 66, 44, .1);
+}
+
+.mode-toggle {
+  display: flex;
+  gap: .1rem;
+  padding: .18rem;
+  border-radius: 999px;
+}
+
+.mode-toggle button {
+  display: flex;
+  align-items: center;
+  gap: .28rem;
+  padding: .2rem .7rem .2rem .5rem;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--hand);
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--tag-ink);
+  background: none;
+  cursor: pointer;
+  transition: background-color .5s var(--ease), box-shadow .5s var(--ease), color .5s;
+}
+.mode-toggle button:hover { background: rgba(201, 211, 180, .35); }
+.mode-toggle button[aria-pressed="true"] { color: #4d3a2a; box-shadow: inset 0 0 0 1px rgba(107, 79, 58, .14); }
+.mode-toggle button[data-mode="day"][aria-pressed="true"] { background: #d3dcc0; }      /* muted sage */
+.mode-toggle button[data-mode="golden"][aria-pressed="true"] { background: #f0d2c0; }   /* soft apricot blush */
+
+/* hand-drawn icons: warm brown pencil lines with a soft wash */
+.mode-icon,
+.sound-toggle svg {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* the speaker */
+.sound-toggle {
+  display: grid;
+  place-items: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--tag-ink);
+  cursor: pointer;
+  transition: background-color .5s var(--ease), transform .3s var(--ease);
+}
+.sound-toggle:hover { background: #efe6cf; transform: translateY(-1px); }
+.sound-toggle[data-sound="on"] { background: #d3dcc0; }
+.sound-toggle__waves,
+.sound-toggle__hush { transition: opacity .4s; }
+.sound-toggle__waves { opacity: 0; }
+.sound-toggle[data-sound="on"] .sound-toggle__waves { opacity: 1; }
+.sound-toggle__hush { opacity: .6; }
+.sound-toggle[data-sound="on"] .sound-toggle__hush { opacity: 0; }
+
+@media (max-width: 560px) {
+  .garden-controls {
+    position: fixed;
+    top: 78px;   /* the second header row, just under the menu */
+    right: 12px;
+  }
+  .mode-toggle__label { display: none; }
+  .mode-toggle button { justify-content: center; min-width: 46px; min-height: 40px; padding: .3rem .5rem; }
+  .sound-toggle { width: 44px; height: 44px; }
+  .garden-controls + .site-nav { margin-left: auto; }
+}
+
+/* ---- Fading golden layers in and out (about 2 seconds) ---------------------- */
+.golden-only {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.5s ease;
+}
+body.mode-golden .golden-only { opacity: 1; }
+body.mode-instant .golden-only,
+body.mode-instant .sun::before { transition: none !important; }
+
+/* ---- Clouds sway gently in both modes; pink wisps drift a little faster -------- */
+/* The drift across the sky (css/garden.css) is on each cloud layer; the sway is on its holder, so each
+   element has a single transform the graphics card can animate on its own (animating both on one
+   element made the browser repaint the whole blurred sky, and the scene with it, every frame).
+   The holder is the garden's width, the clouds twice that: -1.2% here is the clouds' former -.6%. */
+.cloud-sway {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  will-change: transform;
+  animation: cloud-sway 28s ease-in-out infinite alternate;
+}
+.cloud-sway--high { animation-duration: 34s; }
+.cloud-sway--low  { animation-duration: 26s; }
+@keyframes cloud-sway { from { transform: translate(0, 0); } to { transform: translate(-1.2%, 4px); } }
+
+.golden-wisps { animation: wisp-drift 48s ease-in-out infinite alternate; }
+/* the wisps only show at golden hour, so by day they wait where they are */
+body:not(.mode-golden) .golden-wisps { animation-play-state: paused; }
+@keyframes wisp-drift { from { transform: translateX(-3%); } to { transform: translateX(3%); } }
+
+/* ---- Warm evening light and soft shadows over the garden --------------------- */
+.sunset-light,
+.sunset-shadow { position: absolute; inset: 0; }
+.sunset-light {
+  mix-blend-mode: multiply;
+  background:
+    radial-gradient(ellipse 50% 40% at 78% 40%, rgba(255, 236, 200, 0), rgba(255, 236, 200, 0) 100%),
+    linear-gradient(180deg, #fbe4d3 0%, #ffe6c8 45%, #f6d6c4 100%);
+}
+.sunset-shadow {
+  mix-blend-mode: multiply;
+  background:
+    linear-gradient(100deg, rgba(92, 70, 98, .2) 0%, rgba(92, 70, 98, .06) 35%, transparent 60%),
+    linear-gradient(0deg, rgba(92, 70, 98, .14), transparent 30%);
+}
+
+/* the gameplay sun sinks lower toward the hills and warms to gold.
+   It stays fully draggable: the game always measures the sun's current resting spot. */
+.sun { transition: transform .45s var(--ease), filter .45s var(--ease), top 1.5s ease; }
+body.mode-golden .sun { top: calc(330 / 10 * 1%); }
+body.mode-instant .sun { transition: none; }
+.sun::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3d2 0 24%, #ffd08c 38%, rgba(255, 186, 120, .5) 52%, rgba(255, 186, 120, 0) 70%);
+  opacity: 0;
+  transition: opacity 1.5s ease;
+  pointer-events: none;
+}
+body.mode-golden .sun::before { opacity: 1; }
+
+/* ---- Fireflies near the flowers and grass -------------------------------------- */
+.fireflies { position: absolute; inset: 0; }
+.fireflies i {
+  position: absolute;
+  left: calc(var(--x) / 16 * 1%);
+  top: calc(var(--y) / 10 * 1%);
+  width: .42cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff4b8;
+  box-shadow: 0 0 .5cqw .2cqw rgba(255, 228, 130, .75);
+  opacity: .7;
+}
+body.mode-golden .fireflies i { animation: firefly 6s ease-in-out var(--d) infinite; }
+@keyframes firefly {
+  0%   { opacity: 0;  transform: translate(0, 0); }
+  20%  { opacity: .9; }
+  45%  { opacity: .2; transform: translate(.6cqw, -.5cqw); }
+  60%  { opacity: .85; }
+  85%  { opacity: 0;  transform: translate(-.4cqw, -1cqw); }
+  100% { opacity: 0;  transform: translate(0, 0); }
+}
+
+/* ---- A little extra warmth: glow over the garden and glints on the lake -------- */
+.gx-golden-glow {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(ellipse 26% 22% at 68% 36%, rgba(255, 210, 140, .34), transparent 70%),
+    radial-gradient(ellipse 60% 30% at 55% 62%, rgba(255, 196, 150, .12), transparent 70%),
+    radial-gradient(ellipse 30% 26% at 90% 64%, rgba(255, 214, 160, .14), transparent 70%);
+}
+.gx-glints { filter: drop-shadow(0 0 2px rgba(255, 226, 160, .9)); }
+.gx-glint { opacity: .3; }
+body.mode-golden .gx-glint { animation: gx-glint 4.2s ease-in-out var(--d, 0s) infinite; }
+@keyframes gx-glint {
+  0%, 100% { opacity: .15; transform: translateX(0); }
+  40%      { opacity: .95; }
+  70%      { opacity: .35; transform: translateX(4px); }
+}
+
+/* with reduced motion, fireflies, glints and fairy lights simply glow steadily */
+@media (prefers-reduced-motion: reduce) {
+  body.mode-golden .fireflies i,
+  body.mode-golden .gx-glint,
+  body.mode-golden .fairy-bulbs circle { animation: none !important; }
+  body.mode-golden .gx-glint { opacity: .7; }
+}
+
+/* ---- Fairy lights (in the greenhouse outside and in the room) ------------------ */
+.fairy-bulbs { fill: #ffe6a6; filter: drop-shadow(0 0 2px #ffd27a); }
+body.mode-golden .fairy-bulbs circle { animation: twinkle-bulb 3.2s ease-in-out infinite alternate; }
+.fairy-bulbs circle:nth-child(3n)   { animation-delay: -1.1s !important; }
+.fairy-bulbs circle:nth-child(3n+1) { animation-delay: -2.2s !important; }
+@keyframes twinkle-bulb { from { opacity: 1; } to { opacity: .55; } }
+
+/* ---- A softer evening glow inside the greenhouse room --------------------------- */
+.gh-room__evening {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+  background:
+    radial-gradient(ellipse 70% 60% at 72% 20%, rgba(255, 230, 205, 0), rgba(255, 230, 205, 0)),
+    linear-gradient(180deg, #fff2e6 0%, #fdebdf 55%, #f2e1dc 100%);
+}

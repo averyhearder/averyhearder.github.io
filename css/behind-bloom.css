@@ -1,0 +1,356 @@
+/* ==========================================================================
+   A Day in Bloom · behind the bloom ♡ (js/behind-bloom.js)
+   A tiny hand-drawn icon (a sprig, a pencil or a bloom) under a heading opens a
+   little scrapbook-style designer's note: cream stationery, washi tape, pressed
+   flowers, a handwritten heading, and a gentle paper unfolding.
+   ========================================================================== */
+
+/* ---- The tiny icon under the heading ------------------------------------------------------
+   It sits on its own line below the heading, inside the heading's column, so neither the icon
+   nor its hover label ever covers the heading, the text beside it or any image. */
+.behind-bloom {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .4rem;
+}
+.behind-bloom__seed {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;            /* the area you can tap is a comfortable size... */
+  height: 44px;
+  margin-left: -7px;      /* ...while the little drawing lines up with the heading */
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  /* (opacity: it fades in with its heading, see css/project-bloom.css) */
+  transition: opacity .7s ease;
+}
+/* ...the drawing itself is tiny: a soft cream disc with a sage-and-blush edge */
+.behind-bloom__seed::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #fffbf2, #f4ead7 72%);
+  box-shadow: 0 0 0 1px rgba(157, 176, 139, .45), 0 0 0 3px rgba(241, 201, 200, .28), 0 2px 6px rgba(80, 60, 40, .1);
+  transition: transform .35s cubic-bezier(.3, 1.4, .5, 1), box-shadow .3s;
+}
+.behind-bloom__icon {
+  position: relative;
+  z-index: 1;
+  width: 22px;
+  height: 22px;
+  transform: rotate(-6deg);
+  transition: transform .35s cubic-bezier(.3, 1.4, .5, 1);
+}
+/* a soft ring breathes now and then, inviting a closer look */
+.behind-bloom__seed::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 1.2px solid rgba(227, 169, 176, .55);
+  opacity: 0;
+  animation: bb-breathe 5.2s ease-out infinite;
+  pointer-events: none;
+}
+.behind-bloom__seed:hover::after,
+.behind-bloom__seed:focus-visible::after {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 1px rgba(157, 176, 139, .7), 0 0 0 4px rgba(241, 201, 200, .45), 0 4px 10px rgba(80, 60, 40, .16);
+}
+.behind-bloom__seed:hover .behind-bloom__icon,
+.behind-bloom__seed:focus-visible .behind-bloom__icon { transform: rotate(-16deg) scale(1.1); }
+@keyframes bb-breathe {
+  0%, 55% { opacity: 0; transform: scale(.9); }
+  65%     { opacity: 1; }
+  100%    { opacity: 0; transform: scale(1.3); }
+}
+
+/* the hover label: a little handwritten tag, just to the right of the icon */
+.behind-bloom__label {
+  position: absolute;
+  left: calc(100% - 2px);
+  top: 50%;
+  z-index: 3;
+  padding: .05rem .6rem .15rem;
+  white-space: nowrap;
+  font-family: var(--hand);
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #a85f70;
+  background: #fffaf0;
+  border-radius: 3px;
+  box-shadow: 0 2px 8px rgba(80, 60, 40, .12);
+  opacity: 0;
+  transform: translate(-6px, -50%) rotate(-3deg);
+  transition: opacity .25s ease, transform .3s ease;
+  pointer-events: none;
+}
+.behind-bloom__seed:hover .behind-bloom__label,
+.behind-bloom__seed:focus-visible .behind-bloom__label {
+  opacity: 1;
+  transform: translate(0, -50%) rotate(-3deg);
+}
+/* ...touch screens have no hover, so a small, quiet version of the label rests beside the icon */
+@media (hover: none) {
+  .behind-bloom__label {
+    left: calc(100% - 4px);
+    padding: 0;
+    font-size: 1.05rem;
+    color: #b47a86;
+    background: none;
+    box-shadow: none;
+    opacity: .9;
+    transform: translate(0, -50%);
+    pointer-events: auto;   /* tapping the words opens the note too */
+  }
+}
+
+/* ---- Modunest: the little ranunculus glows softly with the aurora --------------------------
+   A halo slowly shifts through the page's own aurora colours (icy cyan, violet, warm amber,
+   sage), breathing brighter now and then to hint that it can be opened. Opacity only. */
+body[data-theme="aurora"] .behind-bloom__seed::before {
+  inset: 3px;
+  border: 0;
+  background: radial-gradient(circle, rgba(143, 211, 201, .55), rgba(182, 163, 220, .35) 45%, transparent 70%);
+  box-shadow: 0 0 12px 3px rgba(143, 211, 201, .45), 0 0 20px 6px rgba(182, 163, 220, .3);
+  animation: bb-aurora-glow 6s ease-in-out infinite;
+}
+body[data-theme="aurora"] .behind-bloom__seed::after {
+  box-shadow: 0 0 0 1px rgba(143, 211, 201, .55), 0 0 0 3px rgba(233, 196, 143, .3), 0 0 10px rgba(182, 163, 220, .45);
+}
+@keyframes bb-aurora-glow {
+  0%, 100% { opacity: .35; transform: scale(1); filter: hue-rotate(0deg); }
+  50%      { opacity: .95; transform: scale(1.25); filter: hue-rotate(-70deg); }
+}
+/* in the dusky twilight band (Concept), the resting label is pale enough to read */
+@media (hover: none) {
+  [data-twilight] .behind-bloom__label { color: #f6dbe0; }
+}
+/* the note's washi tape takes on aurora tones: sage, and icy cyan with a hint of violet */
+body[data-theme="aurora"] .bloom-note__tape--blush {
+  background: radial-gradient(circle, rgba(255, 255, 255, .5) 1.2px, transparent 1.6px) 0 0 / 8px 8px,
+    linear-gradient(90deg, rgba(143, 211, 201, .85), rgba(182, 163, 220, .8));
+}
+
+/* ---- Lucy's Cottage: the little cosmos sways in the sunshine, and its petals gently open ------ */
+body[data-theme="sun"] .behind-bloom__icon {
+  transform-origin: 50% 92%;
+  animation: bb-sway 4.6s ease-in-out infinite alternate;
+}
+body[data-theme="sun"] .behind-bloom__petals {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: bb-bloom 4.6s ease-in-out infinite alternate;
+}
+@keyframes bb-sway {
+  from { transform: rotate(-9deg); }
+  to   { transform: rotate(5deg); }
+}
+@keyframes bb-bloom {
+  0%, 30% { transform: scale(.9) rotate(0); }
+  100%    { transform: scale(1.06) rotate(12deg); }
+}
+/* ...a few soft pink petals drift out from the paper as a note opens (js/behind-bloom.js) */
+.bloom-note__petal {
+  position: absolute;
+  z-index: 4;
+  width: var(--size, 9px);
+  height: calc(var(--size, 9px) * .7);
+  border-radius: 50% 50% 46% 46% / 30% 30% 70% 70%;
+  opacity: 0;
+  pointer-events: none;
+  animation: bb-petal 1.5s cubic-bezier(.2, .7, .35, 1) both;
+}
+@keyframes bb-petal {
+  0%   { opacity: 0; transform: translate(0, 0) rotate(0) scale(.4); }
+  15%  { opacity: .9; }
+  70%  { opacity: .75; }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--spin)) scale(1); }
+}
+
+/* ---- The note ------------------------------------------------------------------------------ */
+.bloom-note {
+  width: min(460px, calc(100vw - 32px));
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;      /* the tape and pressed flower may peek past the paper's edge */
+  color: var(--ink);
+}
+.bloom-note::backdrop {
+  background: rgba(52, 44, 34, .34);
+  animation: bb-fade .4s ease both;
+}
+.bloom-note.is-closing::backdrop { animation: bb-fade-out .28s ease both; }
+html.has-bloom-note { overflow: hidden; }   /* the page rests while a note is open */
+
+/* cream stationery with a soft grain, a faint fold across the middle, resting slightly askew */
+.bloom-note__paper {
+  position: relative;
+  border-radius: 4px 6px 5px 3px / 5px 3px 6px 4px;
+  background:
+    linear-gradient(180deg, transparent 49.6%, rgba(120, 95, 70, .07) 50%, rgba(255, 255, 255, .5) 50.4%, transparent 51%),
+    radial-gradient(ellipse at 18% 12%, rgba(255, 255, 255, .75), transparent 45%),
+    radial-gradient(ellipse at 85% 95%, rgba(226, 206, 170, .35), transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .3 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"),
+    #fbf5e8;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .6),
+    inset 0 0 30px rgba(214, 190, 150, .18),
+    0 3px 8px rgba(60, 45, 30, .14),
+    0 22px 46px rgba(60, 45, 30, .26);
+  transform: rotate(-1.2deg);
+  transform-origin: 50% 0;
+}
+.bloom-note[open] .bloom-note__paper { animation: bb-unfold .7s cubic-bezier(.2, .85, .25, 1.04) both; }
+.bloom-note.is-closing .bloom-note__paper { animation: bb-fold .28s cubic-bezier(.5, 0, .75, .4) both; }
+/* the paper unfolds downwards, like opening a folded letter */
+@keyframes bb-unfold {
+  0%   { opacity: 0; transform: perspective(900px) translateY(-10px) rotateX(-78deg) scaleY(.5) rotate(-1.2deg); }
+  40%  { opacity: 1; }
+  100% { opacity: 1; transform: perspective(900px) translateY(0) rotateX(0) scaleY(1) rotate(-1.2deg); }
+}
+@keyframes bb-fold {
+  to { opacity: 0; transform: perspective(900px) translateY(-8px) rotateX(-60deg) scaleY(.6) rotate(-1.2deg); }
+}
+@keyframes bb-fade { from { opacity: 0; } }
+@keyframes bb-fade-out { to { opacity: 0; } }
+
+.bloom-note__inner {
+  position: relative;
+  z-index: 1;
+  max-height: calc(100vh - 56px);
+  max-height: calc(100dvh - 56px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 2.5rem 2.4rem 2.4rem 2.3rem;
+}
+.bloom-note__eyebrow {
+  margin: 0 0 .35rem;
+  font-size: .7rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: #b8737f;
+}
+.bloom-note__title {
+  position: relative;
+  margin: 0 2.2rem 1.1rem 0;   /* clear of the × */
+  padding-bottom: .45rem;
+  font-family: var(--hand);
+  font-size: 2.15rem;
+  font-weight: 600;
+  line-height: 1.05;
+  color: var(--sage-deep);
+}
+/* a hand-drawn blush underline */
+.bloom-note__title::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  bottom: 0;
+  width: min(220px, 80%);
+  height: 8px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 8' preserveAspectRatio='none'%3E%3Cpath d='M2 5.5 C40 2.5 80 6.5 120 3.8 C150 2 185 5.6 218 3' fill='none' stroke='%23e3a9b0' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat 0 0 / 100% 100%;
+}
+.bloom-note__inner p:not(.bloom-note__eyebrow) {
+  margin: 0 0 .85rem;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.bloom-note__inner p:last-child { margin-bottom: 0; }
+
+/* the little × (a sage pencil cross on a cream button) */
+.bloom-note__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: var(--sage-deep);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color .2s, transform .3s;
+}
+.bloom-note__close svg { width: 22px; height: 22px; }
+.bloom-note__close:hover { background: rgba(201, 213, 185, .35); transform: rotate(8deg); }
+
+/* washi tape: sage at one corner, blush at the other */
+.bloom-note__tape {
+  position: absolute;
+  top: -11px;
+  z-index: 3;
+  width: 92px;
+  height: 24px;
+  opacity: .88;
+  box-shadow: 0 1px 2px rgba(60, 45, 30, .1);
+  pointer-events: none;
+}
+.bloom-note__tape--sage {
+  left: 18px;
+  transform: rotate(-7deg);
+  background: repeating-linear-gradient(45deg, rgba(255, 255, 255, .25) 0 5px, transparent 5px 10px), rgba(169, 190, 146, .82);
+  clip-path: polygon(3% 0, 97% 4%, 100% 50%, 96% 100%, 2% 96%, 0 45%);
+}
+.bloom-note__tape--blush {
+  right: 26px;
+  width: 74px;
+  transform: rotate(5deg);
+  background: radial-gradient(circle, rgba(255, 255, 255, .45) 1.2px, transparent 1.6px) 0 0 / 8px 8px, rgba(236, 184, 186, .8);
+  clip-path: polygon(0 6%, 98% 0, 100% 48%, 97% 95%, 3% 100%, 1% 52%);
+}
+
+/* the pressed flowers, sitting on the paper as if dried between its pages */
+.bloom-note__pressed,
+.bloom-note__leaf {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: .88;
+}
+.bloom-note__pressed { right: -18px; bottom: -14px; width: 56px; height: 122px; transform: rotate(16deg); }
+.bloom-note__leaf { left: 6px; top: 10px; width: 30px; height: 30px; transform: rotate(-12deg); opacity: .75; }
+.bloom-note:nth-of-type(2) .bloom-note__pressed { transform: rotate(-12deg) scaleX(-1); right: -10px; }
+.bloom-note:nth-of-type(3) .bloom-note__pressed { transform: rotate(24deg); }
+
+/* phones: a little more room for the words */
+@media (max-width: 560px) {
+  .bloom-note { width: calc(100vw - 28px); }
+  .bloom-note__inner { padding: 2.3rem 1.5rem 2rem 1.4rem; }
+  .bloom-note__title { font-size: 1.95rem; }
+  .bloom-note__pressed { right: -6px; bottom: -10px; width: 46px; height: 100px; }
+}
+
+/* reduced motion: no breathing ring, and the notes simply fade in and out */
+@media (prefers-reduced-motion: reduce) {
+  .behind-bloom__seed::before { animation: none; }
+  body[data-theme="aurora"] .behind-bloom__seed::before { opacity: .55; }   /* a still, soft glow */
+  body[data-theme="sun"] .behind-bloom__icon,
+  body[data-theme="sun"] .behind-bloom__petals { animation: none; }
+  .bloom-note__petal { display: none; }
+  .behind-bloom__seed,
+  .behind-bloom__seed::after,
+  .behind-bloom__icon,
+  .behind-bloom__label,
+  .bloom-note__close { transition: none; }
+  .bloom-note[open] .bloom-note__paper { animation: bb-fade .2s ease both; }
+  .bloom-note.is-closing .bloom-note__paper { animation: none; }
+}

@@ -1,0 +1,800 @@
+/* ==========================================================================
+   A Day in Bloom · A Few Thoughts from the Lake (js/lake.js)
+   A lakeside scene you step into from the garden, like the greenhouse.
+   The scene uses the garden's 1600 × 1000 units, so 1 unit = 1cqw / 16.
+   ========================================================================== */
+
+/* ---- In the garden: the lake invites a visit -------------------------------- */
+.lake-peek { aspect-ratio: 600 / 48; border-radius: 50%; }
+.lake-peek::before { inset: -25% 0; }
+.lake-peek::after {
+  content: "";
+  position: absolute;
+  inset: 8% 4%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, .5), rgba(255, 255, 255, 0));
+  opacity: 0;
+  transition: opacity .5s var(--ease);
+  pointer-events: none;
+}
+.lake-peek:hover,
+.lake-peek:focus-visible { transform: none; filter: none; }
+.lake-peek:hover::after,
+.lake-peek:focus-visible::after { opacity: 1; }
+.lake-peek .prop-sparkle { top: -10%; right: 32%; animation-delay: 2s; }
+
+/* ---- Stepping down to the water: the garden leans toward the lake ------------- */
+body.at-lake .garden-scene {
+  transform: scale(1.8);
+  transform-origin: 56% 46%;
+  filter: blur(3px) brightness(1.04);
+  transition: transform .95s var(--ease), filter .95s var(--ease);
+}
+body.at-lake .instruction-bar,
+body.at-lake .garden-note,
+body.at-lake .swipe-hint {
+  opacity: 0;
+  pointer-events: none;
+  transition-delay: 0s !important;
+}
+/* once the lake has faded in, the garden behind it isn't drawn at all (nothing changes visually) */
+body.lake-settled .garden-scene { content-visibility: hidden; visibility: hidden; }
+
+/* ---- The lakeside room ------------------------------------------------------------ */
+.lake-room {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  background: #dfe8e3;
+  opacity: 0;
+  transition: opacity .55s var(--ease) .2s;
+}
+.lake-room.is-open { opacity: 1; }
+.lake-room[hidden] { display: none; }
+.lake-room:not(.is-open) { transition-delay: 0s; transition-duration: .5s; }
+
+/* fills the screen; on narrow screens it keeps its shape and you swipe sideways */
+.lake-room__viewport {
+  position: absolute;
+  inset: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.lake-room__viewport::-webkit-scrollbar { display: none; }
+
+/* Safe areas: the controls along the bottom need about this much room. On wide, short
+   screens (where the scene is taller than the window) the scene sits a little higher than
+   centre, trimming sky rather than the dock, the boat and the bottle, but never so high that
+   a gap shows beneath it. */
+.lake-room { --lk-safe-bottom: 112px; }
+.lake-room__scene {
+  --lk-h: calc(max(100vw, 160dvh) * .625);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  top: max(calc(100% - var(--lk-h)), min(calc((100% - var(--lk-h)) / 2), calc(100% - var(--lk-safe-bottom) - var(--lk-h) * .9)));
+  width: max(100vw, 160vh);
+  width: max(100vw, 160dvh);
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  container-type: inline-size;
+  transform: scale(1.06);
+  transition: transform 1.1s var(--ease) .15s;
+}
+.lake-room.is-open .lake-room__scene { transform: none; }
+
+.lake-room__art,
+.lk-shimmer,
+.lk-line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* a paper grain and soft vignette, like the rest of the site */
+.lake-room__light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 120% 90% at 50% 45%, transparent 62%, rgba(50, 60, 55, .18)),
+    var(--grain-soft);
+  background-size: auto, 220px;
+  mix-blend-mode: multiply;
+}
+.lake-room__evening {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  background: linear-gradient(180deg, #fbe7dc 0%, #f8e3d6 50%, #e9d8d6 100%);
+}
+
+/* anything placed in lake units */
+.lk-at {
+  position: absolute;
+  left: calc(var(--x) / 16 * 1%);
+  top: calc(var(--y) / 10 * 1%);
+  width: calc(var(--w) / 16 * 1%);
+  pointer-events: none;
+}
+.lk-at svg,
+.lk-duck svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+/* ---- Gentle life on the water (each moves on its own, as one small piece) ---------- */
+.lk-shimmer { animation: lk-shimmer 8s ease-in-out infinite alternate; }
+@keyframes lk-shimmer {
+  from { opacity: .35; transform: translateX(-.4%); }
+  to   { opacity: .9;  transform: translateX(.4%); }
+}
+
+/* The duck family swims right to left along their own lane in the open water,
+   mama first and facing the way they're going. They fade away well before the dock,
+   so they never cross the sign, the chairs or the boat. (The swan has its own lane.) */
+.lk-ducks {
+  position: absolute;
+  left: 100%;
+  top: calc(468 / 10 * 1%);
+  display: flex;
+  align-items: flex-end;
+  gap: .5cqw;
+  width: calc(230 / 16 * 1cqw);
+  cursor: pointer;   /* a click brings a little quack (js/lake.js) */
+  animation: lk-ducks-swim 70s linear infinite;
+}
+@keyframes lk-ducks-swim {
+  0%   { transform: translateX(0);        opacity: 0; }
+  5%   { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(-62.5cqw); opacity: 0; }   /* fades out by x ≈ 600, out in the open water */
+}
+.lk-duck { flex: none; animation: lk-paddle 2.4s ease-in-out infinite alternate; }
+.lk-duck svg { transform: scaleX(-1); }   /* the drawings face right; the family swims left */
+.lk-duck__head { transform-box: fill-box; transform-origin: 20% 100%; animation: lk-nod 5s ease-in-out infinite; }
+.lk-duck:nth-child(odd) .lk-duck__head { animation-delay: -2.2s; }
+@keyframes lk-nod {
+  0%, 70%, 100% { transform: rotate(0); }
+  76% { transform: rotate(12deg); }   /* a little dip of the bill */
+  84% { transform: rotate(-4deg); }
+}
+.lk-ducks.is-quacking .lk-duck--mama .lk-duck__head { animation: lk-quack .45s ease-in-out 2; }
+@keyframes lk-quack { 50% { transform: rotate(-14deg) translateY(-6%); } }
+.lk-duck--mama { width: calc(70 / 16 * 1cqw); }
+.lk-duck--baby { width: calc(28 / 16 * 1cqw); }
+.lk-duck:nth-child(2) { animation-delay: -.5s; }
+.lk-duck:nth-child(3) { animation-delay: -1.1s; }
+.lk-duck:nth-child(4) { animation-delay: -1.6s; }
+.lk-duck:nth-child(5) { animation-delay: -2s; }
+@keyframes lk-paddle {
+  from { transform: translateY(0) rotate(-1.5deg); }
+  to   { transform: translateY(-8%) rotate(1.5deg); }
+}
+
+/* the swan glides along her own lane, between the ducks' lane and the boat, turning at each end */
+.lk-swan {
+  position: absolute;
+  left: calc(620 / 16 * 1%);
+  top: calc(574 / 10 * 1%);
+  width: calc(100 / 16 * 1%);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  animation: lk-swan-glide 64s ease-in-out infinite;
+}
+.lk-swan:focus-visible { outline: 2px solid #fffaf0; outline-offset: 2px; border-radius: 40%; }
+/* a click: she dips her head down to the water, or gives her wing a little ruffle (js/lake.js) */
+.lk-swan__neck { transform-box: view-box; transform-origin: 68px 46px; }
+.lk-swan__wing { transform-box: view-box; transform-origin: 30px 54px; }
+.lk-swan.is-dipping .lk-swan__neck { animation: lk-swan-dip 1.6s ease-in-out; }
+.lk-swan.is-ruffling .lk-swan__wing { animation: lk-swan-ruffle 1.1s ease-in-out; }
+@keyframes lk-swan-dip {
+  0%, 100% { transform: rotate(0); }
+  38%      { transform: rotate(62deg); }
+  58%      { transform: rotate(66deg); }
+  80%      { transform: rotate(-4deg); }
+}
+@keyframes lk-swan-ruffle {
+  0%, 100% { transform: rotate(0) scale(1); }
+  18%      { transform: rotate(-9deg) scale(1.06, 1.1); }
+  32%      { transform: rotate(-2deg) scale(1.02, 1.04); }
+  46%      { transform: rotate(-8deg) scale(1.05, 1.08); }
+  64%      { transform: rotate(-1deg) scale(1.01, 1.02); }
+}
+.lk-swan > span { display: block; animation: lk-paddle 3.4s ease-in-out infinite alternate; }
+.lk-swan__ripples { animation: lk-shimmer 4s ease-in-out infinite alternate; }
+.lk-swan svg { display: block; width: 100%; height: auto; overflow: visible; animation: lk-swan-turn 64s step-end infinite; }
+@keyframes lk-swan-glide {
+  0%   { transform: translateX(0); }
+  47%  { transform: translateX(44cqw); }
+  53%  { transform: translateX(44cqw); }
+  100% { transform: translateX(0); }
+}
+@keyframes lk-swan-turn {
+  0%  { transform: scaleX(1); }
+  50% { transform: scaleX(-1); }
+}
+
+/* little frogs on the lily pads: they blink, puff their throats, and hop to another pad
+   (click one for a croak and a hop) */
+.lk-frog {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(36 / 16 * 1cqw);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform: translate(calc(var(--x, 1200) * 1cqw / 16 - 50%), calc(var(--y, 820) * 1cqw / 16 - 86%));
+  transition: transform .7s cubic-bezier(.3, .7, .4, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+.lk-frog::before { content: ""; position: absolute; inset: -40%; }
+.lk-frog:focus-visible { outline: 2px solid #fffaf0; outline-offset: 3px; border-radius: 50%; }
+.lk-frog__art { display: block; }
+.lk-frog svg { display: block; width: 100%; height: auto; overflow: visible; }
+.lk-frog.is-hopping .lk-frog__art { animation: lk-hop .7s cubic-bezier(.3, .7, .4, 1); }
+@keyframes lk-hop {
+  0%   { transform: translateY(0) scale(1, 1); }
+  15%  { transform: translateY(4%) scale(1.08, .9); }
+  50%  { transform: translateY(-70%) scale(.95, 1.08); }
+  85%  { transform: translateY(2%) scale(1.06, .92); }
+  100% { transform: translateY(0) scale(1, 1); }
+}
+.lk-frog__lids { transform-box: fill-box; transform-origin: 50% 0; transform: scaleY(0); animation: lk-blink 6s ease-in-out infinite; }
+.lk-frog:nth-child(2) .lk-frog__lids { animation-delay: -2.4s; }
+.lk-frog:nth-child(3) .lk-frog__lids { animation-delay: -4.1s; }
+@keyframes lk-blink {
+  0%, 90%, 100% { transform: scaleY(0); }
+  94% { transform: scaleY(1); }
+}
+.lk-frog__throat { transform-box: fill-box; transform-origin: 50% 20%; animation: lk-throat 7s ease-in-out infinite; }
+.lk-frog:nth-child(2) .lk-frog__throat { animation-delay: -3s; }
+.lk-frog:nth-child(3) .lk-frog__throat { animation-delay: -5.5s; }
+/* a click: the throat puffs with each syllable of its "rib-bit" (in time with the croak, js/sound.js) */
+.lk-frog.is-croaking .lk-frog__throat { animation: lk-croak .3s ease-in-out 2; }
+@keyframes lk-throat {
+  0%, 60%, 100% { transform: scale(1); }
+  66% { transform: scale(1.7, 1.5); }
+  72% { transform: scale(1); }
+  78% { transform: scale(1.5, 1.35); }
+}
+@keyframes lk-croak { 50% { transform: scale(1.9, 1.7); } }
+
+/* the loon floats far out, and now and then slips under the water */
+.lk-loon { animation: lk-loon 16s ease-in-out infinite; }
+@keyframes lk-loon {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  30%      { transform: translateY(-4%); }
+  60%      { transform: translateY(2%); opacity: 1; }
+  66%      { transform: translateY(40%); opacity: 0; }    /* a quick dive */
+  80%      { transform: translate(-60%, 40%); opacity: 0; }
+  86%      { transform: translate(-60%, 0); opacity: 1; }  /* pops up a little further along */
+  99%      { transform: translate(-60%, 0); opacity: 1; }
+}
+
+.lk-dragonfly { animation: var(--path) var(--dur) ease-in-out infinite; }
+.lk-dragonfly .lk-wing { transform-box: fill-box; transform-origin: 50% 100%; animation: flutter .06s linear infinite alternate; }
+@keyframes lk-flit-a {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(-3cqw, -1.5cqw) rotate(-8deg); }
+  40%  { transform: translate(-5cqw, .4cqw); }
+  60%  { transform: translate(-2cqw, 2cqw) rotate(6deg); }
+  80%  { transform: translate(1cqw, .6cqw); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes lk-flit-b {
+  0%   { transform: translate(0, 0) scaleX(-1); }
+  25%  { transform: translate(3cqw, -2cqw) scaleX(-1); }
+  50%  { transform: translate(6cqw, -.5cqw); }
+  75%  { transform: translate(3cqw, 1.2cqw); }
+  100% { transform: translate(0, 0) scaleX(-1); }
+}
+
+.lk-lantern .lk-flame { transform-box: fill-box; transform-origin: 50% 100%; animation: lk-flicker 2.4s ease-in-out infinite alternate; }
+@keyframes lk-flicker { from { transform: scale(1, 1); } to { transform: scale(.85, 1.12); } }
+.lk-lantern-glow {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 214, 140, .75), rgba(255, 214, 140, .2) 55%, rgba(255, 214, 140, 0));
+  mix-blend-mode: screen;
+}
+
+/* ---- The rowboat ----------------------------------------------------------------
+   Placed by its bottom centre at (--bx, --by) in lake units, a little smaller when
+   it's further out. It glides with a single transform, so it's smooth on phones. */
+.lk-boat {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(220 / 16 * 1cqw);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform-origin: 50% 100%;
+  transform: translate(calc(var(--bx, 652) * 1cqw / 16 - 50%), calc(var(--by, 818) * 1cqw / 16 - 100%)) scale(var(--bs, 1));
+  transition: transform var(--glide, 3s) cubic-bezier(.45, .05, .35, 1), filter .4s;
+  -webkit-tap-highlight-color: transparent;
+}
+.lk-boat:hover,
+.lk-boat:focus-visible { filter: drop-shadow(0 0 .7cqw rgba(255, 246, 214, 1)); }
+.lk-boat:focus-visible { outline: 2px solid #fffaf0; outline-offset: 4px; border-radius: 10px; }
+.lk-boat > .prop-tag { bottom: calc(100% + .2cqw); }
+.lk-boat:hover > .prop-tag,
+.lk-boat:focus-visible > .prop-tag { opacity: 1; transform: translate(-50%, 0); }
+.lake-room.is-riding .lk-boat { cursor: default; filter: none; }
+.lake-room.is-riding .lk-boat > .prop-tag { display: none; }
+/* the mooring line unties as the ride begins, and is tied again on return */
+.lk-mooring { transition: opacity .6s; }
+.lake-room.is-untied .lk-mooring { opacity: 0; }
+.lk-boat__bob { display: block; animation: lk-bob 3.2s ease-in-out infinite alternate; }
+.lk-boat__bob svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  transform: scaleX(var(--dir, 1));
+  transition: transform .6s var(--ease);
+}
+@keyframes lk-bob {
+  from { transform: translateY(0) rotate(-1deg); }
+  to   { transform: translateY(-3%) rotate(1.2deg); }
+}
+
+.lk-line path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.lk-line.is-cast path { opacity: 1; stroke-dashoffset: 0; transition: stroke-dashoffset .55s ease-out, opacity .2s; }
+
+/* the bobber: one tap (or Enter) reels in the fish, no timing needed */
+.lk-bobber {
+  position: absolute;
+  left: calc(var(--x) / 16 * 1%);
+  top: calc(var(--y) / 10 * 1%);
+  width: calc(var(--s, 1) * 30 / 16 * 1cqw);
+  min-width: 18px;
+  padding: 0;
+  border: 0;
+  background: none;
+  transform: translate(-50%, -72%);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.lk-bobber[hidden] { display: none; }
+.lk-bobber::before { content: ""; position: absolute; inset: -90% -120%; }   /* a generous tap target */
+.lk-bobber:focus-visible { outline: 2px solid #fffaf0; outline-offset: 4px; border-radius: 50%; }
+.lk-bobber__art { display: block; animation: lk-nibble 1.4s ease-in-out infinite; }
+.lk-bobber__art svg { display: block; width: 100%; height: auto; overflow: visible; }
+@keyframes lk-nibble {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  20%      { transform: translateY(10%) rotate(-6deg); }
+  40%      { transform: translateY(-4%) rotate(4deg); }
+}
+.lk-bobber.is-tugged .lk-bobber__art { animation: lk-tug .5s ease-in both; }
+@keyframes lk-tug { to { transform: translateY(60%) scale(.8); opacity: 0; } }
+.lk-bobber__hint {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + .6cqw);
+  padding: .1em .7em;
+  border-radius: 999px;
+  font-size: max(15px, 1.15cqw);
+  font-weight: 600;
+  white-space: nowrap;
+  color: #8f4a5b;
+  background: rgba(255, 250, 240, .92);
+  box-shadow: 0 4px 12px rgba(40, 60, 60, .18);
+  transform: translateX(-50%);
+  pointer-events: none;
+  animation: lk-hint 1.6s ease-in-out infinite alternate;
+}
+@keyframes lk-hint { from { transform: translate(-50%, 0); } to { transform: translate(-50%, -12%); } }
+.lk-bobber.is-tugged .lk-bobber__hint { opacity: 0; }
+
+/* ripples where things touch the water */
+.lk-ring {
+  position: absolute;
+  left: calc(var(--x) / 16 * 1%);
+  top: calc(var(--y) / 10 * 1%);
+  width: calc(var(--s, 1) * 90 / 16 * 1cqw);
+  aspect-ratio: 3 / 1;
+  border: 2px solid rgba(255, 255, 255, .8);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(.2);
+  opacity: 0;
+  pointer-events: none;
+  animation: lk-ring 1.5s ease-out forwards;
+}
+@keyframes lk-ring {
+  0%   { transform: translate(-50%, -50%) scale(.2); opacity: .9; }
+  100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+}
+
+/* the fish leaping out of the water, and later swimming home */
+.lk-jump {
+  position: absolute;
+  left: calc(var(--x) / 16 * 1%);
+  top: calc(var(--y) / 10 * 1%);
+  width: calc(var(--s, 1) * 110 / 16 * 1cqw);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+.lk-jump svg { display: block; width: 100%; height: auto; overflow: visible; transform: scaleX(var(--dir, 1)); }
+.lk-jump.is-jumping { animation: lk-leap .95s cubic-bezier(.3, .6, .4, 1) both; }
+.lk-jump.is-swimming { animation: lk-swim .95s ease-in both; }
+@keyframes lk-leap {
+  0%   { opacity: 0; transform: translate(-50%, -20%) rotate(25deg) scale(.6); }
+  15%  { opacity: 1; }
+  55%  { transform: translate(-50%, -170%) rotate(-18deg) scale(1); }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -150%) rotate(-5deg) scale(1.1); }
+}
+@keyframes lk-swim {
+  0%   { opacity: 0; transform: translate(-50%, -150%) rotate(0) scale(1); }
+  15%  { opacity: 1; }
+  60%  { transform: translate(-30%, -40%) rotate(32deg) scale(.95); opacity: 1; }
+  100% { transform: translate(-10%, 30%) rotate(50deg) scale(.8); opacity: 0; }
+}
+
+/* The message in a bottle: it drifts in from the open lake (small and far away at first),
+   growing as it comes closer, then settles beside the boat with a glimmer and a label.
+   Placed by its waterline at (--x, --y) in lake units; js/lake.js sets the path. */
+.lk-bottle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(100 / 16 * 1cqw);
+  min-width: 76px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  transform-origin: 50% 78%;
+  transform: translate(calc(var(--x, 1240) * 1cqw / 16 - 50%), calc(var(--y, 420) * 1cqw / 16 - 78%)) scale(var(--bs, .4));
+  transition: transform 4.6s cubic-bezier(.25, .5, .3, 1), opacity 1.4s ease, filter .4s;
+  -webkit-tap-highlight-color: transparent;
+}
+.lk-bottle[hidden] { display: none; }
+.lk-bottle.is-drifting { opacity: 1; }
+.lk-bottle::before { content: ""; position: absolute; inset: -40% -20%; }   /* a generous tap target */
+.lk-bottle__art { position: relative; display: block; animation: lk-bottle-bob 2.8s ease-in-out infinite alternate; }
+.lk-bottle__art svg { display: block; width: 100%; height: auto; overflow: visible; }
+@keyframes lk-bottle-bob {
+  from { transform: translateY(0) rotate(-3deg); }
+  to   { transform: translateY(-5%) rotate(3deg); }
+}
+/* a soft halo on the water, so it's easy to spot once it arrives */
+.lk-bottle__glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 190%;
+  aspect-ratio: 2 / 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 248, 222, .75), rgba(255, 248, 222, 0));
+  transform: translate(-50%, -50%) scale(.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.2s ease, transform 1.2s var(--ease);
+}
+.lk-bottle.is-landed .lk-bottle__glow { opacity: 1; transform: translate(-50%, -50%) scale(1); animation: lk-bottle-halo 3.2s ease-in-out 1.2s infinite alternate; }
+@keyframes lk-bottle-halo { to { opacity: .55; transform: translate(-50%, -50%) scale(1.12); } }
+/* a tiny glimmer on the glass as it comes to rest */
+.lk-bottle__glint {
+  position: absolute;
+  left: 30%;
+  top: 6%;
+  width: 18%;
+  aspect-ratio: 1;
+  background: #fffaf0;
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+  filter: drop-shadow(0 0 4px rgba(255, 236, 170, .95));
+  opacity: 0;
+  pointer-events: none;
+}
+.lk-bottle.is-landed .lk-bottle__glint { animation: lk-glint 3.6s ease-in-out .2s infinite; }
+@keyframes lk-glint {
+  0%, 100% { transform: scale(.2) rotate(0); opacity: 0; }
+  14%      { transform: scale(1.1) rotate(45deg); opacity: 1; }
+  30%, 99% { transform: scale(.2) rotate(90deg); opacity: 0; }
+}
+/* its handwritten label: always shown once it has settled */
+.lk-bottle > .lk-bottle__tag {
+  bottom: calc(100% + .2cqw);
+  padding: .1em .8em;
+  font-family: var(--hand);
+  font-size: max(17px, 1.3cqw);
+  font-weight: 600;
+  letter-spacing: 0;
+  color: #8f4a5b;
+  transition: opacity .8s ease .3s, transform .8s var(--ease) .3s;
+}
+.lk-bottle.is-landed > .lk-bottle__tag { opacity: 1; transform: translate(-50%, 0); animation: lk-hint 1.8s ease-in-out 1.2s infinite alternate; }
+.lk-bottle:hover,
+.lk-bottle:focus-visible { filter: drop-shadow(0 0 .8cqw rgba(255, 246, 214, 1)); }
+.lk-bottle:focus-visible { outline: 2px solid #fffaf0; outline-offset: 6px; border-radius: 8px; }
+
+/* ---- The controls along the bottom ------------------------------------------------- */
+.lk-controls {
+  position: fixed;
+  left: 50%;
+  bottom: clamp(12px, 2.6vh, 26px);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .45rem;
+  width: max-content;
+  max-width: calc(100vw - 24px);
+  transform: translateX(-50%);
+}
+.lk-status {
+  margin: 0;
+  padding: .15rem .9rem;
+  border-radius: 999px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  color: #5a4636;
+  background: rgba(248, 243, 231, .88);
+  box-shadow: 0 4px 14px rgba(40, 55, 50, .12);
+}
+.lk-controls__row { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
+.lk-btn {
+  padding: .5rem 1.15rem;
+  border: 1px solid rgba(95, 115, 87, .35);
+  border-radius: 999px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--sage-deep);
+  background: rgba(248, 243, 231, .94);
+  box-shadow: 0 8px 22px rgba(40, 55, 50, .18);
+  cursor: pointer;
+  transition: background-color .3s, transform .3s var(--ease);
+}
+.lk-btn:hover { background: #fffaf0; transform: translateY(-2px); }
+.lk-btn[hidden] { display: none; }
+.lk-btn--primary { border-color: transparent; color: var(--cream); background: var(--sage-deep); }
+.lk-btn--primary:hover { background: #546650; }
+
+/* phones: one compact row of buttons with shorter labels (the full words stay for screen readers) */
+@media (max-width: 560px) {
+  .lake-room { --lk-safe-bottom: 96px; }
+  .lk-controls { gap: .35rem; bottom: max(10px, env(safe-area-inset-bottom)); }
+  .lk-status { padding: .1rem .8rem; font-size: 1.05rem; }
+  .lk-btn { padding: .38rem .8rem; font-size: 1.05rem; box-shadow: 0 6px 16px rgba(40, 55, 50, .16); }
+  .lk-controls__row { flex-wrap: nowrap; gap: .3rem; }
+  .lk-long { display: none; }
+}
+@media (max-width: 350px) {
+  .lk-btn { padding: .34rem .62rem; font-size: .98rem; }
+  .lk-status { font-size: .98rem; }
+}
+
+/* ---- The cards: a caught thought, the note in the bottle, and all five together ----- */
+.lk-card { background: linear-gradient(180deg, rgba(201, 214, 182, .25), transparent 120px), var(--grain-soft), var(--paper); background-size: auto, 220px, auto; }
+.lk-card__fish { width: min(230px, 70%); margin: .2rem auto .4rem; }
+.lk-card__fish svg { display: block; width: 100%; height: auto; overflow: visible; }
+.lk-card__thought {
+  margin: .7rem 0 0;
+  font-family: var(--serif);
+  font-size: 1.22rem;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.lk-card__button {
+  margin-top: 1.1rem;
+  padding: .35rem 1.3rem;
+  border: 0;
+  border-radius: 999px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--cream);
+  background: var(--sage-deep);
+  box-shadow: 0 6px 16px rgba(61, 71, 57, .22);
+  cursor: pointer;
+  transition: background-color .3s, transform .3s var(--ease);
+}
+.lk-card__button:hover { background: #546650; transform: translateY(-1px); }
+.lk-card__button--soft { color: #8f4a5b; background: #f1c9cd; }
+.lk-card__button--soft:hover { background: #edbcc1; }
+.lk-card__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; }
+.lk-card__envelope { width: 40px; margin: 0 auto .3rem; display: block; }
+.lk-card__headline { font-size: 2rem; line-height: 1.1; }
+.lk-card__sign { margin: .6rem 0 0; font-size: 1.5rem; text-align: right; color: #b0697a; }
+
+.lk-thoughts { width: min(640px, calc(100vw - 24px)); }
+.lk-card--list { max-height: calc(100dvh - 48px); overflow-y: auto; text-align: left; }
+.lk-card--list > .music-card__eyebrow,
+.lk-card--list > .music-card__title,
+.lk-card--list > .music-card__sub { text-align: center; }
+.lk-list { margin: 1rem 0 0; padding: 0; list-style: none; }
+.lk-list li {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px dashed rgba(157, 176, 139, .55);
+}
+.lk-list__fish {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  padding: 6px;
+  border-radius: 14px;
+  background: rgba(255, 253, 248, .9);
+  box-shadow: inset 0 0 0 1px rgba(157, 176, 139, .35);
+}
+.lk-list__fish svg { width: 100%; height: auto; overflow: visible; }
+.lk-list__no { margin: 0; font-size: .64rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); }
+.lk-list__title { margin: .1rem 0 0; font-size: 1.45rem; font-weight: 600; line-height: 1.1; color: #5a4636; }
+.lk-list .lk-card__thought { margin-top: .3rem; font-size: 1.08rem; }
+.lk-list__note { margin: 1.1rem 0 .4rem; padding: 1rem 1.1rem; border-radius: 14px; text-align: center; background: rgba(241, 201, 205, .25); }
+.lk-list__headline { margin: .1rem 0 0; font-size: 1.7rem; font-weight: 600; color: #b0697a; }
+.lk-card--list > .music-card__close { display: block; margin: .4rem auto 0; }
+
+@media (max-width: 560px) {
+  .lk-list li { grid-template-columns: 70px 1fr; gap: 10px; }
+  .lk-card__headline { font-size: 1.7rem; }
+}
+
+/* ---- Inside the rowboat: the view during the ride ------------------------------------
+   A 16:10 scene anchored to the bottom of the screen (so the boat is always in view and
+   only sky is trimmed). It fades in over the dock scene with a gentle settle. */
+.lk-pov {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #bcd2cf;
+  opacity: 0;
+  transition: opacity 1s var(--ease);
+}
+.lk-pov[hidden] { display: none; }
+.lake-room.is-pov .lk-pov { opacity: 1; }
+.lk-pov__scene {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: max(100vw, 160vh);
+  width: max(100vw, 160dvh);
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  container-type: inline-size;
+  transform: translateX(-50%) scale(1.02);   /* the faintest settle as you step in, once */
+  transform-origin: 50% 70%;
+  transition: transform 1.2s var(--ease);
+}
+.lake-room.is-pov .lk-pov__scene { transform: translateX(-50%); }
+/* once you're out on the water, the dock scene behind isn't drawn */
+.lake-room.pov-settled .lake-room__scene { visibility: hidden; }
+
+.lk-pov__sky,
+.lk-pov__boat svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.lk-pov__shimmer { opacity: .7; }
+
+/* The horizon stays put. As you row forward, the distant shore and the swan, ducks and
+   reed island drift only very slightly (the far shore least), so each stop is a slightly
+   different part of the lake; what really moves is the nearby water passing the boat
+   (below). --pan is set per stop in js/lake.js. */
+.lk-pov__world { position: absolute; inset: 0; }
+.lk-pov__far,
+.lk-pov__near {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  transition: transform var(--glide, 3.2s) cubic-bezier(.45, .1, .25, 1);   /* eases off, then gently slows */
+}
+.lk-pov__far { max-width: none; transform: translateX(calc(var(--pan, 0) * -1cqw / 192)); }   /* (the site caps svgs at 100% wide) */
+.lk-pov__near { transform: translateX(calc(var(--pan, 0) * -1cqw / 96)); }
+
+/* Passing by: lily pads, reeds and ripples come toward you from the horizon and slide
+   past the sides of the boat (placed in perspective by js/lake.js), slowing to a stop
+   at each fishing spot. Each one is a single small layer moved by transform. */
+.lk-pov__pass { position: absolute; inset: 0; pointer-events: none; }
+.lk-pass {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(var(--w, 200) / 16 * 1cqw);
+  transform: translate(calc(var(--sx) * 1cqw / 16 - 50%), calc(var(--sy) * 1cqw / 16 - 50%)) scale(var(--k));
+  transition: transform var(--glide, 3.2s) cubic-bezier(.45, .1, .25, 1), opacity 1s ease;
+}
+.lk-pass svg { display: block; width: 100%; height: auto; overflow: visible; }
+.lk-pass.is-new { transition: none; opacity: 0; }
+
+/* a soft bow wave peeling away from the hull while you're moving */
+.lk-wake {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+.lk-pov.is-gliding .lk-wake { opacity: .8; }
+.lk-wake path { stroke-dasharray: 18 26; animation: lk-wake 1.6s linear infinite; }
+.lk-pov:not(.is-gliding) .lk-wake path { animation-play-state: paused; }
+@keyframes lk-wake { to { stroke-dashoffset: -44; } }
+.lk-pov__near > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.lk-pov__at {
+  position: absolute;
+  left: calc(var(--x) / 32 * 1%);    /* the near layer is 3200 units wide */
+  top: calc(var(--y) / 10 * 1%);
+  width: calc(var(--w) / 32 * 1%);
+  pointer-events: none;
+}
+.lk-pov__at svg { display: block; width: 100%; height: auto; overflow: visible; }
+.lk-pov__at > span { display: block; animation: lk-paddle 3s ease-in-out infinite alternate; }
+.lk-ducks-pov { display: flex; align-items: flex-end; gap: .4cqw; }
+.lk-ducks-pov .lk-duck--mama { width: calc(84 / 16 * 1cqw); }
+.lk-ducks-pov .lk-duck--baby { width: calc(34 / 16 * 1cqw); }
+
+/* your boat floats on calm water: no tilting or swaying, just the slowest, softest bob */
+.lk-pov__boat {
+  position: absolute;
+  inset: 0;
+  animation: lk-boat-float 7s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes lk-boat-float {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-.22%); }
+}
+
+/* the bobber, the fish and the ripples are closer now, so a little bigger */
+.lk-pov .lk-bobber { min-width: 34px; }
+.lk-bobber.is-biting .lk-bobber__art { animation: lk-bite 1.3s ease-in-out infinite; }
+@keyframes lk-bite {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  12%      { transform: translateY(26%) rotate(-8deg); }   /* a tug */
+  24%      { transform: translateY(-4%) rotate(5deg); }
+  40%      { transform: translateY(18%) rotate(-4deg); }
+  56%      { transform: translateY(0); }
+}
+.lk-bobber::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 78%;
+  width: 260%;
+  aspect-ratio: 3 / 1;
+  border: 2px solid rgba(255, 255, 255, .8);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.3);
+  pointer-events: none;
+}
+.lk-bobber.is-biting::after { animation: lk-bite-ring 1.3s ease-out infinite; }
+@keyframes lk-bite-ring {
+  0%, 10% { opacity: 0;  transform: translate(-50%, -50%) scale(.3); }
+  16%     { opacity: .9; }
+  100%    { opacity: 0;  transform: translate(-50%, -50%) scale(1.3); }
+}
+.lk-bobber:not(.is-biting) .lk-bobber__hint { opacity: 0; }
+
+/* reduced motion: everything rests; the views simply change */
+@media (prefers-reduced-motion: reduce) {
+  .lk-ducks { left: 64%; animation: none !important; }
+  .lk-swan { left: 52%; }
+  .lk-boat, .lk-bottle, .lk-frog, .lk-pov, .lk-pov__scene, .lk-pov__far, .lk-pov__near, .lk-pass { transition: none !important; }
+  .lk-wake { display: none; }   /* a still boat: the scenery simply changes between stops */
+}

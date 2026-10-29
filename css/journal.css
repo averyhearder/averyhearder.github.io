@@ -1,0 +1,957 @@
+/* ==========================================================================
+   A Day in Bloom · About Me junk journal
+   Three spreads (About · Skills · Hello) chosen with tabs along the top.
+   Nothing scrolls inside the book: each spread is sized to fit, and if a
+   screen is too short, the whole notebook view scrolls like a normal page.
+   Keepsakes have their own spaces, so they never cover the text.
+   ========================================================================== */
+
+/* ---- The notebook view: centred, and scrolls as a whole if needed ------- */
+.panel--journal {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  display: flex;
+  padding: 84px clamp(10px, 3vw, 32px) 28px;
+  overflow-y: auto;
+  background: none;
+  box-shadow: none;
+  opacity: 0;
+  transform: translateY(18px) scale(.98);
+  transition: transform .55s var(--ease), opacity .4s var(--ease);
+}
+.panel--journal.is-active {
+  opacity: 1;
+  transform: none;
+}
+
+.journal {
+  position: relative;
+  width: min(1180px, 100%);
+  margin: auto;
+}
+
+/* ---- Tabs along the top of the book ------------------------------------- */
+.journal-tabs {
+  display: flex;
+  gap: 6px;
+  padding-left: clamp(16px, 5vw, 56px);
+}
+
+.journal-tab {
+  padding: 8px 24px 14px;
+  border: 0;
+  border-radius: 12px 12px 0 0;
+  font-family: var(--hand);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1;
+  color: #4d3d2f;
+  cursor: pointer;
+  box-shadow: 0 -2px 6px rgba(30, 30, 20, .12);
+  transform: translateY(8px);
+  transition: transform .3s var(--ease), filter .3s;
+}
+.journal-tab:hover { transform: translateY(3px); }
+.journal-tab[aria-selected="true"] { transform: translateY(0); filter: saturate(1.15); }
+.journal-tab--blush  { background: #efc3c8; }
+.journal-tab--butter { background: #f1d898; }
+.journal-tab--sage   { background: #bccca8; }
+.journal-tab--lake   { background: #bcd2db; }
+
+/* ---- The book: cloth cover, stacked pages, binding ---------------------- */
+.journal-book {
+  position: relative;
+  padding: 14px;
+  border-radius: 16px;
+  background:
+    var(--grain-soft),
+    linear-gradient(135deg, #8ea17c, #788c67);
+  background-size: 220px, auto;
+  box-shadow: 0 30px 70px rgba(30, 36, 26, .4), inset 0 0 0 1px rgba(255, 255, 255, .12);
+}
+
+/* round × on the corner of the book */
+.journal-close {
+  top: -16px;
+  right: -12px;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 0;
+  background: var(--cream);
+  box-shadow: 0 4px 14px rgba(30, 30, 20, .3);
+  transition: transform .3s var(--ease);
+}
+.journal-close::before {
+  content: "×";
+  font-family: var(--serif);
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--ink);
+}
+.journal-close:hover { transform: rotate(90deg); }
+
+/* All three spreads share one grid cell, so the book keeps one steady size */
+.journal-spreads {
+  display: grid;
+  border-radius: 6px;
+  box-shadow: 2px 3px 0 #ece3cf, 4px 6px 0 #e2d7bf, 6px 9px 0 #d8ccb2, 0 2px 8px rgba(0, 0, 0, .18);
+}
+
+.journal-spread {
+  grid-area: 1 / 1;
+  display: grid;
+  grid-template-columns: 1fr 30px 1fr;
+  visibility: hidden;
+}
+/* the new spread settles in like a turned page */
+.journal-spread.is-current {
+  visibility: visible;
+  animation: page-turn .6s var(--ease);
+}
+@keyframes page-turn {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: none; }
+}
+/* ...and the paper itself: the right-hand page swings in from the spine and settles flat, the left one
+   gives the faintest settle, like a real page being laid down (same length, so nothing feels slower) */
+.journal-spread.is-current .journal-page--right {
+  transform-origin: 0 50%;
+  animation: page-swing .6s cubic-bezier(.25, .7, .3, 1);
+}
+.journal-spread.is-current .journal-page--left {
+  transform-origin: 100% 50%;
+  animation: page-settle .6s cubic-bezier(.25, .7, .3, 1);
+}
+@keyframes page-swing {
+  from { transform: perspective(1600px) rotateY(-14deg); }
+  70%  { transform: perspective(1600px) rotateY(1.2deg); }
+  to   { transform: none; }
+}
+@keyframes page-settle {
+  from { transform: perspective(1600px) rotateY(4deg); }
+  to   { transform: none; }
+}
+
+/* a page corner lifts very slightly when the pointer comes near it (js/main.js adds the corners) */
+.journal-corner {
+  position: absolute;
+  bottom: 0;
+  z-index: 3;
+  width: 30px;
+  height: 30px;
+}
+.journal-page--left .journal-corner  { left: 0; }
+.journal-page--right .journal-corner { right: 0; }
+.journal-corner::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  transition: width .35s cubic-bezier(.3, .8, .35, 1), height .35s cubic-bezier(.3, .8, .35, 1);
+  pointer-events: none;
+}
+/* the folded-back flap (the paper's underside) and, beneath it, a hint of the cover and its shadow */
+.journal-page--right .journal-corner::before {
+  right: 0;
+  border-bottom-right-radius: 6px;
+  background: linear-gradient(to top left, rgba(95, 115, 87, .55) 0 47%, rgba(60, 45, 30, .18) 48% 50%, #f1e8d4 51%, #fbf6ea 100%);
+  box-shadow: -1px -1px 3px rgba(60, 45, 30, .12);
+}
+.journal-page--left .journal-corner::before {
+  left: 0;
+  border-bottom-left-radius: 6px;
+  background: linear-gradient(to top right, rgba(95, 115, 87, .55) 0 47%, rgba(60, 45, 30, .18) 48% 50%, #f1e8d4 51%, #fbf6ea 100%);
+  box-shadow: 1px -1px 3px rgba(60, 45, 30, .12);
+}
+@media (hover: hover) and (pointer: fine) {
+  .journal-page:hover .journal-corner::before { width: 7px; height: 7px; }    /* a hint, anywhere on the page */
+  .journal-page .journal-corner:hover::before { width: 20px; height: 20px; }  /* right by the corner */
+}
+
+.journal-page {
+  position: relative;
+  min-width: 0;
+  padding: 30px clamp(22px, 3.2vw, 42px) 44px;
+  background: var(--grain-soft), var(--paper);
+  background-size: 220px, auto;
+}
+.journal-page--left {
+  border-radius: 6px 0 0 6px;
+  background:
+    linear-gradient(270deg, rgba(90, 70, 45, .14), transparent 46px),
+    var(--grain-soft), var(--paper);
+  background-size: auto, 220px, auto;
+}
+.journal-page--right {
+  border-radius: 0 6px 6px 0;
+  background:
+    linear-gradient(90deg, rgba(90, 70, 45, .14), transparent 46px),
+    var(--grain-soft), var(--paper);
+  background-size: auto, 220px, auto;
+}
+
+.journal-binding {
+  background:
+    repeating-linear-gradient(180deg, transparent 0 14px, rgba(160, 120, 90, .55) 14px 22px),
+    linear-gradient(90deg, rgba(60, 45, 30, .22), rgba(60, 45, 30, .05) 40%, rgba(255, 255, 255, .45) 50%, rgba(60, 45, 30, .05) 60%, rgba(60, 45, 30, .22));
+  background-size: 2px 100%, auto;
+  background-position: center, 0 0;
+  background-repeat: no-repeat;
+}
+
+/* page numbers */
+.journal-folio {
+  position: absolute;
+  bottom: 14px;
+  font-family: var(--serif);
+  font-size: .9rem;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.journal-page--left .journal-folio  { left: 26px; }
+.journal-page--right .journal-folio { right: 26px; }
+
+/* "turn the page" links */
+.journal-turn {
+  justify-self: end;
+  align-self: end;
+  grid-column: 1 / -1;
+  margin-top: 6px;
+  padding: .2rem .2rem;
+  border: 0;
+  background: none;
+  font-size: 1.3rem;
+  color: var(--sage-deep);
+  cursor: pointer;
+  border-bottom: 1px solid rgba(95, 115, 87, .35);
+  transition: color .3s, transform .3s var(--ease);
+}
+.journal-turn:hover { color: var(--ink); transform: translateX(3px); }
+
+/* ==========================================================================
+   SHARED PAGE TYPOGRAPHY
+   ========================================================================== */
+.journal-page .eyebrow { margin: 0 0 .3rem; }
+
+.journal-title {
+  margin: 0;
+  font-size: clamp(2.3rem, 3.8vw, 3.1rem);
+  font-weight: 400;
+}
+
+.journal-hello {
+  margin: .2rem 0 1rem;
+  font-size: 1.4rem;
+  color: #9a5a6b;
+  transform: rotate(-2deg);
+  transform-origin: left;
+}
+
+.journal-heading {
+  margin: 1.3rem 0 .6rem;
+  font-size: 1.45rem;
+  font-style: italic;
+}
+
+.journal-text p {
+  margin: 0;
+  font-size: .96rem;
+  line-height: 1.7;
+}
+.journal-text.paper-card--lined { transform: rotate(-.4deg); }
+/* on the ruled card, the writing sits on the lines (28px apart); new paragraphs are indented */
+.journal-text.paper-card--lined p { line-height: 28px; }
+.journal-text.paper-card--lined p + p { text-indent: 1.4em; }
+
+/* ==========================================================================
+   PHOTOS (your real photos, with a tidy placeholder until they're added)
+   ========================================================================== */
+.photo-slot { margin: 0; }
+
+.photo-slot__frame {
+  position: relative;
+  aspect-ratio: var(--ratio, 4 / 5);
+  overflow: hidden;
+  background: #e9e2d2;
+}
+.photo-slot__frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(.94) contrast(1.03) sepia(.06);
+}
+/* soft film-like edge */
+.photo-slot__frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 28px rgba(60, 45, 30, .18);
+  pointer-events: none;
+}
+
+.photo-slot__missing {
+  display: none;
+  position: absolute;
+  inset: 0;
+  place-items: center;
+  align-content: center;
+  padding: .8rem;
+  font-size: .8rem;
+  text-align: center;
+  color: var(--ink-soft);
+  border: 1.5px dashed rgba(95, 115, 87, .45);
+  background: rgba(201, 213, 185, .22);
+}
+.photo-slot__missing small { display: block; margin-top: .3rem; font-size: .64rem; opacity: .8; overflow-wrap: anywhere; }
+.photo-slot.is-missing img { display: none; }
+.photo-slot.is-missing .photo-slot__missing { display: grid; }
+.photo-slot--optional.is-missing { display: none; }
+
+/* ==========================================================================
+   COLLAGE PAGES (right-hand pages)
+   ========================================================================== */
+.journal-collage {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 22px 26px;
+  align-items: start;
+}
+
+.keepsake { margin: 0; display: block; }
+.keepsake svg { display: block; width: 100%; height: auto; }
+.keepsake figcaption { margin-top: 4px; font-size: 1.12rem; text-align: center; }
+
+/* ---- About spread ---- */
+.collage-portrait { grid-row: 1 / 3; transform: rotate(-2deg); margin-top: 10px; }
+.collage-field    { transform: rotate(4deg); margin-top: 34px; width: 88%; justify-self: end; }
+
+.collage-keepsakes {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+.keepsake--latte   { width: 52px; transform: rotate(3deg); filter: drop-shadow(0 6px 8px rgba(60, 45, 30, .15)); }
+.keepsake--pressed { width: 40px; transform: rotate(9deg); }
+.keepsake-note {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 1.25rem;
+  text-align: center;
+  transform: rotate(-3deg);
+}
+
+/* ---- Skills spread ---- */
+.journal-education {
+  margin-top: 18px;
+  padding-top: 1.2rem;
+  transform: rotate(-.8deg);
+}
+.journal-education .journal-heading { margin-top: 0; }
+.journal-education p { margin: 0; }
+.journal-education__program {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  line-height: 1.2;
+  margin-bottom: .15rem !important;
+}
+.journal-education__year {
+  margin-top: .5rem !important;
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 16px;
+  align-items: start;
+  margin-top: 20px;
+}
+.skills-card__title {
+  margin: 0 0 .7rem;
+  font-family: var(--sans);
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.collage-pets { grid-row: 1 / 3; transform: rotate(-2.5deg); margin-top: 10px; }
+.journal-collage--skills .keepsake--cat { align-self: center; margin-top: 24px; }
+.keepsake--record { transform: rotate(3deg); margin-top: 18px; }
+.keepsake--record svg { filter: drop-shadow(0 6px 10px rgba(60, 45, 30, .2)); }
+.keepsake--cat { width: 108px; justify-self: center; transform: rotate(-4deg); }
+.keepsake--cat .sticker { width: 92px; margin: 0 auto; }
+.keepsake--lab { width: 118px; justify-self: center; transform: rotate(4deg); }
+.keepsake--boots {
+  position: absolute;
+  left: 40%;
+  bottom: 40px;
+  width: 58px;
+  transform: rotate(8deg);
+}
+
+/* ---- Hello spread ---- */
+.hello-postcard {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  margin-top: 22px;
+  padding: 24px 22px 20px;
+  background: var(--grain-soft), #fffdf8;
+  background-size: 220px, auto;
+  box-shadow: 0 2px 3px rgba(60, 45, 30, .08), 0 14px 30px rgba(60, 45, 30, .14);
+  transform: rotate(-1deg);
+}
+.hello-postcard__message {
+  padding-right: 20px;
+  border-right: 1px solid rgba(157, 176, 139, .55);
+}
+.hello-postcard__greeting { margin: 0 0 .3rem; font-size: 2.1rem; color: #b0697a; }
+.hello-postcard__text { margin: 0; font-size: 1.32rem; line-height: 1.3; color: var(--ink); }
+.hello-postcard__sign { margin: .6rem 0 0; font-size: 1.4rem; text-align: right; }
+
+.hello-postcard__address { padding-left: 20px; }
+.hello-postcard__stamp {
+  display: block;
+  width: 50px;
+  margin: 0 0 10px auto;
+  transform: rotate(5deg);
+}
+.hello-contacts { margin: 0; padding: 0; list-style: none; }
+.hello-contacts li {
+  padding: .4rem 0;
+  border-bottom: 1px dashed rgba(120, 100, 70, .3);
+  font-size: .86rem;
+}
+.hello-contacts span {
+  display: block;
+  font-size: .6rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.hello-contacts a { color: var(--sage-deep); overflow-wrap: anywhere; text-underline-offset: 3px; }
+.hello-contacts a:hover { color: var(--ink); }
+
+.journal-contact-btn {
+  margin-top: 28px;
+  font-size: 1.15rem;
+  padding: .8rem 1.8rem;
+}
+
+.collage-muskoka { grid-row: 1 / 3; transform: rotate(-2.5deg); margin-top: 10px; }
+.keepsake--postcard {
+  grid-row: 1 / 3;
+  align-self: center;
+  transform: rotate(-3deg);
+  filter: drop-shadow(0 8px 14px rgba(60, 45, 30, .18));
+}
+.keepsake--daisy {
+  position: absolute;
+  left: 46%;
+  bottom: 36px;
+  width: 34px;
+  transform: rotate(-10deg);
+}
+
+/* ---- Little Things spread ---- */
+.washi--gingham {
+  background:
+    linear-gradient(90deg, rgba(232, 150, 168, .5) 50%, transparent 50%) 0 0 / 8px 8px,
+    linear-gradient(180deg, rgba(232, 150, 168, .5) 50%, rgba(255, 248, 246, .75) 50%) 0 0 / 8px 8px;
+}
+
+.lt-mixer {
+  position: absolute;
+  top: 24px;
+  right: 34px;
+  width: 76px;
+  transform: rotate(6deg);
+}
+.lt-cookie {
+  position: absolute;
+  right: 30px;
+  bottom: 26px;
+  width: 60px;
+  transform: rotate(-10deg);
+}
+
+/* the recipe card flips over to show the recipe */
+.recipe {
+  position: relative;
+  margin: 18px 54px 50px 0;
+  transform: rotate(-1deg);
+}
+.recipe .washi { z-index: 3; }
+
+.recipe-card { perspective: 1400px; }
+.recipe-card__inner {
+  display: grid;
+  transform-style: preserve-3d;
+  transition: transform .65s var(--ease);
+}
+.recipe-card.is-flipped .recipe-card__inner { transform: rotateY(180deg); }
+
+.recipe-card__face {
+  position: relative;
+  grid-area: 1 / 1;
+  padding: 24px 24px 20px;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  background:
+    linear-gradient(180deg, transparent 54px, rgba(226, 143, 161, .6) 54px 56px, transparent 56px),
+    repeating-linear-gradient(180deg, transparent 0 25px, rgba(168, 195, 207, .32) 25px 26px) 0 70px / 100% calc(100% - 70px) no-repeat,
+    #fffdf7;
+  box-shadow: 0 2px 3px rgba(60, 45, 30, .08), 0 12px 26px rgba(60, 45, 30, .14);
+}
+.recipe-card__back {
+  transform: rotateY(180deg);
+  background:
+    repeating-linear-gradient(180deg, transparent 0 25px, rgba(168, 195, 207, .32) 25px 26px) 0 14px / 100% 100% no-repeat,
+    #fffdf7;
+}
+
+.recipe-card__from {
+  margin: 0;
+  font-family: var(--hand);
+  font-size: 1.15rem;
+  color: var(--sage-deep);
+}
+.recipe-card__title {
+  margin: 1.1rem 0 0;
+  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+  line-height: 1.15;
+}
+.recipe-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem 1.4rem;
+  margin: .9rem 0 0;
+  font-size: .82rem;
+  color: var(--ink-soft);
+}
+
+/* the whole front of the card is the flip button */
+.recipe-flip {
+  margin-top: 1.4rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 1.25rem;
+  color: #9a5a6b;
+  cursor: pointer;
+}
+.recipe-flip::after { content: ""; position: absolute; inset: 0; }
+.recipe-card__front:hover { box-shadow: 0 2px 3px rgba(60, 45, 30, .08), 0 16px 32px rgba(60, 45, 30, .2); }
+
+.recipe-card__heading {
+  margin: 0 0 .3rem;
+  font-family: var(--sans);
+  font-size: .64rem;
+  font-weight: 500;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.recipe-card__heading:not(:first-child) { margin-top: .8rem; }
+.recipe-list {
+  columns: 2;
+  column-gap: 1.2rem;
+  margin: 0;
+  padding-left: 1rem;
+  font-size: .84rem;
+  line-height: 1.62;
+}
+.recipe-list li::marker { color: #e28fa1; }
+.recipe-steps {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: .84rem;
+  line-height: 1.62;
+}
+.recipe-card__note { margin: .5rem 0 0; font-size: 1.1rem; }
+.recipe-flip-back {
+  position: absolute;
+  right: 18px;
+  bottom: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 1.1rem;
+  color: var(--sage-deep);
+  cursor: pointer;
+}
+
+/* recipe card + cookie photo side by side */
+.lt-recipe-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  margin-top: 20px;
+}
+.lt-recipe-row .recipe { margin: 0; }
+
+.lt-photo-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding-top: 6px;
+}
+.lt-cookie-photo { width: 100%; transform: rotate(3deg); }
+.lt-photo-col .lt-cookie { position: static; width: 54px; }
+
+/* the back of the card holds two pages that share one size */
+.recipe-pages { display: grid; height: 100%; }
+.recipe-page {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+}
+.recipe-pages[data-page="1"] .recipe-page--1,
+.recipe-pages[data-page="2"] .recipe-page--2 { visibility: visible; }
+/* ...but only while the Little Things page is open, so the card never shows through other pages */
+.journal-spread:not(.is-current) .recipe-pages .recipe-page { visibility: hidden; }
+
+.recipe-card__heading { display: flex; justify-content: space-between; }
+.recipe-card__heading span { letter-spacing: .1em; color: #9a5a6b; }
+
+/* easy-to-read recipe text, sitting on the card's ruled lines */
+.recipe-pages .recipe-list,
+.recipe-pages .recipe-steps {
+  columns: 1;
+  font-size: .9rem;
+  line-height: 26px;
+  color: var(--ink);
+}
+.recipe-pages .recipe-steps li { padding-left: .15rem; }
+.recipe-pages .recipe-steps li::marker { color: #b0697a; font-family: var(--serif); font-style: italic; }
+
+.recipe-card__nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: .5rem;
+}
+.recipe-card__nav button,
+.recipe-pages .recipe-flip-back {
+  position: static;
+  padding: 2px 0;   /* a 24px-tall target without moving the words */
+  margin: -2px 0;
+  border: 0;
+  background: none;
+  font-size: 1.15rem;
+  color: var(--sage-deep);
+  cursor: pointer;
+}
+.recipe-page-turn { color: #9a5a6b !important; }
+
+/* right page: the pink record and keepsakes */
+.journal-collage--little { grid-template-columns: 1.35fr 1fr; align-items: center; }
+
+.lt-music { text-align: center; }
+.lt-record {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: transform .4s var(--ease);
+}
+/* the record: a sleeve, with the pink disc peeking out and spinning behind it. Its soft shadow is drawn
+   once underneath, the outline of sleeve and disc together, softened and nudged down: the same as a
+   drop-shadow(0 6px 10px rgba(60, 45, 30, .2)) on the whole record, but it never has to be redrawn
+   while the disc turns (a shadow on the spinning record redrew the page every frame). */
+.lt-record__art { position: relative; display: block; }
+.lt-record .lt-record__shadow {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  overflow: visible;
+  filter: blur(5px);
+  transform: translateY(6px);
+}
+.lt-record svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.lt-record:hover,
+.lt-record:focus-visible { transform: translateY(-3px) rotate(-1.5deg); }
+/* the disc is its own small square drawing, placed exactly where it sat in the 130 x 92 picture
+   (44,6 to 124,86), so the whole element spins: the graphics card turns it, with no redrawing */
+.lt-record .lt-record__disc {
+  position: absolute;
+  left: 33.846%;     /* 44 / 130 */
+  top: 6.522%;       /* 6 / 92 */
+  width: 61.538%;    /* 80 / 130 */
+  height: 86.957%;   /* 80 / 92 */
+  animation: spin-record 9s linear infinite;
+}
+.lt-record .lt-record__sleeve { position: relative; }
+/* the notebook keeps its other spreads on the page, invisible: the record rests while its spread is closed */
+.journal-spread:not(.is-current) .lt-record__disc { animation-play-state: paused; }
+@keyframes spin-record { to { transform: rotate(360deg); } }
+
+/* hover label above the record */
+.lt-record { position: relative; }
+.lt-record__hover {
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  z-index: 2;
+  padding: .15rem .7rem;
+  border-radius: 999px;
+  font-size: 1.12rem;
+  white-space: nowrap;
+  color: #8a4a5a;
+  background: rgba(255, 250, 244, .96);
+  box-shadow: 0 4px 12px rgba(60, 45, 30, .14);
+  opacity: 0;
+  transform: translate(-50%, 4px) rotate(-2deg);
+  transition: opacity .3s, transform .3s var(--ease);
+  pointer-events: none;
+}
+.lt-record:hover .lt-record__hover,
+.lt-record:focus-visible .lt-record__hover { opacity: 1; transform: translate(-50%, -100%) rotate(-2deg); }
+
+.lt-music__caption { margin: 8px 0 0; font-size: 1.12rem; }
+.lt-music__status { margin: 2px 0 0; font-size: 1.2rem; color: #9a5a6b; }
+.lt-music__status.is-pulse { animation: soft-pulse .9s var(--ease); }
+@keyframes soft-pulse {
+  40% { transform: scale(1.12); }
+}
+
+.journal-collage--little .keepsake--latte { width: 62px; justify-self: center; }
+.lt-pressed {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 6px;
+}
+.lt-pressed .keepsake--pressed { width: 46px; transform: rotate(-6deg); }
+.lt-pressed .keepsake--daisy { position: static; width: 38px; transform: rotate(8deg); }
+.lt-boots { width: 74px; justify-self: center; transform: rotate(7deg); }
+
+/* ==========================================================================
+   MUSIC POP-UP ("choose your player ♡")
+   ========================================================================== */
+.music-dialog {
+  width: min(390px, calc(100vw - 32px));
+  max-width: none;
+  margin: auto;
+  padding: 18px 0 0;
+  border: 0;
+  background: none;
+  overflow: visible;
+  color: var(--ink);
+}
+.music-dialog::backdrop {
+  background: rgba(50, 58, 46, .38);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+.music-dialog[open] .music-card { animation: music-card-in .45s var(--ease) both; }
+@keyframes music-card-in {
+  from { opacity: 0; transform: translateY(14px) rotate(1deg) scale(.97); }
+  to   { opacity: 1; transform: rotate(-1.2deg); }
+}
+
+.music-card {
+  position: relative;
+  padding: 34px 26px 20px;
+  border-radius: 4px;
+  text-align: center;
+  background:
+    linear-gradient(180deg, rgba(239, 195, 200, .22), transparent 120px),
+    repeating-linear-gradient(180deg, transparent 0 27px, rgba(226, 143, 161, .13) 27px 28px),
+    var(--grain-soft), var(--paper);
+  background-size: auto, auto, 220px, auto;
+  box-shadow: 0 2px 3px rgba(60, 45, 30, .1), 0 24px 50px rgba(30, 30, 20, .3);
+  transform: rotate(-1.2deg);
+}
+.music-card__tape {
+  top: -10px;
+  left: 50%;
+  width: 96px;
+  transform: translateX(-50%) rotate(-3deg);
+}
+.music-card__flowers {
+  position: absolute;
+  right: -14px;
+  bottom: -16px;
+  width: 78px;
+  transform: rotate(8deg);
+  pointer-events: none;
+}
+.music-card__x {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--ink-soft);
+  background: none;
+  cursor: pointer;
+  transition: background-color .3s, transform .3s var(--ease);
+}
+.music-card__x:hover { background: rgba(239, 195, 200, .4); transform: rotate(90deg); }
+
+.music-card__eyebrow {
+  margin: 0;
+  font-size: .64rem;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.music-card__title {
+  margin: .1rem 0 0;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #b0697a;
+}
+.music-card__sub {
+  margin: .2rem 0 0;
+  font-family: var(--serif);
+  font-size: 1.08rem;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.music-options {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0 6px;
+  padding: 0;
+  list-style: none;
+}
+.music-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 14px 9px 10px;
+  border: 1px dashed rgba(226, 143, 161, .65);
+  border-radius: 14px;
+  text-align: left;
+  text-decoration: none;
+  color: var(--ink);
+  background: rgba(255, 253, 248, .92);
+  transition: transform .3s var(--ease), background-color .3s, box-shadow .3s;
+}
+a.music-option:hover,
+a.music-option:focus-visible {
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(176, 105, 122, .18);
+  transform: translateY(-1px) rotate(-.6deg);
+}
+.music-option.is-soon { cursor: default; background: rgba(255, 253, 248, .55); }
+.music-option.is-soon .music-option__icon { filter: saturate(.6); opacity: .8; }
+
+.music-option__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #4d3d2f;
+}
+.music-option__icon svg { width: 26px; height: 26px; }
+.music-option__icon--sage   { background: #c9d6b6; }
+.music-option__icon--blush  { background: #f1c9cd; }
+.music-option__icon--butter { background: #f3dea4; }
+
+.music-option__name { font-family: var(--serif); font-size: 1.22rem; }
+.music-option__meta { margin-left: auto; font-size: 1.15rem; color: var(--sage-deep); white-space: nowrap; }
+.music-option.is-soon .music-option__meta { color: #b0697a; }
+
+.music-card__close {
+  margin-top: 8px;
+  padding: .2rem .4rem;
+  border: 0;
+  background: none;
+  font-size: 1.2rem;
+  color: var(--sage-deep);
+  cursor: pointer;
+}
+.music-card__close:hover { color: var(--ink); }
+
+/* ==========================================================================
+   SMALLER SCREENS: the two pages of each spread stack, and the view scrolls
+   like a normal page (no hidden inner scrolling)
+   ========================================================================== */
+@media (max-width: 900px) {
+  .panel--journal { padding-top: 76px; }
+  .journal-tab { padding: 7px 18px 12px; font-size: 1.2rem; }
+  .journal-book { padding: 8px; }
+  .journal-close { right: -4px; }
+  .journal-spread { grid-template-columns: 1fr; }
+  .journal-binding { display: none; }
+  .journal-page--left,
+  .journal-page--right {
+    border-radius: 6px;
+    background: var(--grain-soft), var(--paper);
+    background-size: 220px, auto;
+  }
+  .journal-page--left { border-bottom: 1px dashed rgba(120, 100, 70, .25); }
+}
+
+@media (max-width: 560px) {
+  .journal-page { padding: 24px 20px 46px; }
+  .journal-collage { gap: 18px 16px; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .hello-postcard { grid-template-columns: 1fr; }
+  .hello-postcard__message { padding: 0 0 16px; border-right: 0; border-bottom: 1px solid rgba(157, 176, 139, .55); }
+  .hello-postcard__address { padding: 14px 0 0; }
+  .keepsake--boots, .keepsake--daisy { display: none; }
+  .lt-pressed .keepsake--daisy { display: block; }
+  .panel--journal { padding-top: var(--header-h); }   /* the tabs sit below the header's light and sound controls */
+  /* easier to tap: the cards' × and the recipe card's little page links */
+  .music-card__x { top: 4px; right: 6px; width: 42px; height: 42px; }
+  .recipe-flip-back,
+  .recipe-pages .recipe-flip-back { min-height: 40px; padding: 0 .4rem; }
+  /* the tiniest labels, a touch larger to read */
+  .hello-contacts span,
+  .recipe-card__heading { font-size: .7rem; }
+  .journal-tab { padding: 7px 12px 12px; font-size: 1.05rem; }
+  .lt-mixer { width: 56px; right: 18px; }
+  .recipe { margin-right: 0; }
+  .recipe-list { columns: 1; }
+  .lt-recipe-row { grid-template-columns: 1fr; }
+  .lt-photo-col { flex-direction: row; justify-content: center; }
+  .lt-cookie-photo { width: 62%; }
+}
+
+/* the narrowest phones: slimmer tabs, so "Hello" stays clear of the notebook's × */
+@media (max-width: 350px) {
+  .journal-tabs { gap: 4px; padding-left: 10px; }
+  .journal-tab { padding: 7px 8px 12px; font-size: 1rem; }
+}

@@ -1,0 +1,152 @@
+/* ==========================================================================
+   A Day in Bloom · click to enlarge (js/lightbox.js)
+   A soft cream lightbox for the project images, and the little magnifying
+   glass that shows they can be opened.
+   ========================================================================== */
+
+/* ---- On the page: each image sits in a frame of exactly its own size ---------------------------- */
+.lb-frame {
+  position: relative;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+.material-samples .lb-frame { width: 100%; }
+.lb-trigger:focus-visible { outline: 2px solid var(--sage-deep); outline-offset: 4px; }
+/* the magnifying glass: appears in the corner on hover or keyboard focus */
+.lb-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(251, 247, 238, .92);
+  box-shadow: 0 0 0 1px rgba(157, 176, 139, .5), 0 4px 12px rgba(61, 71, 57, .16);
+  opacity: 0;
+  transform: scale(.8);
+  transition: opacity .2s ease, transform .25s cubic-bezier(.3, 1.4, .5, 1);
+  pointer-events: none;
+}
+.lb-badge svg { width: 20px; height: 20px; }
+.lb-trigger:hover .lb-badge,
+.lb-trigger:focus-visible .lb-badge { opacity: 1; transform: none; }
+/* on touch screens there's no hover, so the glass rests quietly in the corner */
+@media (hover: none) {
+  .lb-badge { width: 28px; height: 28px; top: 8px; right: 8px; opacity: .88; transform: none; }
+  .lb-badge svg { width: 17px; height: 17px; }
+}
+
+/* ---- The lightbox -------------------------------------------------------------------------------- */
+.lightbox {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  color: var(--ink);
+  background: var(--cream);   /* a clean, solid cream: nothing from the page shows through */
+}
+.lightbox::backdrop { background: rgba(248, 243, 231, .6); }
+.lightbox[open] {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  animation: lb-in .25s ease both;
+}
+@keyframes lb-in { from { opacity: 0; } }
+html.has-lightbox { overflow: hidden; }   /* the page rests underneath */
+
+.lightbox__stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 68px 76px 6px;
+  overflow: hidden;
+  touch-action: none;      /* pinching and dragging zoom the picture, not the page */
+}
+.lightbox__img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;     /* always the whole picture, never cropped */
+  border-radius: 6px;
+  box-shadow: 0 18px 50px rgba(61, 71, 57, .18);
+  transform-origin: center;
+  transition: transform .25s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.lightbox.is-gesturing .lightbox__img { transition: none; }
+
+.lightbox__bar {
+  padding: 10px 76px 18px;
+  text-align: center;
+}
+.lightbox__caption {
+  margin: 0 auto;
+  max-width: 62ch;
+  font-size: .92rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.lightbox__count {
+  margin: .3rem 0 0;
+  font-size: .68rem;
+  letter-spacing: .22em;
+  color: #b8737f;
+}
+.lightbox__count:empty { display: none; }
+
+/* round, quiet buttons in sage and cream */
+.lightbox__button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: var(--sage-deep);
+  background: rgba(255, 252, 245, .9);
+  box-shadow: 0 0 0 1px rgba(157, 176, 139, .45), 0 4px 14px rgba(61, 71, 57, .1);
+  transition: background-color .2s, box-shadow .2s, transform .25s cubic-bezier(.3, 1.4, .5, 1);
+}
+.lightbox__button svg { width: 22px; height: 22px; }
+.lightbox__button:hover { background: #fffaf0; box-shadow: 0 0 0 1px rgba(127, 154, 100, .7), 0 0 0 4px rgba(241, 201, 200, .4); }
+.lightbox__close { position: absolute; top: 14px; right: 14px; }
+.lightbox__tools { position: absolute; top: 14px; left: 14px; display: flex; gap: 8px; }
+.lightbox__arrow { position: absolute; top: calc(50% - 40px); }
+.lightbox__arrow--prev { left: 16px; }
+.lightbox__arrow--next { right: 16px; }
+.lightbox.is-single .lightbox__arrow { display: none; }
+
+@media (max-width: 600px) {
+  .lightbox__stage { padding: 66px 8px 4px; }
+  .lightbox__bar { padding: 8px 16px 16px; }
+  .lightbox__caption { font-size: .86rem; }
+  /* on a phone the arrows sit low at the sides, clear of the picture's middle */
+  .lightbox__arrow { top: auto; bottom: 12px; width: 40px; height: 40px; }
+  .lightbox__arrow--prev { left: 10px; }
+  .lightbox__arrow--next { right: 10px; }
+  .lightbox__bar { padding-left: 58px; padding-right: 58px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox[open] { animation: none; }
+  .lightbox__img,
+  .lb-badge,
+  .lightbox__button { transition: none; }
+}

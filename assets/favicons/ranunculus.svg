@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Modunest: a butter-yellow ranunculus, ring upon ruffled ring (browser-tab icon) -->
+  <path d="M32 63 L32 46" stroke="#6f8a58" stroke-width="3" stroke-linecap="round"/>
+  <path d="M32 58 C25 58 20.5 54 19 48.5 C25.5 49 30.5 52.5 32 58 Z" fill="#8fa871"/>
+  <g transform="translate(32 27)" stroke="#d9a964" stroke-width="1.1">
+    <circle r="21" fill="#ecc07a"/>
+    <circle r="16" fill="#f3d394"/>
+    <circle r="11" fill="#f7e0b2"/>
+    <circle r="6.4" fill="#efc884"/>
+    <circle r="2.8" fill="#a7965a" stroke="none"/>
+  </g>
+</svg>

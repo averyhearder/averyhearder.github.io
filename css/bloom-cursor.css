@@ -1,0 +1,66 @@
+/* ==========================================================================
+   A Day in Bloom · the floral cursor (js/bloom-cursor.js)
+   The pointer is the browser's own cursor, drawn as our leaf and cosmos
+   (assets/cursor/), so it follows the mouse instantly. The leaf's tip, at 2,2
+   in each picture, is the click point. Each look is its own picture:
+     bloom.svg        everywhere
+     bloom-hover.svg  over anything you can click: the petals open wider and
+                      deepen, with a soft sage halo
+     bloom-press.svg  while pressing, and while dragging a seed, the watering
+                      can or the sun: a little squeeze
+   It only applies while the script has seen a real mouse (html.has-bloom-cursor),
+   and every rule falls back to the usual cursor if a picture can't be used.
+   ========================================================================== */
+
+:root.has-bloom-cursor,
+:root.has-bloom-cursor *,
+:root.has-bloom-cursor ::backdrop { cursor: url("../assets/cursor/bloom.svg") 2 2, auto !important; }
+
+/* things you can click or drag (each has a "pointer" or "grab" cursor somewhere on the site; :where keeps this rule
+   gentle, so pressing, dragging and typing below always take precedence) */
+:root.has-bloom-cursor :where(a[href], button:not(:disabled), [role="button"], [role="link"], label, select, summary,
+  input[type="button"], input[type="submit"], input[type="reset"], input[type="checkbox"], input[type="radio"], input[type="range"],
+  .prop--interactive, .seed-packet, .sun, .garden-bed.is-bloomed .bloom, .garden-note.is-visible,
+  .lk-ducks, .lk-frog, .lk-boat, .lk-bobber, .lk-bottle, .gh-bq-bucket:not(.is-off),
+  .wl-swing, .wl-ribbon, .wl-hung, .aura-key, .behind-bloom__seed),
+:root.has-bloom-cursor :where(a[href], button:not(:disabled), [role="button"], [role="link"], label, select, summary,
+  .prop--interactive, .seed-packet, .sun, .garden-bed.is-bloomed .bloom, .garden-note.is-visible,
+  .lk-ducks, .lk-frog, .lk-boat, .lk-bobber, .lk-bottle, .gh-bq-bucket:not(.is-off),
+  .wl-swing, .wl-ribbon, .wl-hung, .aura-key, .behind-bloom__seed) * { cursor: url("../assets/cursor/bloom-hover.svg") 2 2, pointer !important; }
+
+/* pressing (just the thing under the pointer), and the whole time a seed, the can or the sun is dragged */
+:root.has-bloom-cursor .bloom-cursor--pressed,
+:root.has-bloom-cursor body.is-dragging-seed,
+:root.has-bloom-cursor body.is-dragging-seed * { cursor: url("../assets/cursor/bloom-press.svg") 2 2, grabbing !important; }
+
+/* where you type, and while selecting text: the normal text cursor stays clear */
+:root.has-bloom-cursor :is(input:not([type="button"], [type="submit"], [type="reset"], [type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="image"]), textarea, [contenteditable]:not([contenteditable="false"])),
+:root.has-bloom-cursor.bloom-cursor--text,
+:root.has-bloom-cursor.bloom-cursor--text * { cursor: text !important; }
+
+/* a click: two or three petals drift from the flower and fade */
+.bloom-cursor__drift {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482999;
+  pointer-events: none;
+  overflow: hidden;
+}
+.bloom-cursor__drift i {
+  position: absolute;
+  width: 7px;
+  height: 5px;
+  margin: -2.5px 0 0 -3.5px;
+  border-radius: 50% 50% 46% 46% / 30% 30% 70% 70%;
+  /* they drift out quickly and slow down, staying soft and visible for most of the way, then fade */
+  animation: bloom-cursor-petal .75s cubic-bezier(.2, .7, .35, 1) forwards, bloom-cursor-fade .75s linear forwards;
+}
+@keyframes bloom-cursor-petal {
+  from { transform: translate(0, 0) rotate(0) scale(.6); }
+  to   { transform: translate(var(--dx), var(--dy)) rotate(var(--spin)) scale(1); }
+}
+@keyframes bloom-cursor-fade { 0%, 55% { opacity: .95; } 100% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .bloom-cursor__drift { display: none; }
+}

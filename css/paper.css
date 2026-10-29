@@ -1,0 +1,127 @@
+/* ==========================================================================
+   A Day in Bloom · paper & keepsakes
+   Shared journal pieces used by the About Me journal and the project
+   field journals: paper, washi tape, paper clips, polaroids, stickers.
+   ========================================================================== */
+
+:root {
+  --paper: #fbf7ee;
+  --paper-warm: #f6efe0;
+  --paper-line: rgba(140, 160, 125, .22);
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .3 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* a much lighter grain for paper surfaces */
+  --grain-soft: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .3 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Handwritten accents: use sparingly */
+.hand {
+  font-family: var(--hand);
+  font-weight: 500;
+  line-height: 1.1;
+  color: #6b5a49;
+}
+
+/* A sheet of paper with a soft grain */
+.paper-card {
+  position: relative;
+  padding: 1.1rem 1.25rem;
+  background: var(--grain-soft), var(--paper);
+  background-size: 220px, auto;
+  box-shadow: 0 1px 1px rgba(60, 45, 30, .08), 0 6px 16px rgba(60, 45, 30, .09);
+}
+
+.paper-card--lined {
+  background:
+    repeating-linear-gradient(180deg, transparent 0 27px, var(--paper-line) 27px 28px),
+    var(--paper);
+  background-position: 0 10px;
+}
+
+/* torn bottom edge */
+.paper-card--torn {
+  padding-bottom: 1.6rem;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 5px), 95% 100%, 90% calc(100% - 6px), 84% calc(100% - 1px), 78% calc(100% - 7px), 71% calc(100% - 2px), 64% calc(100% - 6px), 57% 100%, 50% calc(100% - 5px), 43% calc(100% - 1px), 36% calc(100% - 7px), 29% calc(100% - 2px), 22% calc(100% - 6px), 15% 100%, 8% calc(100% - 5px), 3% calc(100% - 1px), 0 calc(100% - 6px));
+  filter: drop-shadow(0 4px 8px rgba(60, 45, 30, .12));
+  box-shadow: none;
+}
+
+/* ---- Washi tape --------------------------------------------------------- */
+.washi {
+  position: absolute;
+  z-index: 2;
+  width: 84px;
+  height: 20px;
+  opacity: .88;
+  background: repeating-linear-gradient(45deg, rgba(227, 169, 176, .7) 0 6px, rgba(255, 250, 244, .55) 6px 12px);
+  clip-path: polygon(3% 0, 97% 0, 100% 22%, 97% 42%, 100% 62%, 97% 82%, 100% 100%, 3% 100%, 0 80%, 3% 60%, 0 40%, 3% 20%);
+  pointer-events: none;
+}
+.washi--sage   { background: repeating-linear-gradient(90deg, rgba(157, 176, 139, .65) 0 5px, rgba(240, 244, 232, .55) 5px 10px); }
+.washi--butter { background: radial-gradient(circle, rgba(255, 255, 255, .8) 1.6px, transparent 2px) 0 0 / 9px 9px, rgba(242, 213, 143, .75); }
+.washi--lake   { background: repeating-linear-gradient(-45deg, rgba(168, 195, 207, .7) 0 4px, rgba(250, 252, 252, .55) 4px 9px); }
+.washi--plain  { background: rgba(239, 230, 210, .82); }
+
+/* ---- Paper clip ---------------------------------------------------------- */
+.paper-clip {
+  position: absolute;
+  z-index: 3;
+  width: 16px;
+  height: 46px;
+  pointer-events: none;
+}
+
+/* ---- Polaroid ------------------------------------------------------------ */
+.polaroid {
+  position: relative;
+  margin: 0;
+  padding: 8px 8px 10px;
+  background: #fffdf8;
+  box-shadow: 0 2px 3px rgba(60, 45, 30, .1), 0 10px 22px rgba(60, 45, 30, .14);
+}
+.polaroid figcaption {
+  margin-top: 6px;
+  font-family: var(--hand);
+  font-size: 1.15rem;
+  text-align: center;
+  color: #6b5a49;
+}
+
+/* ---- Die-cut stickers (white border + soft shadow) ---------------------- */
+.sticker {
+  display: block;
+  filter:
+    drop-shadow(1.6px 0 0 #fff) drop-shadow(-1.6px 0 0 #fff)
+    drop-shadow(0 1.6px 0 #fff) drop-shadow(0 -1.6px 0 #fff)
+    drop-shadow(0 3px 4px rgba(60, 45, 30, .2));
+}
+
+/* ---- Placeholder image box ---------------------------------------------- */
+.ph {
+  display: grid;
+  place-items: center;
+  min-height: 200px;
+  padding: 1rem;
+  border: 1.5px dashed rgba(95, 115, 87, .45);
+  font-size: .85rem;
+  text-align: center;
+  color: var(--ink-soft);
+  background: rgba(201, 213, 185, .2);
+}
+
+/* ---- Small labels / tags ------------------------------------------------- */
+.tag-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin: 0;
+  padding: 0;
+}
+.tag-list li {
+  padding: .28rem .75rem;
+  border-radius: 999px;
+  font-size: .8rem;
+  font-weight: 400;
+  background: rgba(157, 176, 139, .22);
+}
+.tag-list--blush li { background: rgba(227, 169, 176, .24); }
