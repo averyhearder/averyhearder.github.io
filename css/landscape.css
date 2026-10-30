@@ -25,6 +25,12 @@
   .mode-toggle button { justify-content: center; min-width: 42px; min-height: 38px; padding: .2rem .45rem; }
   .sound-toggle { width: 42px; height: 42px; }
   .garden-controls + .site-nav { margin-left: .4rem; }
+  /* The menu sits beside the title and the light and sound buttons at the far right, leaving the
+     stretch between them open: that is where the sun is (about two-thirds of the way across, on
+     every phone held sideways), so the buttons never cover it. (Their order for the keyboard and
+     screen readers is unchanged.) */
+  .site-nav { order: 1; }
+  .garden-controls { order: 2; margin-left: auto; }
   .site-nav { padding: .15rem; }
   .site-nav a { display: flex; align-items: center; min-height: 40px; padding: 0 .65rem; font-size: .64rem; letter-spacing: .15em; }
 
@@ -93,9 +99,16 @@
     box-shadow: 0 6px 16px rgba(40, 50, 35, .26);
   }
 
-  /* the lake: the rowboat's message and the buttons share one slim row (shorter labels, as on
-     phones held upright; the full words stay for screen readers) */
-  .lk-controls { flex-direction: row; gap: .4rem; bottom: max(8px, env(safe-area-inset-bottom, 0px)); }
+  /* the lake: the rowboat's message above a slim row of buttons (shorter labels, as on phones held
+     upright; the full words stay for screen readers), at the bottom left, over the meadow, so the
+     frogs on the lily pads to the right stay in reach */
+  .lk-controls {
+    left: max(10px, env(safe-area-inset-left, 0px));
+    bottom: max(8px, env(safe-area-inset-bottom, 0px));
+    align-items: flex-start;
+    gap: .3rem;
+    transform: none;
+  }
   .lk-status { padding: .1rem .75rem; font-size: 1rem; white-space: nowrap; }
   .lk-btn { padding: .3rem .8rem; font-size: 1rem; box-shadow: 0 6px 16px rgba(40, 55, 50, .16); }
   .lk-controls__row { flex-wrap: nowrap; gap: .3rem; }

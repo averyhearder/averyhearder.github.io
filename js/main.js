@@ -45,12 +45,20 @@
   // On narrow screens the garden is wider than the window; start at the beds.
   // (A phone turned sideways is the other way round: the garden is taller than the window and
   // scrolls up to the sky, so it starts at the bottom, with the beds, seeds and can in view.
-  // The same test as in css/landscape.css.)
+  // The same test as in css/landscape.css. If that leaves the sun only just clipped by the top of
+  // the screen, the view sits a few pixels lower so the whole sun shows.)
   const sideways = window.matchMedia('(orientation: landscape) and (max-height: 500px) and (hover: none) and (pointer: coarse)');
+  const sun = document.getElementById('sun');
+  function restingTop() {
+    const bottom = viewport.scrollHeight - viewport.clientHeight;
+    const sunTop = sun.offsetTop;   // (its place in the garden, unaffected by the welcome screen's gentle zoom)
+    const clipped = sunTop < bottom + 4 && sunTop + sun.offsetHeight > bottom;
+    return clipped && bottom + 4 - sunTop <= 24 ? sunTop - 4 : bottom;
+  }
   function centreOnBeds() {
     const bedsCentre = scene.offsetWidth * (810 / 1600);
     viewport.scrollLeft = Math.max(0, bedsCentre - viewport.clientWidth / 2);
-    if (sideways.matches) viewport.scrollTop = viewport.scrollHeight;
+    if (sideways.matches) viewport.scrollTop = restingTop();
   }
 
   function showSwipeHint() {
@@ -211,7 +219,8 @@
   });
 
   // Shared with js/game.js
-  window.GardenUI = { showNote: showNote };
+  // (restingTop: where a phone turned sideways sits, at the bottom of the garden)
+  window.GardenUI = { showNote: showNote, restingTop: restingTop };
 
   // ---- The garden rests while something covers it --------------------------
   // While a panel or the greenhouse is open, the garden's animations pause. Only the

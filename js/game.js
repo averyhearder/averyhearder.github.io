@@ -748,7 +748,8 @@
     if (!glided && sideways.matches && bed.getBoundingClientRect().bottom > instructionBar.getBoundingClientRect().top) {
       state.busy = true;
       const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      viewport.scrollTo({ top: viewport.scrollHeight, behavior: calm ? 'auto' : 'smooth' });
+      const top = window.GardenUI && window.GardenUI.restingTop ? window.GardenUI.restingTop() : viewport.scrollHeight;
+      viewport.scrollTo({ top, behavior: calm ? 'auto' : 'smooth' });
       window.setTimeout(() => shine(bed, true), calm ? 0 : 550);
       return;
     }
@@ -996,13 +997,20 @@
       const W = viewport.clientWidth;
       const boxes = need[0].filter(Boolean).map((el) => el.getBoundingClientRect());
       const across = (r) => r.left + r.width / 2 > 0 && r.left + r.width / 2 < W;
-      const upDown = (r) => !sideways.matches || (r.top + r.height / 2 > ceiling && r.top + r.height / 2 < barTop);
+      // (sideways, the header's buttons sit at either end, so something can show in the gap between them)
+      const headerBoxes = sideways.matches ? [...document.querySelectorAll('.brand, .garden-controls, .site-nav')].map((el) => el.getBoundingClientRect()) : [];
+      const upDown = (r) => {
+        if (!sideways.matches) return true;
+        const x = r.left + r.width / 2;
+        const y = r.top + r.height / 2;
+        return y > 0 && y < barTop && !headerBoxes.some((b) => x > b.left && x < b.right && y < b.bottom);
+      };
       const inView = boxes.some((r) => across(r) && upDown(r));
       if (!inView) {
         // the nearest of them, measured from the middle of the screen
         target = boxes.reduce((best, r) => (!best || Math.abs(r.left + r.width / 2 - W / 2) < Math.abs(best.left + best.width / 2 - W / 2) ? r : best), null);
         if (!across(target)) way = target.left + target.width / 2 < 0 ? 'left' : 'right';
-        else way = target.top + target.height / 2 <= ceiling ? 'up' : 'down';
+        else way = target.top + target.height / 2 < barTop / 2 ? 'up' : 'down';
       }
     }
     if (!target) {
