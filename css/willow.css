@@ -57,6 +57,9 @@ body.willow-settled .garden-scene { content-visibility: hidden; visibility: hidd
 .willow-room.is-open { opacity: 1; }
 .willow-room[hidden] { display: none; }
 .willow-room:not(.is-open) { transition-delay: 0s; transition-duration: .5s; }
+/* while it's still invisible (or fading away) it takes no taps: on a slower phone, a second tap
+   made while the nook was being drawn could otherwise land on its unseen "back to the garden" */
+.willow-room:not(.is-open) { pointer-events: none; }
 
 /* fills the screen; on narrow screens it keeps its shape and you swipe sideways */
 .willow-room__viewport {
@@ -172,7 +175,17 @@ body.willow-settled .garden-scene { content-visibility: hidden; visibility: hidd
   from { opacity: .65; transform: translateX(-.3%); }
   to   { opacity: 1;   transform: translateX(.3%); }
 }
-.wl-beams { mix-blend-mode: screen; opacity: .9; }
+.wl-beams { mix-blend-mode: screen; opacity: .9; filter: blur(.375cqw); will-change: filter; }
+
+/* The far curtain and the sunbeams are softened with CSS blurs, each on its own layer, so Safari can
+   blur them on the graphics chip. (They used to be SVG blur filters across the whole nook, which
+   Safari draws in software at full screen resolution, keeping several full-size copies in memory:
+   on iPhones that was enough to make the page reload.) The amounts match the SVG filters exactly:
+   one garden unit is 1/1600 of the nook's width, so blur-md (6 units) is .375cqw, blur-sm (1 unit)
+   .0625cqw, and the opacity follows the blur, as it did on the SVG groups. */
+.wl-far { will-change: filter; }
+.wl-far--glow    { filter: blur(.375cqw); opacity: .7; }
+.wl-far--strands { filter: blur(.0625cqw); opacity: .75; }
 
 /* a paper grain and a soft vignette, like the rest of the site */
 .willow-room__light {

@@ -903,10 +903,31 @@
     if (ctx && ctx.state === 'running') ambience.schedule(ctx.currentTime + 1.5);
   }
 
+  // iPhones and iPads mute web audio while the ring/silent switch is set to silent (as they do
+  // ringtones), even with the volume up, unless the page asks to play like a music or video
+  // player does. That's only asked once the visitor has turned sound on, and handed back when
+  // they turn it off. Other browsers don't have navigator.audioSession and are unaffected.
+  // Playing that way pauses other apps' music, so once the visitor has opened the playlist in a
+  // music app, the garden plays along underneath it instead (the phone's usual mixing rules).
+  let withTheirMusic = false;
+  document.addEventListener('click', (event) => {
+    if (event.target.closest && event.target.closest('.music-option')) withTheirMusic = true;
+  }, true);
+  function audioSession(type) {
+    try { if (navigator.audioSession && navigator.audioSession.type !== type) navigator.audioSession.type = type; } catch (error) { /* not allowed: carry on */ }
+  }
+
   function wake(fadeSeconds) {
+    audioSession(withTheirMusic ? 'auto' : 'playback');
     if (!build()) return;
     window.clearTimeout(sleepTimer);
     const resumed = ctx.state === 'running' ? Promise.resolve() : ctx.resume();
+    // a silent, one-sample sound started right inside the tap: older iPhones only let a page's audio
+    // begin once something has actually played during a tap
+    const blip = ctx.createBufferSource();
+    blip.buffer = ctx.createBuffer(1, 1, ctx.sampleRate);
+    blip.connect(ctx.destination);
+    blip.start();
     resumed.then(() => { tick(); fadeTo(VOLUME, fadeSeconds); }).catch(() => { /* the browser said not yet */ });
     if (!ticker) ticker = window.setInterval(tick, 400);
   }
@@ -918,7 +939,10 @@
     fadeTo(0, fadeSeconds);
     window.clearInterval(ticker);
     ticker = 0;
-    sleepTimer = window.setTimeout(() => { if (ctx.state === 'running') ctx.suspend(); }, fadeSeconds * 1000 + 120);
+    sleepTimer = window.setTimeout(() => {
+      if (ctx.state === 'running') ctx.suspend();
+      audioSession('auto');   // resting (turned off, or the page hidden): other apps can play freely
+    }, fadeSeconds * 1000 + 120);
   }
 
   function showButton() {

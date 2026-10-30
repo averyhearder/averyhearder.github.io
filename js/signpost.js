@@ -65,9 +65,17 @@
     document.body.classList.remove('signpost-open');
   }
 
-  // close by stepping back off the entry added on opening (then, if a board or link was tapped, go there)
+  // close by stepping back off the entry added on opening. If a board or link was tapped, that entry is
+  // simply replaced by where it leads instead: stepping back and then going there raced on slower
+  // iPhones, where the step back could land after the willow (or any room) had opened, and take
+  // the visitor straight back to the garden.
   function dismiss(hash) {
     if (!open) return;
+    if (hash && history.state && history.state.signpost) {
+      hide();
+      location.replace(hash);
+      return;
+    }
     pendingHash = hash || null;
     if (history.state && history.state.signpost) {
       history.back();

@@ -93,7 +93,8 @@
     top: 78px;   /* the second header row, just under the menu */
     right: 12px;
   }
-  .mode-toggle__label { display: none; }
+  /* hidden from view only, so screen readers still hear "Daytime" and "Golden Hour" */
+  .mode-toggle__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .mode-toggle button { justify-content: center; min-width: 46px; min-height: 40px; padding: .3rem .5rem; }
   .sound-toggle { width: 44px; height: 44px; }
   .garden-controls + .site-nav { margin-left: auto; }

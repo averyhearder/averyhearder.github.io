@@ -586,6 +586,11 @@
   // it on or off for the whole site. It never starts without a click or key press.
   const AC = window.AudioContext || window.webkitAudioContext;
   const SOUND_KEY = 'aDayInBloom.sound';   // the garden's own sound setting, kept for this visit
+  // iPhones mute web audio while the ring/silent switch is on unless the page plays like a music
+  // player does; only asked once the visitor's sound is on (as in js/sound.js)
+  const audioSession = (type) => {
+    try { if (navigator.audioSession && navigator.audioSession.type !== type) navigator.audioSession.type = type; } catch (error) { /* carry on */ }
+  };
   const header = document.querySelector('.site-header');
   if ((theme === 'fire' || theme === 'aurora') && AC && header) {
     const fire = theme === 'fire';
@@ -782,6 +787,7 @@
     // behind the bloom (js/behind-bloom.js): the designer's note's paper rustles (see paperRustle below)
     document.addEventListener('pb:paper', (event) => {
       if (!on || document.hidden) return;
+      audioSession('playback');
       build();
       const play = () => paperRustle(ctx, !!(event.detail && event.detail.open));
       if (ctx.state === 'running') play(); else ctx.resume().then(play).catch(() => { /* not yet allowed */ });
@@ -789,6 +795,7 @@
 
     function start() {
       if (!on || document.hidden) return;
+      audioSession('playback');
       build();
       const resumed = ctx.state === 'running' ? Promise.resolve() : ctx.resume();
       resumed.then(() => {
@@ -805,7 +812,10 @@
       if (!ctx) return;
       master.gain.cancelScheduledValues(ctx.currentTime);
       master.gain.setTargetAtTime(0, ctx.currentTime, seconds / 3);
-      window.setTimeout(() => { if (ctx && ctx.state === 'running' && !crackleTimer) ctx.suspend(); }, seconds * 1000 + 100);
+      window.setTimeout(() => {
+        if (ctx && ctx.state === 'running' && !crackleTimer) ctx.suspend();
+        if (!crackleTimer) audioSession('auto');   // resting: other apps can play freely
+      }, seconds * 1000 + 100);
     }
 
     btn.addEventListener('click', () => {
@@ -834,6 +844,7 @@
       let on = false;
       try { on = sessionStorage.getItem(SOUND_KEY) === 'on'; } catch (error) { /* storage blocked */ }
       if (!on || document.hidden) return;
+      audioSession('playback');
       if (!ctx) ctx = new AC();
       const play = () => paperRustle(ctx, !!(event.detail && event.detail.open));
       if (ctx.state === 'running') play(); else ctx.resume().then(play).catch(() => { /* not yet allowed */ });

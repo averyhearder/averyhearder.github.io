@@ -101,10 +101,12 @@
     if (painted) return;
     painted = true;
 
-    // the far curtain of willow strands, with bright meadow light glowing between them
-    let curtain = '<g fill="#fbf6e2" filter="url(#blur-md)" opacity=".7">';
-    for (let i = 0; i < 14; i++) curtain += `<ellipse cx="${r1(between(0, 1600))}" cy="${r1(between(260, 700))}" rx="${r1(between(30, 80))}" ry="${r1(between(60, 160))}"/>`;
-    curtain += '</g><g filter="url(#blur-sm)" opacity=".75" fill="none" stroke-linecap="round">';
+    // the far curtain of willow strands, with bright meadow light glowing between them (each part is
+    // softened by a CSS blur on its own layer, matching blur-md and blur-sm: see .wl-far in css/willow.css)
+    let glow = '<g fill="#fbf6e2">';
+    for (let i = 0; i < 14; i++) glow += `<ellipse cx="${r1(between(0, 1600))}" cy="${r1(between(260, 700))}" rx="${r1(between(30, 80))}" ry="${r1(between(60, 160))}"/>`;
+    fill('wl-curtain-glow', glow + '</g>');
+    let curtain = '<g fill="none" stroke-linecap="round">';
     for (let x = -20; x < 1620; x += between(12, 22)) {
       const len = between(420, 860);
       const drift = between(-20, 20);
@@ -258,11 +260,12 @@
     fill('wl-desk', desk);
 
     // soft beams of sunlight slanting down through the leaves
-    fill('wl-beams', '<g fill="#fff8e0" filter="url(#blur-md)">' +
+    // (softened by a CSS blur on the whole layer, matching blur-md: see .wl-beams in css/willow.css)
+    fill('wl-beams', '<g fill="#fff8e0">' +
       '<path d="M980 -20 L1100 -20 L860 820 L740 820 Z" opacity=".16"/>' +
       '<path d="M1180 -20 L1250 -20 L1080 760 L1000 760 Z" opacity=".12"/>' +
       '<path d="M500 -20 L560 -20 L420 700 L360 700 Z" opacity=".1"/></g>' +
-      '<g class="golden-only" fill="#ffd9a6" filter="url(#blur-md)">' +
+      '<g class="golden-only" fill="#ffd9a6">' +
       '<path d="M1300 -20 L1420 -20 L1140 820 L1020 820 Z" fill-opacity=".3"/></g>');
 
     // the strands nearest to you, framing the nook. A clear pocket is kept on the left, under
@@ -392,6 +395,17 @@
   let enteredFromGarden = false;
   let closeTimer;
   let settleTimer;
+  // phones and tablets: while the nook fades in, the phone is drawing both it and the whole garden
+  // behind it, which is the most memory the page ever needs at once (on older iPhones, enough for
+  // Safari to reload the page). So there, the garden is put away the moment the nook's fade has
+  // finished and it fully covers the garden, rather than at a fixed time that, on a slower phone,
+  // could be half a second later. Nothing changes visually.
+  const touch = window.matchMedia('(hover: none) and (pointer: coarse)');
+  room.addEventListener('transitionend', (event) => {
+    if (!touch.matches || event.target !== room || event.propertyName !== 'opacity' || !room.classList.contains('is-open')) return;
+    window.clearTimeout(settleTimer);
+    body.classList.add('willow-settled');
+  });
 
   function unit() { return scene.clientWidth / 1600; }
 
@@ -408,10 +422,13 @@
     const spare = scene.clientWidth - viewport.clientWidth;
     viewport.scrollLeft = spare > 0 ? Math.min(spare, Math.max(0, 950 * unit() - viewport.clientWidth / 2)) : 0;
     window.clearTimeout(settleTimer);
-    settleTimer = window.setTimeout(() => body.classList.add('willow-settled'), 1300);
+    if (!touch.matches) settleTimer = window.setTimeout(() => body.classList.add('willow-settled'), 1300);
     requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (!body.classList.contains('at-willow')) return;   // left again already
       room.classList.add('is-open');
       back.focus({ preventScroll: true });
+      // (and should the fade not report its end, e.g. with reduced motion, where there is no fade)
+      if (touch.matches) settleTimer = window.setTimeout(() => body.classList.add('willow-settled'), 1000);
     }));
     greet();   // "welcome back ♡", if their wishes were waiting for them
   }
@@ -832,4 +849,11 @@
 
   window.addEventListener('hashchange', sync);
   sync();
+
+  // ---- Getting the nook ready in the background (as the greenhouse does) -----------------
+  // Drawing its thousands of leaves takes the phone a moment, so it's done once the garden has
+  // loaded and the browser is idle, rather than in the instant the willow is tapped. The nook stays
+  // hidden, so nothing is shown or laid out until the visitor steps in.
+  const whenIdle = (fn) => (window.requestIdleCallback ? window.requestIdleCallback(fn, { timeout: 2500 }) : window.setTimeout(fn, 2000));
+  window.addEventListener('load', () => whenIdle(paint));
 })();

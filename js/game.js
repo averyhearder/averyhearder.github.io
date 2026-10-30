@@ -737,10 +737,21 @@
       sun.style.transform = '';
       sun.style.transition = '';
       sun.classList.remove('is-shining');
+      scheduleGuide();   // back in the sky (which, on a phone turned sideways, may be out of view)
     }, 950);
   }
 
-  function shine(bed) {
+  function shine(bed, glided) {
+    // a phone turned sideways: the sun can be carried from the sky while the beds are still below the
+    // screen (the sun shines on whichever bed it's above). The garden glides down to the bed first,
+    // the sun travelling with it, and then the sunshine begins.
+    if (!glided && sideways.matches && bed.getBoundingClientRect().bottom > instructionBar.getBoundingClientRect().top) {
+      state.busy = true;
+      const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      viewport.scrollTo({ top: viewport.scrollHeight, behavior: calm ? 'auto' : 'smooth' });
+      window.setTimeout(() => shine(bed, true), calm ? 0 : 550);
+      return;
+    }
     const flower = bed.dataset.flower;
     const home = sunHome();
     const r = bed.getBoundingClientRect();
@@ -942,9 +953,13 @@
   // On phones the garden is wider than the screen, so when the next thing to tap is off to one
   // side, a small handwritten arrow at that edge points the way. It follows the garden as you
   // swipe, fades once the thing is in view, and never takes a tap. (Phones only.)
+  // A phone turned sideways shows the garden's full width but not its full height (the sky
+  // scrolls: see css/landscape.css), so there the arrow can also point up to the sun, or down
+  // to the beds.
   const instructionBar = document.getElementById('instruction-bar');
   const controls = document.querySelector('.garden-controls');
-  const phone = window.matchMedia('(max-width: 560px)');
+  const sideways = window.matchMedia('(orientation: landscape) and (max-height: 500px) and (hover: none) and (pointer: coarse)');
+  const phone = window.matchMedia('(max-width: 560px), (orientation: landscape) and (max-height: 500px) and (hover: none) and (pointer: coarse)');
   const AWAY = ['is-welcome', 'has-panel', 'in-greenhouse', 'at-lake', 'at-willow'];
   const guide = document.createElement('p');
   guide.className = 'garden-guide hand';
@@ -972,34 +987,49 @@
     const busyElsewhere = !phone.matches || AWAY.some((c) => document.body.classList.contains(c)) ||
       document.querySelector('dialog[open]') || can.classList.contains('is-carried') || sun.classList.contains('is-carried');
     const need = busyElsewhere ? null : nextNeed();
+    // the open sky between the header and the instruction band
+    const ceiling = controls ? controls.getBoundingClientRect().bottom + 10 : 80;
+    const barTop = instructionBar.getBoundingClientRect().top;
     let target = null;
+    let way = '';   // 'left' or 'right'; or, sideways, 'up' or 'down'
     if (need) {
       const W = viewport.clientWidth;
       const boxes = need[0].filter(Boolean).map((el) => el.getBoundingClientRect());
-      const inView = boxes.some((r) => r.left + r.width / 2 > 0 && r.left + r.width / 2 < W);
+      const across = (r) => r.left + r.width / 2 > 0 && r.left + r.width / 2 < W;
+      const upDown = (r) => !sideways.matches || (r.top + r.height / 2 > ceiling && r.top + r.height / 2 < barTop);
+      const inView = boxes.some((r) => across(r) && upDown(r));
       if (!inView) {
         // the nearest of them, measured from the middle of the screen
         target = boxes.reduce((best, r) => (!best || Math.abs(r.left + r.width / 2 - W / 2) < Math.abs(best.left + best.width / 2 - W / 2) ? r : best), null);
+        if (!across(target)) way = target.left + target.width / 2 < 0 ? 'left' : 'right';
+        else way = target.top + target.height / 2 <= ceiling ? 'up' : 'down';
       }
     }
     if (!target) {
       guide.classList.remove('is-shown');
       return;
     }
-    const toLeft = target.left + target.width / 2 < 0;
-    const key = need[1] + (toLeft ? '<' : '>');
+    const key = need[1] + way;
     if (key !== guideShown) {   // only rewritten when it changes, so its little nudge carries on smoothly
       guideShown = key;
-      guide.innerHTML = toLeft
-        ? `<span class="garden-guide__arrow">←</span> ${need[1]}`
-        : `${need[1]} <span class="garden-guide__arrow">→</span>`;
-      guide.classList.toggle('garden-guide--left', toLeft);
-      guide.classList.toggle('garden-guide--right', !toLeft);
+      const arrow = { left: '←', right: '→', up: '↑', down: '↓' }[way];
+      guide.innerHTML = way === 'right'
+        ? `${need[1]} <span class="garden-guide__arrow">${arrow}</span>`
+        : `<span class="garden-guide__arrow">${arrow}</span> ${need[1]}`;
+      ['left', 'right', 'up', 'down'].forEach((w) => guide.classList.toggle('garden-guide--' + w, w === way));
     }
-    // just above the thing it points to, kept clear of the header and the instruction band
-    const ceiling = controls ? controls.getBoundingClientRect().bottom + 10 : 80;
-    const floor = instructionBar.getBoundingClientRect().top - guide.offsetHeight - 10;
-    guide.style.top = Math.round(Math.max(ceiling, Math.min(floor, target.top - guide.offsetHeight - 16))) + 'px';
+    if (way === 'up' || way === 'down') {
+      // at the top or the bottom of the open sky, in line with the thing it points to
+      const half = guide.offsetWidth / 2;
+      const x = Math.max(8 + half, Math.min(viewport.clientWidth - 8 - half, target.left + target.width / 2));
+      guide.style.left = Math.round(x - half) + 'px';
+      guide.style.top = Math.round(way === 'up' ? ceiling : barTop - guide.offsetHeight - 10) + 'px';
+    } else {
+      // just above the thing it points to, kept clear of the header and the instruction band
+      guide.style.removeProperty('left');
+      const floor = barTop - guide.offsetHeight - 10;
+      guide.style.top = Math.round(Math.max(ceiling, Math.min(floor, target.top - guide.offsetHeight - 16))) + 'px';
+    }
     guide.classList.add('is-shown');
   }
   function scheduleGuide() {

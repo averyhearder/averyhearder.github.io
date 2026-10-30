@@ -40,6 +40,7 @@
   <link rel="stylesheet" href="css/willow.css">
   <link rel="stylesheet" href="css/golden-hour.css">
   <link rel="stylesheet" href="css/intro.css">
+  <link rel="stylesheet" href="css/landscape.css">
   <link rel="stylesheet" href="css/bloom-cursor.css">
 </head>
 <body class="is-welcome">
@@ -2568,7 +2569,14 @@
           <!-- soft green light inside the canopy, with brightness glowing through the far branches -->
           <rect width="1600" height="1000" fill="url(#wl-air)"/>
           <rect width="1600" height="1000" fill="url(#wl-light)"/>
-          <g id="wl-curtain"></g>      <!-- the far curtain of willow strands -->
+        </svg>
+        <!-- the far curtain of willow strands, softly out of focus: the light glowing between them, then
+             the strands. Each is its own layer softened with a CSS blur (css/willow.css), which Safari
+             does on the graphics chip; as SVG blur filters across the whole nook they needed more
+             memory than an iPhone allows a page. -->
+        <svg class="willow-room__art wl-far wl-far--glow" viewBox="0 0 1600 1000" aria-hidden="true"><g id="wl-curtain-glow"></g></svg>
+        <svg class="willow-room__art wl-far wl-far--strands" viewBox="0 0 1600 1000" aria-hidden="true"><g id="wl-curtain"></g></svg>
+        <svg class="willow-room__art" viewBox="0 0 1600 1000" aria-hidden="true">
           <g id="wl-ground"></g>       <!-- moss, roots, wildflowers and mushrooms -->
           <g id="wl-trunk"></g>        <!-- the great trunk, its limbs and the little hollow -->
           <g id="wl-sign"></g>
@@ -2798,6 +2806,7 @@
   <script src="js/bouquet.js"></script>
   <script src="js/lake.js"></script>
   <script src="js/willow.js"></script>
+  <script src="js/room-hints.js"></script>
   <script src="js/sound.js"></script>
   <script src="js/mode.js"></script>
   <script src="js/flowers.js"></script>

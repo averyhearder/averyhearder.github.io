@@ -43,9 +43,14 @@
   }
 
   // On narrow screens the garden is wider than the window; start at the beds.
+  // (A phone turned sideways is the other way round: the garden is taller than the window and
+  // scrolls up to the sky, so it starts at the bottom, with the beds, seeds and can in view.
+  // The same test as in css/landscape.css.)
+  const sideways = window.matchMedia('(orientation: landscape) and (max-height: 500px) and (hover: none) and (pointer: coarse)');
   function centreOnBeds() {
     const bedsCentre = scene.offsetWidth * (810 / 1600);
     viewport.scrollLeft = Math.max(0, bedsCentre - viewport.clientWidth / 2);
+    if (sideways.matches) viewport.scrollTop = viewport.scrollHeight;
   }
 
   function showSwipeHint() {

@@ -1612,9 +1612,12 @@ body.has-panel .swipe-hint { opacity: 0; }
     transform: translateY(-6px);
   }
   .swipe-hint.is-visible { transform: none; }
+}
 
-  /* a little arrow at the screen's edge toward the next thing you need, when it's out of view
-     (js/game.js). It never takes a tap or a swipe. */
+/* a little arrow at the screen's edge toward the next thing you need, when it's out of view
+   (js/game.js). It never takes a tap or a swipe. Phones, upright or turned sideways (where it
+   can also point up to the sun or down to the beds: see css/landscape.css). */
+@media (max-width: 560px), (orientation: landscape) and (max-height: 500px) and (hover: none) and (pointer: coarse) {
   .garden-guide {
     position: fixed;
     z-index: 23;   /* under the instruction band, the messages and the menu */
@@ -1644,11 +1647,55 @@ body.has-panel .swipe-hint { opacity: 0; }
   .garden-guide--right .garden-guide__arrow { --nudge: 4px; }
   .garden-guide:not(.is-shown) .garden-guide__arrow { animation-play-state: paused; }
   @keyframes guide-nudge { 50% { transform: translateX(var(--nudge)); } }
+  .garden-guide--up .garden-guide__arrow,
+  .garden-guide--down .garden-guide__arrow { animation-name: guide-nudge-y; }
+  .garden-guide--up .garden-guide__arrow   { --nudge: -4px; }
+  .garden-guide--down .garden-guide__arrow { --nudge: 4px; }
+  @keyframes guide-nudge-y { 50% { transform: translateY(var(--nudge)); } }
+}
+/* phones only: on larger screens the whole garden fits (every case except a phone turned sideways) */
+@media (min-width: 561px) and (hover: hover), (min-width: 561px) and (pointer: fine),
+       (min-width: 561px) and (orientation: portrait), (min-width: 561px) and (min-height: 501px) {
+  .garden-guide { display: none; }
 }
 @media (min-width: 561px) {
-  .garden-guide { display: none; }   /* phones only: on larger screens the whole garden fits */
   .garden-soil { display: none; }    /* the garden already reaches the bottom of the screen */
 }
+
+/* ---- Little hints in the willow and the greenhouse (js/room-hints.js) ----------------------
+   The garden's arrow, pointing to the swing, the writing desk, the music and the bouquet bar.
+   Only created on phones and tablets. Just a fade and the arrow's small nudge. */
+.room-hint {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  margin: 0;
+  padding: .28rem .8rem .32rem;
+  border: 1px solid rgba(95, 115, 87, .28);
+  border-radius: 999px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.1;
+  white-space: nowrap;
+  color: var(--sage-deep);
+  background: rgba(250, 246, 236, .95);
+  box-shadow: 0 4px 14px rgba(50, 60, 40, .18);
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity .45s ease;
+}
+.room-hint.is-shown { opacity: 1; pointer-events: auto; }   /* a tap on it does what it says */
+.room-hint__arrow { display: inline-block; font-size: 1.2rem; animation: room-hint-nudge 1.4s ease-in-out infinite; }
+.room-hint--left .room-hint__arrow  { --nudge: -4px; }
+.room-hint--right .room-hint__arrow { --nudge: 4px; }
+.room-hint--down .room-hint__arrow  { --nudge: 4px; animation-name: room-hint-nudge-y; }
+.room-hint:not(.is-shown) .room-hint__arrow { animation-play-state: paused; }
+@keyframes room-hint-nudge { 50% { transform: translateX(var(--nudge)); } }
+@keyframes room-hint-nudge-y { 50% { transform: translateY(var(--nudge)); } }
 
 /* ---- Fitting the garden to the screen it's actually on -----------------------------------
    The garden is sized from the height of its own window (cqh) rather than from vh/dvh. On iPhones,

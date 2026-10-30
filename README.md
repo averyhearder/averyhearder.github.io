@@ -64,6 +64,9 @@ js/lake.js              "A Few Thoughts from the Lake": the lakeside scene, boat
 css/lake.css            The lakeside scene, the boat ride and its cards
 js/willow.js            "The Wishing Willow": the nook beneath the willow, its rope swing, the wish card at the desk and up to eight wishes hung on the branches (saved privately in the visitor's own browser with localStorage, key aDayInBloom.willow.v1; never sent anywhere)
 css/willow.css          The Wishing Willow's scene, light, swing, wish card, ribbons and hanging notes
+js/room-hints.js        Phones and tablets: little arrows in the willow and the greenhouse (the swing, the wish desk, the music, the bouquet bar);
+                        each one retires once that feature is used (remembered in the visitor's browser, key aDayInBloom.hints.v1)
+css/landscape.css       Phones turned sideways: a slimmer header, instructions, messages and room buttons; the garden scrolls up to the sun
 js/sound.js             Garden sounds (lake, wind, birds, crickets) and gardening sound effects; off until turned on
 css/golden-hour.css     Golden Hour sunset layers, fireflies and fairy lights
 js/little-things.js     Notebook "Little Things" page: recipe card + PLAYLIST_URL for the record
