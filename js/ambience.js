@@ -29,12 +29,19 @@
 
   // Bees and butterflies share one drawing each; paste in real copies so
   // every browser can flap their wings
+  const copied = new Set();
   document.querySelectorAll('.critters svg > use').forEach((use) => {
     const art = document.getElementById(use.getAttribute('href').slice(1));
     const copy = art.cloneNode(true);
     copy.removeAttribute('id');
     use.replaceWith(copy);
+    copied.add(art);
   });
+  // ...then put the original drawings away. Hidden as they are, their wings were still flapping, and
+  // a moving part in a shared drawing makes the browser redraw everything that borrows from those
+  // drawings, many times a second (it tripled the work of every frame, which is what made older
+  // Macs and iPhones struggle). Nothing on screen changes.
+  copied.forEach((art) => { if (!document.querySelector(`use[href="#${art.id}"]`)) art.remove(); });
 
   function canAnimate() {
     const away = ['has-panel', 'in-greenhouse', 'at-lake', 'at-willow'].some((name) => document.body.classList.contains(name));

@@ -83,6 +83,7 @@ const UPCOMING_PROJECTS = [
     instructionBar.inert = true;
     // start centred on the potting bench (matters on narrow screens)
     roomViewport.scrollLeft = (roomViewport.scrollWidth - roomViewport.clientWidth) * 0.5;
+    if (window.GreenhouseArt && window.GreenhouseArt.fitSway) window.GreenhouseArt.fitSway();   // (where the cart's flowers sway from)
     requestAnimationFrame(() => requestAnimationFrame(() => {
       room.classList.add('is-open');
       back.focus({ preventScroll: true });

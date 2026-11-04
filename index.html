@@ -494,9 +494,15 @@
         <g id="field-fence"></g>
         <g id="garden-path"></g>
         <g id="field-rows-back"></g>
+      </svg>
 
-        <!-- GREENHOUSE · glass panels with a soft white frame -->
-        <g id="greenhouse">
+      <!-- GREENHOUSE · glass panels with a soft white frame
+           Drawn as three stacked layers that look exactly like one: behind, the inside (the bench and
+           the pets), and in front (the frame, door and base). The pets' little movements then only
+           redraw their own small drawing, not the whole meadow, hedgerow and field behind them, which
+           the browser otherwise had to redraw on every frame. The hover glow lights all three together. -->
+      <div class="layer greenhouse-layers" id="greenhouse">
+        <svg class="layer" viewBox="0 0 1600 1000" aria-hidden="true">
           <ellipse cx="1360" cy="603" rx="170" ry="10" fill="url(#soft-shadow)"/>
           <!-- plants seen through the glass -->
           <g opacity=".85">
@@ -521,6 +527,8 @@
             <path d="M1385 500 L1505 492 L1505 588 L1385 600 Z" fill="url(#window-glow)" opacity=".45"/>
           </g>
 
+        </svg>
+        <svg class="layer" viewBox="0 0 1600 1000" aria-hidden="true">
           <!-- INSIDE THE GREENHOUSE · potting bench, seedlings, tools and the pets
                (drawn over the glass so they stay clear; the frame still sits on top) -->
           <g id="greenhouse-interior">
@@ -606,7 +614,8 @@
             <path d="M1401 590 L1404 568" stroke="#a9825d" stroke-width="1.1" stroke-linecap="round"/>
             <path d="M1402.2 567 L1405.8 567.6 L1404.6 574.6 Q1403.2 576.6 1402.4 574.2 Z" fill="#c3c9ca"/>
           </g>
-
+        </svg>
+        <svg class="layer" viewBox="0 0 1600 1000" aria-hidden="true">
           <!-- GOLDEN HOUR: a string of fairy lights inside the greenhouse -->
           <g class="golden-only fairy-lights">
             <path d="M1222 504 Q1240 516 1258 506 Q1279 518 1300 508 Q1321 518 1342 506 Q1360 516 1378 504 M1390 506 Q1418 516 1446 504 Q1474 512 1500 498" fill="none" stroke="#7a6a52" stroke-width=".6"/>
@@ -646,7 +655,10 @@
           <path d="M1213 591 L1387 591 L1387 603 L1213 603 Z" fill="#e7dfcf"/>
           <path d="M1387 591 L1507 581 L1507 591 L1387 603 Z" fill="#d2c9b6"/>
           <path d="M1213 603 L1387 603" stroke="#a69c88" stroke-width="1"/>
-        </g>
+        </svg>
+      </div>
+
+      <svg class="layer layer-midground layer-midground--after" viewBox="0 0 1600 1000" aria-hidden="true">
         <g id="greenhouse-pots"></g>
         <g id="gx-greenhouse"></g>      <!-- stacked pots by the greenhouse (garden-extras.js) -->
 
@@ -2042,6 +2054,9 @@
     <h2 class="visually-hidden" id="gh-room-title">Inside the greenhouse</h2>
     <div class="gh-room__viewport" id="gh-room-viewport">
       <div class="gh-room__scene">
+        <!-- The room is drawn as a stack of layers that look exactly like one picture, split wherever
+             something moves (the fairy lights, the lantern's flame, the cat and the dog), so those small
+             movements only redraw their own little drawing, not the whole room, on every frame. -->
         <svg class="gh-room__art" viewBox="0 0 1600 1000" aria-hidden="true">
           <defs>
             <linearGradient id="gh-wall" x1="0" y1="0" x2="0" y2="1">
@@ -2104,6 +2119,8 @@
           <!-- climbing vines around the window frames (drawn by js/greenhouse-flowers.js) -->
           <g id="ghf-climbers"></g>
 
+        </svg>
+        <svg class="gh-room__art" viewBox="0 0 1600 1000" aria-hidden="true">
           <!-- fairy lights along the roof beam (they glow and twinkle more in Golden Hour) -->
           <g class="fairy-lights">
             <path d="M0 132 Q80 176 160 134 Q240 178 320 136 Q400 180 480 136 Q560 180 640 136 M960 136 Q1040 180 1120 136 Q1200 178 1280 134 Q1360 176 1440 132 Q1520 174 1600 130" fill="none" stroke="#7a6a52" stroke-width="2"/>
@@ -2117,6 +2134,8 @@
             </g>
           </g>
 
+        </svg>
+        <svg class="gh-room__art" viewBox="0 0 1600 1000" aria-hidden="true">
           <!-- hanging welcome sign -->
           <path d="M690 124 L690 154 M910 124 L910 154" stroke="#8a7d6c" stroke-width="2"/>
           <g transform="rotate(-1.5 800 180)">
@@ -2235,9 +2254,13 @@
             <path d="M290 712 L350 712 L344 748 L296 748 Z" fill="url(#terracotta)"/>
             <path d="M320 712 C300 690 286 680 270 676 M320 712 C330 688 346 676 366 672 M320 712 C318 690 320 674 326 660" fill="none" stroke="#86a169" stroke-width="5" stroke-dasharray="5 3" stroke-linecap="round"/>
           </g>
+        </svg>
+        <svg class="gh-room__art" viewBox="0 0 1600 1000" aria-hidden="true">
           <!-- flowers added to the shelves (js/greenhouse-flowers.js) -->
           <g id="ghf-shelf"></g>
 
+        </svg>
+        <svg class="gh-room__art" viewBox="0 0 1600 1000" aria-hidden="true">
           <!-- the potting bench -->
           <g>
             <ellipse cx="790" cy="886" rx="330" ry="14" fill="url(#soft-shadow)"/>
@@ -2271,9 +2294,13 @@
           <!-- tea towel, clippings, scissors and greenery around the bench (js/greenhouse-flowers.js) -->
           <g id="ghf-bench"></g>
 
+        </svg>
+        <svg class="gh-room__art" viewBox="0 0 1600 1000" aria-hidden="true">
           <!-- the cat sits on the bench and the dog rests beside it (filled in by js/greenhouse.js) -->
           <g transform="translate(640 600) scale(7) translate(-1238 -566)"><g id="gh-room-cat"></g></g>
 
+        </svg>
+        <svg class="gh-room__art" viewBox="0 0 1600 1000" aria-hidden="true">
           <!-- right wall shelf for "Growing Soon" -->
           <g>
             <rect x="1160" y="575" width="360" height="16" rx="3" fill="url(#gh-wood)"/>
@@ -2283,8 +2310,12 @@
           <g id="ghf-station-floor"></g>
           <g id="ghf-stool"></g>
 
+        </svg>
+        <svg class="gh-room__art" viewBox="0 0 1600 1000" aria-hidden="true">
           <g transform="translate(1300 905) scale(5) translate(-1354 -592)"><g id="gh-room-dog"></g></g>
 
+        </svg>
+        <svg class="gh-room__art" viewBox="0 0 1600 1000" aria-hidden="true">
           <!-- GOLDEN HOUR: peach evening light through the glass -->
           <g class="golden-only">
             <rect width="1600" height="1000" fill="#ffc7a0" opacity=".08"/>

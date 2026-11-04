@@ -137,11 +137,17 @@
   width: 100%;
   height: 100%;
   overflow: visible;
+}
+/* the flicker moves the span around each flame's drawing (the graphics chip does that by itself) */
+.pb-flm__flicker {
+  display: block;
+  width: 100%;
+  height: 100%;
   transform-origin: 50% 100%;
   animation: pb-burn var(--fd, .18s) ease-in-out var(--fo, 0s) infinite alternate;
   animation-play-state: paused;
 }
-.pb-fire.is-burning .pb-flm__body { animation-play-state: running; }
+.pb-fire.is-burning .pb-flm__flicker { animation-play-state: running; }
 @keyframes pb-burn {
   0%   { transform: scale(1, .86) skewX(-5deg); }
   50%  { transform: scale(.92, 1.06) skewX(3deg); }
@@ -706,7 +712,7 @@ body[data-theme="aurora"] { overflow-x: clip; }
   .pb-fire__trail, .pb-fire__light { transform: none; opacity: .45; animation: none !important; }
   .pb-fire__flame, .pb-fire__spark { display: none; }
   .pb-flm { transform: scale(.6, .4); opacity: .6; animation: none !important; }
-  .pb-flm__body { animation: none !important; }
+  .pb-flm__flicker { animation: none !important; }
   .pb-flo { transform: none; transition: none; }
   .pb-au, .pb-pencil__line, .pb-sk, .pb-underline__line { stroke-dashoffset: 0; animation: none !important; }
   .pb-underline__tick { opacity: .32; animation: none !important; }

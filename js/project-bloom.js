@@ -37,17 +37,34 @@
   const theme = body.dataset.theme || '';
   let uid = 0;
 
+  // ---- Where the page is scrolled to ----------------------------------------------------------
+  // Noted the moment each scroll event arrives, at the start of a frame, and used by everything below.
+  // Asking for it later in the frame, once the vine's flowers had started opening, made the browser
+  // re-lay-out the whole page first, on every frame of a scroll: that is what made scrolling stutter.
+  let scrollTop = window.scrollY;
+  let viewHeight = window.innerHeight;
+  window.addEventListener('scroll', () => { scrollTop = window.scrollY; }, { passive: true });
+  window.addEventListener('resize', () => { scrollTop = window.scrollY; viewHeight = window.innerHeight; }, { passive: true });
+
   // ---- Things that appear once as they arrive ------------------------------------------------
   // (or as soon as they've been scrolled past). A tiny, throttled check of the few that are still
-  // waiting, which stops listening once they've all appeared.
-  const waiting = [];
+  // waiting, which stops listening once they've all appeared. Where each one sits on the page is
+  // measured once, and again only when the page changes size, rather than on every frame.
+  const waiting = [];   // [element, what to do, where it is on the page]
   let waitFrame = 0;
+  let measured = false;
+  function measure() {
+    measured = true;
+    scrollTop = window.scrollY;
+    waiting.forEach((w) => { w[2] = w[0].getBoundingClientRect().top + scrollTop; });
+  }
   function arrive() {
     waitFrame = 0;
-    const line = window.innerHeight * 0.88;
+    if (!measured) measure();
+    const line = scrollTop + viewHeight * 0.88;
     for (let i = waiting.length - 1; i >= 0; i--) {
-      const [el, then] = waiting[i];
-      if (el.getBoundingClientRect().top < line) {
+      const [el, then, top] = waiting[i];
+      if (top < line) {
         waiting.splice(i, 1);
         then(el);
       }
@@ -58,8 +75,12 @@
   function whenArrived(el, then) {
     if (calm.matches) { then(el); return; }
     if (!waiting.length) window.addEventListener('scroll', onScroll, { passive: true });
-    waiting.push([el, then]);
+    waiting.push([el, then, 0]);
+    measured = false;
   }
+  const remeasure = () => { measured = false; };
+  if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(main);
+  window.addEventListener('resize', remeasure, { passive: true });
   const addClass = (name) => (el) => el.classList.add(name);
 
   // a note for the garden: the visitor has been looking at a project, so its grown flowers can give a
@@ -173,6 +194,7 @@
     vine.setAttribute('class', 'pb-vine');
     vine.setAttribute('aria-hidden', 'true');
     main.appendChild(vine);
+    const layers = [vine];   // the vine's stacked drawings (see drawVine)
     let vineTop = 0;
     let vineHeight = 1;
     let marks = [];
@@ -199,6 +221,7 @@
       let d = `M${r1(xAt(0))} 0`;
       for (let y = 12; y <= vineHeight; y += 12) d += ` L${r1(xAt(y))} ${y}`;
       let art = `<path class="pb-vine__stem" pathLength="1" d="${d}" fill="none" stroke="#7f9a64" stroke-width="${wide ? 2 : 1.5}" stroke-linecap="round"/>`;
+      const bits = [];   // every leaf, bud and flower, in the order they're drawn
       const at = (y) => Math.min(1, r1(y / vineHeight * 1000) / 1000);
       const bit = (y, x, rot, inner, cls) => `<g class="pb-bit${cls ? ' ' + cls : ''}" data-at="${at(y)}" transform="translate(${r1(x)} ${r1(y)}) rotate(${Math.round(rot)})"><g class="pb-bit__grow">${inner}</g></g>`;
 
@@ -208,7 +231,7 @@
       for (let y = 26, i = 0; y < vineHeight - 16; y += (lush ? (wide ? 26 : 20) : (wide ? 34 : 26)) + ((i * 37) % (wide ? 26 : 16)), i++) {
         const side = i % 2 ? 1 : -1;
         const len = wide ? 17 + (i * 7) % 9 : W * (0.34 + ((i * 7) % 9) / 70);   // narrow: always within the page's edge
-        art += bit(y, xAt(y), side * (50 + (i * 13) % 30), leaf(len, pick(LEAVES, i)));
+        bits.push(bit(y, xAt(y), side * (50 + (i * 13) % 30), leaf(len, pick(LEAVES, i))));
       }
       // blossoms and buds along the way, in varied sizes, shades and directions
       const flowerAt = (y, i, big) => {
@@ -218,43 +241,61 @@
         return bit(y, xAt(y) + (wide ? ((i % 3) - 1) * 6 : 0), lean, `<g transform="scale(${r1(s * 100) / 100})">${kind.bloom(i)}</g>`, 'pb-bit--flower');
       };
       for (let y = 110, i = 0; y < vineHeight - 40; y += (lush ? (wide ? 80 : 66) : (wide ? 150 : 120)) + ((i * 53) % (lush ? 50 : 90)), i++) {
-        art += flowerAt(y, i + 3, false);
+        bits.push(flowerAt(y, i + 3, false));
         if (lush && i % 3 !== 2 && y + 22 < vineHeight - 20) {
-          art += bit(y + 22, xAt(y + 22) + (wide ? (i % 2 ? 9 : -9) : 0), (i % 2 ? 1 : -1) * (14 + (i * 17) % 20),
-            `<g transform="scale(${r1((wide ? 0.85 + ((i * 13) % 30) / 100 : Math.min(1, (W - 2) / (kind.width || kind.size)) * 0.8) * 100) / 100})">${kind.bloom(i + 11)}</g>`, 'pb-bit--flower');
+          bits.push(bit(y + 22, xAt(y + 22) + (wide ? (i % 2 ? 9 : -9) : 0), (i % 2 ? 1 : -1) * (14 + (i * 17) % 20),
+            `<g transform="scale(${r1((wide ? 0.85 + ((i * 13) % 30) / 100 : Math.min(1, (W - 2) / (kind.width || kind.size)) * 0.8) * 100) / 100})">${kind.bloom(i + 11)}</g>`, 'pb-bit--flower'));
         }
-        art += bit(y + 34, xAt(y + 34) + (i % 2 ? -5 : 5) * k, (i % 2 ? 1 : -1) * 20, `<g transform="scale(${r1((wide ? 1.3 : 0.9) * 100) / 100})">${budArt(i)}</g>`);
-        art += bit(y + 70, xAt(y + 70) + (i % 2 ? 6 : -6) * k, (i % 2 ? -1 : 1) * 25, `<g transform="scale(${r1((wide ? 1 : 0.75) * 100) / 100})">${budArt(i + 1)}</g>`);
+        bits.push(bit(y + 34, xAt(y + 34) + (i % 2 ? -5 : 5) * k, (i % 2 ? 1 : -1) * 20, `<g transform="scale(${r1((wide ? 1.3 : 0.9) * 100) / 100})">${budArt(i)}</g>`));
+        bits.push(bit(y + 70, xAt(y + 70) + (i % 2 ? 6 : -6) * k, (i % 2 ? -1 : 1) * 25, `<g transform="scale(${r1((wide ? 1 : 0.75) * 100) / 100})">${budArt(i + 1)}</g>`));
       }
       // a bigger bloom beside each section's heading (and, for LumiEdge, a little flame)
       const anchors = [hero, ...sections.map((s) => s.querySelector('h2'))].filter(Boolean);
       const mainTop = main.getBoundingClientRect().top + window.scrollY;
       anchors.forEach((el, i) => {
         const y = Math.min(vineHeight - 10, Math.max(30, el.getBoundingClientRect().top + window.scrollY - mainTop - vineTop + 20));
-        art += flowerAt(y, i, true);
+        bits.push(flowerAt(y, i, true));
         if (theme === 'fire' && i > 0) {
           const fy = Math.max(20, y - 40);
-          art += `<g class="pb-bit pb-vflame" data-at="${at(fy)}" transform="translate(${r1(xAt(fy) + (wide ? 12 : 0))} ${r1(fy)}) scale(${wide ? 1.3 : Math.min(1, W / 16)})"><g class="pb-bit__grow">` +
-            `<circle class="pb-vflame__glow" r="9" cy="-5" fill="url(#pb-vflame-glow)"/>${tinyFlame}</g></g>`;
+          bits.push(`<g class="pb-bit pb-vflame" data-at="${at(fy)}" transform="translate(${r1(xAt(fy) + (wide ? 12 : 0))} ${r1(fy)}) scale(${wide ? 1.3 : Math.min(1, W / 16)})"><g class="pb-bit__grow">` +
+            `<circle class="pb-vflame__glow" r="9" cy="-5" fill="url(#pb-vflame-glow)"/>${tinyFlame}</g></g>`);
         }
       });
       if (theme === 'fire') {
         art = '<defs><radialGradient id="pb-vflame-glow"><stop offset="0" stop-color="#ffd27a" stop-opacity=".8"/><stop offset="1" stop-color="#f08a3c" stop-opacity="0"/></radialGradient></defs>' + art;
       }
-      vine.innerHTML = art;
-      marks = [...vine.querySelectorAll('.pb-bit')].map((el) => [el, parseFloat(el.dataset.at)]);
+      // The vine is a stack of drawings of the same size, in the same place: the stem in the first, then
+      // its leaves, buds and flowers dealt out in the order they're drawn, about forty to a drawing (so
+      // each holds one stretch of the vine). It looks exactly like a single drawing, but as you scroll,
+      // the stem growing and each flower opening only redraw their own small drawing, not the hundreds
+      // of others along the whole page, which is what made scrolling stutter on slower computers.
+      const groups = [art];
+      for (let i = 0; i < bits.length; i += 40) groups.push(bits.slice(i, i + 40).join(''));
+      while (layers.length < groups.length) { const s = document.createElementNS(NS, 'svg'); layers[layers.length - 1].after(s); layers.push(s); }
+      while (layers.length > groups.length) layers.pop().remove();
+      layers.forEach((svg, i) => {
+        if (i) ['class', 'style', 'viewBox', 'height', 'aria-hidden'].forEach((name) => svg.setAttribute(name, vine.getAttribute(name)));
+        svg.innerHTML = groups[i];
+      });
+      marks = layers.flatMap((svg) => [...svg.querySelectorAll('.pb-bit')]).map((el) => [el, parseFloat(el.dataset.at)]);
+      // (measured here, whenever the vine is drawn, rather than on every frame of a scroll)
+      shown = vine.getClientRects().length > 0;
+      docTop = main.getBoundingClientRect().top + window.scrollY + vineTop;
+      pageHeight = document.documentElement.scrollHeight;
       reached = 0;
       growVine();
     }
 
     // the vine reaches a little ahead of what you're reading; it only ever grows
     let frame = 0;
+    let shown = false;
+    let docTop = 0;
+    let pageHeight = 0;
     function growVine() {
       frame = 0;
-      if (!vine.getClientRects().length) return;
-      const docTop = main.getBoundingClientRect().top + window.scrollY + vineTop;
-      const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
-      const p = calm.matches || atBottom ? 1 : Math.min(1, Math.max(0, (window.scrollY + window.innerHeight * 0.75 - docTop) / vineHeight));
+      if (!shown) return;
+      const atBottom = scrollTop + viewHeight >= pageHeight - 4;
+      const p = calm.matches || atBottom ? 1 : Math.min(1, Math.max(0, (scrollTop + viewHeight * 0.75 - docTop) / vineHeight));
       if (p <= reached) return;
       reached = p;
       vine.querySelector('.pb-vine__stem').style.strokeDashoffset = String(1 - p);
@@ -315,9 +356,11 @@
     for (let k = 0; k < n; k++) {
       const f = (k + 0.3 + ((k * 37) % 40) / 100) / n;
       const h = low ? 8 + (k * 7) % 5 : (phone ? 14 : 16) + (k * 13) % (phone ? 12 : 16);
+      // (the flicker moves the span around the flame's drawing, which the graphics chip can do by
+      // itself; on the drawing itself, the browser had to redo it on every frame, for every flame)
       html += `<span class="pb-flm" style="left:${r1(f * 100)}%; --h:${h}px; --d:${Math.round((rtl ? 1 - f : f) * TRAVEL * 0.92)}ms">` +
-        `<span class="pb-flm__size"><svg class="pb-flm__body" viewBox="-12 -32 24 33" style="--fd:${(0.13 + ((k * 7) % 13) / 100).toFixed(2)}s; --fo:-${((k * 11) % 9) / 10}s">` +
-        `<use href="#pb-flame-${'abcab'[k % 5]}"/></svg></span></span>`;
+        `<span class="pb-flm__size"><span class="pb-flm__flicker" style="--fd:${(0.13 + ((k * 7) % 13) / 100).toFixed(2)}s; --fo:-${((k * 11) % 9) / 10}s">` +
+        `<svg class="pb-flm__body" viewBox="-12 -32 24 33"><use href="#pb-flame-${'abcab'[k % 5]}"/></svg></span></span></span>`;
     }
     row.innerHTML = html;
   }

@@ -290,6 +290,7 @@ a.gh-pot:hover .gh-pot__art { transform: translateY(-.2cqw); }
    invisible pad over the cart's body take taps: nothing nearby is covered. */
 .gh-station { aspect-ratio: 290 / 490; pointer-events: none; }
 .gh-station svg { display: block; width: 100%; height: auto; overflow: visible; }
+.gh-station svg ~ svg { position: absolute; inset: 0; height: 100%; }   /* the cart's other layers, stacked exactly over the first */
 .gh-station svg * { pointer-events: visiblePainted; }
 .gh-station .gh-station__hit { fill: transparent; pointer-events: all; }
 .gh-station .prop-tag { top: 2%; bottom: auto; }

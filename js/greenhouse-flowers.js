@@ -336,7 +336,9 @@
   };
 
   // ---- Paint ---------------------------------------------------------------------
-  const art = document.querySelector('.gh-room__art');
+  // (the room's picture is a stack of layers: the swaying flowers go just above the last of them)
+  const artLayers = document.querySelectorAll('.gh-room__art');
+  const art = artLayers[artLayers.length - 1];
   if (!art) return;
 
   // The room is painted once, quietly in the background after the page has loaded (or
@@ -447,7 +449,9 @@
       bucket(968, 798, 52, 38);
     shelfFlowers += arrangement(bucket, 1042, 796, 52, 40, 104, 120, { mix: { zinnia: 2, poppy: 2, cosmos: 1 }, spires: 2, filler: 1, scale: 0.72 });
     shelfFlowers += arrangement(bucket, 1114, 798, 50, 38, 100, 110, { mix: { dahlia: 2, ranunculus: 2 }, amaranth: 2, scale: 0.72 });
-    station += `<g class="gh-station__sway">${shelfFlowers}</g>`;
+    // (the cart is drawn in five stacked layers: see "The swaying flowers" below)
+    const stationBack = station;
+    station = '';
     // front legs on little wheels
     station += '<path d="M934 674 V896 M1146 674 V896" stroke="#8c6a4a" stroke-width="13"/>' +
       '<circle cx="934" cy="900" r="13" fill="#6f5a45"/><circle cx="934" cy="900" r="5" fill="#c9b08a"/>' +
@@ -475,15 +479,34 @@
     for (let i = 0; i < 5; i++) station += leaf(between(1020, 1150), between(658, 664), between(9, 14), between(-25, 25) + (random() < 0.5 ? 180 : 0));
     station += '<path d="M1018 662 L1046 657 M1022 664 L1052 661" stroke="#6f8a58" stroke-width="1.8"/>';
     // a wrapped bouquet leaning against the jar, ready to take home
-    station += `<g class="gh-station__sway"><g transform="translate(1140 662) rotate(14) scale(.72)">${wrappedBouquet({ mix: { ranunculus: 2, poppy: 1, cosmos: 1 }, spires: 1, scale: 0.7, filler: 1 })}</g></g>`;
+    const leaning = `<g transform="translate(1140 662) rotate(14) scale(.72)">${wrappedBouquet({ mix: { ranunculus: 2, poppy: 1, cosmos: 1 }, spires: 1, scale: 0.7, filler: 1 })}</g>`;
     // clippings and petals on the floor around the wheels
-    for (let i = 0; i < 6; i++) station += leaf(between(930, 1150), between(896, 914), between(9, 14), between(-30, 30) + (random() < 0.5 ? 180 : 0));
+    let floor = '';
+    for (let i = 0; i < 6; i++) floor += leaf(between(930, 1150), between(896, 914), between(9, 14), between(-30, 30) + (random() < 0.5 ? 180 : 0));
     for (let i = 0; i < 10; i++) {
       const x = between(920, 1160);
       const y = between(892, 916);
-      station += `<ellipse cx="${r1(x)}" cy="${r1(y)}" rx="3.6" ry="2.4" fill="${pick(['#efbcc4', '#f6c3a0', '#fffaf0', '#e39aa8'])}" transform="rotate(${r1(between(0, 180))} ${r1(x)} ${r1(y)})"/>`;
+      floor += `<ellipse cx="${r1(x)}" cy="${r1(y)}" rx="3.6" ry="2.4" fill="${pick(['#efbcc4', '#f6c3a0', '#fffaf0', '#e39aa8'])}" transform="rotate(${r1(between(0, 180))} ${r1(x)} ${r1(y)})"/>`;
     }
-    fill('ghf-station', station);
+
+    // The swaying flowers: the stems on the lower shelf and the bouquet leaning on the jar each get a
+    // drawing of their own, so they sway as a whole (which the graphics chip does by itself) rather than
+    // the browser redrawing the cart around them on every frame. The cart is five stacked layers that
+    // look exactly like one: the back, the shelf's flowers, the front, the leaning bouquet, then the
+    // floor and the visitor's own jar (js/bouquet.js) on top.
+    fill('ghf-station', stationBack);
+    const cart = document.getElementById('ghf-station').ownerSVGElement;
+    const cartLayer = (html, sways) => {
+      const svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('viewBox', cart.getAttribute('viewBox'));
+      svg.setAttribute('aria-hidden', 'true');
+      if (sways) svg.setAttribute('class', 'gh-station__sway');
+      svg.innerHTML = html;
+      return svg;
+    };
+    const uppermost = cartLayer(floor);
+    uppermost.appendChild(document.getElementById('gh-station-jar'));
+    cart.after(cartLayer(shelfFlowers, true), cartLayer(station), cartLayer(leaning, true), uppermost);
 
     // ---- Layers that sway, each at its own pace ------------------------------------------
     function layer(className, html, motion) {
@@ -547,6 +570,19 @@
 
     art.after(...layers, air);
   }
+  // Each swaying layer of the cart leans from the bottom centre of its own flowers, exactly where they
+  // used to lean from. That spot can only be measured while the room is showing, so js/greenhouse.js
+  // asks for it as the room opens (while it is still fully transparent).
+  function fitSway() {
+    document.querySelectorAll('svg.gh-station__sway:not([data-fit])').forEach((svg) => {
+      const box = svg.getBBox();
+      const view = svg.viewBox.baseVal;
+      if (!box.width || !view.width) return;   // not showing yet
+      svg.style.transformOrigin = `${r1((box.x + box.width / 2 - view.x) / view.width * 1000) / 10}% ${r1((box.y + box.height - view.y) / view.height * 1000) / 10}%`;
+      svg.dataset.fit = '';
+    });
+  }
+
   // (js/greenhouse.js decides when: in the background after the page loads, or on entry)
-  window.GreenhouseArt = { paint: paintRoom };
+  window.GreenhouseArt = { paint: paintRoom, fitSway };
 })();
