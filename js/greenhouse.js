@@ -132,13 +132,15 @@ const UPCOMING_PROJECTS = [
   sync();
 
   // ---- Getting the room ready in the background ------------------------------------
-  // The room's flowers are painted once the page has loaded and the browser is idle
-  // (or after a second and a half at most, since the garden rarely sits completely still),
-  // so they never slow down the first look at the garden.
-  const whenIdle = (fn) => (window.requestIdleCallback ? window.requestIdleCallback(fn, { timeout: 1500 }) : window.setTimeout(fn, 1200));
-  window.addEventListener('load', () => whenIdle(() => {
-    if (window.GreenhouseArt) window.GreenhouseArt.paint();
-  }));
+  // The room's flowers are painted in a quiet moment once the visitor is in the garden and it has
+  // settled (js/main.js), so they never slow down the landing page, the opening transition or the
+  // first look at the garden. A touch or click on the greenhouse (or its signpost board) on the way
+  // in paints it straight away, as the finger or button goes down.
+  const paintRoom = () => { if (window.GreenhouseArt) window.GreenhouseArt.paint(); };
+  const paintSoon = window.GardenUI && window.GardenUI.whenSettled ? window.GardenUI.whenSettled(paintRoom) : paintRoom;
+  document.querySelectorAll('#greenhouse-peek, .signpost-board[href="#greenhouse"]').forEach((el) => {
+    el.addEventListener('pointerdown', paintSoon, { passive: true });
+  });
 
   // ---- The sketchbook note --------------------------------------------------------
   function openNote() {

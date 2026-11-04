@@ -1662,6 +1662,28 @@ body.has-panel .swipe-hint { opacity: 0; }
   .garden-soil { display: none; }    /* the garden already reaches the bottom of the screen */
 }
 
+/* a little looping movement that's off screen rests until it comes back into view (js/offstage.js) */
+.is-offstage { animation-play-state: paused !important; }
+
+/* ---- A gentler garden (js/gentle.js) -----------------------------------------------------
+   Only on a device that can't keep the garden moving smoothly: the ambient background motion holds
+   still where it is. The animals, the growing game, the rooms and every hover or tap keep moving. */
+.is-gentle .layer-clouds,
+.is-gentle .cloud-sway,
+.is-gentle .layer-willow,
+.is-gentle .layer-breeze,
+.is-gentle .gx-layer,
+.is-gentle .layer-shimmer,
+.is-gentle .layer-shimmer *,
+.is-gentle .layer-boats *,
+.is-gentle .ghf-layer,
+.is-gentle .ghf-air *,
+.is-gentle .gh-station__sway,
+.is-gentle .gh-room .fairy-bulbs circle,
+.is-gentle .wl-strands,
+.is-gentle .wl-dapple,
+.is-gentle .wl-lantern-glow { animation-play-state: paused !important; }
+
 /* ---- Little hints in the willow and the greenhouse (js/room-hints.js) ----------------------
    The garden's arrow, pointing to the swing, the writing desk, the music and the bouquet bar.
    Only created on phones and tablets. Just a fade and the arrow's small nudge. */

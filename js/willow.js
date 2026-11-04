@@ -851,9 +851,13 @@
   sync();
 
   // ---- Getting the nook ready in the background (as the greenhouse does) -----------------
-  // Drawing its thousands of leaves takes the phone a moment, so it's done once the garden has
-  // loaded and the browser is idle, rather than in the instant the willow is tapped. The nook stays
-  // hidden, so nothing is shown or laid out until the visitor steps in.
-  const whenIdle = (fn) => (window.requestIdleCallback ? window.requestIdleCallback(fn, { timeout: 2500 }) : window.setTimeout(fn, 2000));
-  window.addEventListener('load', () => whenIdle(paint));
+  // Drawing its thousands of leaves takes the phone a moment, so it's done in a quiet moment once the
+  // visitor is in the garden and it has settled (js/main.js), rather than in the instant the willow is
+  // tapped, and never during the landing page or the opening transition. A touch or click on the
+  // willow (or its signpost board) on the way in draws it straight away, as the finger or button goes
+  // down. The nook stays hidden, so nothing is shown or laid out until the visitor steps in.
+  const paintSoon = window.GardenUI && window.GardenUI.whenSettled ? window.GardenUI.whenSettled(paint) : paint;
+  [peek, document.querySelector('.signpost-board[href="#willow"]')].forEach((el) => {
+    if (el) el.addEventListener('pointerdown', paintSoon, { passive: true });
+  });
 })();

@@ -219,8 +219,29 @@
   });
 
   // Shared with js/game.js
+  // ---- Getting the rooms ready, once the garden has settled ----------------------------------
+  // The greenhouse and the willow are drawn ahead of time, so stepping inside never stalls, but only
+  // once the visitor is in the garden and it has settled: never during the landing page or the opening
+  // transition, and not at all for someone who doesn't come in. (They hold almost half of the page's
+  // drawing.) Returns a function that draws the room straight away, for a touch or click on the way in
+  // (not a hover: drawing it then would hold up the hover's own glow and label).
+  function whenSettled(draw) {
+    let drawn = false;
+    const now = () => { if (!drawn) { drawn = true; draw(); } };
+    const idle = (fn) => (window.requestIdleCallback ? window.requestIdleCallback(fn, { timeout: 2000 }) : window.setTimeout(fn, 1000));
+    const watch = new MutationObserver(() => check());
+    function check() {
+      if (drawn || !body.classList.contains('is-garden') || body.classList.contains('ib-running')) return;
+      watch.disconnect();
+      window.setTimeout(() => idle(() => now()), 2500);
+    }
+    watch.observe(body, { attributes: true, attributeFilter: ['class'] });
+    if (document.readyState === 'complete') check(); else window.addEventListener('load', check);
+    return now;
+  }
+
   // (restingTop: where a phone turned sideways sits, at the bottom of the garden)
-  window.GardenUI = { showNote: showNote, restingTop: restingTop };
+  window.GardenUI = { showNote: showNote, restingTop: restingTop, whenSettled: whenSettled };
 
   // ---- The garden rests while something covers it --------------------------
   // While a panel or the greenhouse is open, the garden's animations pause. Only the

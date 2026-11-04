@@ -67,6 +67,8 @@ css/willow.css          The Wishing Willow's scene, light, swing, wish card, rib
 js/room-hints.js        Phones and tablets: little arrows in the willow and the greenhouse (the swing, the wish desk, the music, the bouquet bar);
                         each one retires once that feature is used (remembered in the visitor's browser, key aDayInBloom.hints.v1)
 css/landscape.css       Phones turned sideways: a slimmer header, instructions, messages and room buttons; the garden scrolls up to the sun
+js/offstage.js          Small looping movements (pets, wings, ripples, sparkles, fairy lights) rest while they're off screen; travellers never do
+js/gentle.js            A gentler garden, only on devices measured to be struggling: the ambient background motion rests (?gentle=on / off / auto)
 js/sound.js             Garden sounds (lake, wind, birds, crickets) and gardening sound effects; off until turned on
 css/golden-hour.css     Golden Hour sunset layers, fireflies and fairy lights
 js/little-things.js     Notebook "Little Things" page: recipe card + PLAYLIST_URL for the record
